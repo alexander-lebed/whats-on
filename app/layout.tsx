@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "What's on",
-  description: 'Events in Calstellon',
+  description: 'Events in Castellon',
 };
 
 export default function RootLayout({
@@ -26,9 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          {children}
-        </div>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
       </body>
     </html>
   );
