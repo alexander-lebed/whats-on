@@ -1,0 +1,6 @@
+#!/bin/sh
+# Run lint-staged for staged files
+pnpm exec lint-staged
+
+# Run TypeScript type checking
+pnpm run types:check
