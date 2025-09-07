@@ -19,7 +19,7 @@ export default async function Page() {
 
   return (
     <main className="py-8">
-      <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900">Events</h1>
+      <h1 className="mb-6 text-3xl font-bold tracking-tight">Events</h1>
       <section aria-labelledby="popular-heading">
         <h2 id="popular-heading" className="sr-only">
           Events list
