@@ -57,6 +57,8 @@ All code generated must adhere to the following standards. Always consult the **
 
 #### ✅ Testing & Documentation
 - Write **unit tests** using `Jest` and `Testing Library`. Use `screen` to get elements using their role. Use `userEvent` over `fireEvent`.
+- Sanity CMS: https://www.sanity.io/docs
+  - GROQ: https://www.sanity.io/docs/specifications/groq-syntax, https://www.sanity.io/docs/content-lake/query-cheat-sheet
 
 ---
 

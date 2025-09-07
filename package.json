@@ -12,6 +12,7 @@
     "lint": "next lint && pnpm run types:check",
     "lint:fix": "next lint --fix",
     "types:check": "tsc",
+    "types:generate": "sanity schema extract --enforce-required-fields --path=sanity/schema.json && sanity typegen generate && rm -f sanity/schema.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",
