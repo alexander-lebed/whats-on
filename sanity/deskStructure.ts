@@ -42,7 +42,6 @@ const deskStructure = (S: StructureBuilder) =>
       S.divider(),
       S.documentTypeListItem('place').title('Places'),
       S.documentTypeListItem('organizer').title('Organizers'),
-      S.documentTypeListItem('category').title('Categories'),
     ]);
 
 export default deskStructure;

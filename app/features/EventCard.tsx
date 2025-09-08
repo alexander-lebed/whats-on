@@ -2,6 +2,7 @@
 import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CATEGORIES } from '@/app/constants';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { urlForImage } from '../utils/sanityImage';
 
@@ -69,14 +70,18 @@ export const EventCard: FC<EventCardProps> = ({ item }) => {
           <div className="p-4">
             {item.categories && item.categories?.length > 0 && (
               <div className="mb-2 flex flex-wrap gap-2">
-                {item.categories.slice(0, 3).map(cat => (
-                  <span
-                    key={cat._id}
-                    className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
-                  >
-                    {cat.title}
-                  </span>
-                ))}
+                {item.categories.slice(0, 3).map(slug => {
+                  const cat = CATEGORIES.find(c => c.slug === slug);
+                  const label = cat ? cat.title : slug; // TODO: i18n
+                  return (
+                    <span
+                      key={slug}
+                      className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+                    >
+                      {label}
+                    </span>
+                  );
+                })}
               </div>
             )}
             <h3 className="mb-1 line-clamp-2 text-lg font-semibold leading-snug text-gray-900">

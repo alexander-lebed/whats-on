@@ -1,4 +1,5 @@
-import { defineArrayMember, defineField, defineType } from 'sanity';
+import { defineField, defineType } from 'sanity';
+import { CATEGORIES } from '@/app/constants';
 import { SANITY_LANGUAGES } from '@/sanity/constants';
 
 export default defineType({
@@ -60,15 +61,15 @@ export default defineType({
       name: 'categories',
       title: 'Categories',
       type: 'array',
-      description: 'Add up to 3. Use “Add item → Create new” to pick a preset (e.g. Music).',
-      of: [
-        defineArrayMember({
-          type: 'reference',
-          to: [{ type: 'category' }],
-          options: { disableNew: false },
-        }),
-      ],
-      validation: Rule => Rule.max(3),
+      description: 'Select up to 3 categories.',
+      of: [{ type: 'string' }],
+      options: {
+        list: CATEGORIES.map(cat => ({
+          title: `${cat.icon} ${cat.title}`.trim(),
+          value: cat.slug,
+        })),
+      },
+      validation: Rule => Rule.unique().max(3),
     }),
     defineField({
       name: 'startDateTime',

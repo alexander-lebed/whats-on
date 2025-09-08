@@ -13,16 +13,6 @@
  */
 
 // Source: schema.json
-export type Category = {
-  _id: string;
-  _type: 'category';
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-};
-
 export type Event = {
   _id: string;
   _type: 'event';
@@ -52,13 +42,7 @@ export type Event = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
-  categories?: Array<{
-    _ref: string;
-    _type: 'reference';
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: 'category';
-  }>;
+  categories?: Array<string>;
   startDateTime: string;
   endDateTime?: string;
   isDigital?: boolean;
@@ -255,7 +239,6 @@ export type SanityAssetSourceData = {
 };
 
 export type AllSanitySchemaTypes =
-  | Category
   | Event
   | Organizer
   | Place
@@ -277,7 +260,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./lib/sanity/queries.ts
 // Variable: EVENTS_QUERY_I18N
-// Query: *[    _type == "event"    && defined(startDateTime)    && defined(slug.current)    && !(_id in path('drafts.**'))    && (      dateTime(startDateTime) >= dateTime(now())      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))    )  ] | order(dateTime(startDateTime) asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": categories[]-> { _id, title, slug },    "place": coalesce(place-> { _id, title, slug, address, location }, null),    organizer-> { _id, title, slug }  }
+// Query: *[    _type == "event"    && defined(startDateTime)    && defined(slug.current)    && !(_id in path('drafts.**'))    && (      dateTime(startDateTime) >= dateTime(now())      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))    )  ] | order(dateTime(startDateTime) asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": coalesce(categories, []),    "place": coalesce(place-> { _id, title, slug, address, location }, null),    organizer-> { _id, title, slug }  }
 export type EVENTS_QUERY_I18NResult = Array<{
   _id: string;
   _type: 'event';
@@ -299,11 +282,7 @@ export type EVENTS_QUERY_I18NResult = Array<{
     crop?: SanityImageCrop;
     _type: 'image';
   };
-  categories: Array<{
-    _id: string;
-    title: string;
-    slug: Slug;
-  }> | null;
+  categories: Array<string> | Array<never>;
   startDateTime: string;
   endDateTime?: string;
   isDigital?: boolean;
@@ -330,6 +309,6 @@ export type EVENTS_QUERY_I18NResult = Array<{
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
-    '\n  *[\n    _type == "event"\n    && defined(startDateTime)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n    && (\n      dateTime(startDateTime) >= dateTime(now())\n      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))\n    )\n  ] | order(dateTime(startDateTime) asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": categories[]-> { _id, title, slug },\n    "place": coalesce(place-> { _id, title, slug, address, location }, null),\n    organizer-> { _id, title, slug }\n  }\n': EVENTS_QUERY_I18NResult;
+    '\n  *[\n    _type == "event"\n    && defined(startDateTime)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n    && (\n      dateTime(startDateTime) >= dateTime(now())\n      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))\n    )\n  ] | order(dateTime(startDateTime) asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": coalesce(categories, []),\n    "place": coalesce(place-> { _id, title, slug, address, location }, null),\n    organizer-> { _id, title, slug }\n  }\n': EVENTS_QUERY_I18NResult;
   }
 }
