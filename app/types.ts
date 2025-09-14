@@ -1,8 +1,11 @@
+import { ReactNode } from 'react';
+
 export type Category = {
   slug: string;
-  title: string /* Used to display in Sanity */;
+  title: string /* displayed in Sanity */;
   i18n: string;
-  icon: string;
+  iconComponent: ReactNode;
+  emoji: string /* displayed in Sanity */;
 };
 
 export type Locale = 'en' | 'es';

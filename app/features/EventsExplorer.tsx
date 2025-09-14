@@ -48,7 +48,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
               active={isActive}
               onClick={() => toggle(category.slug)}
             >
-              <span aria-hidden> {category.icon} </span>
+              <span aria-hidden> {category.iconComponent} </span>
               <span>{t(category.i18n)}</span>
             </Button>
           );

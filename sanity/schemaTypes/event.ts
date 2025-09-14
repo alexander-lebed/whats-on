@@ -65,7 +65,7 @@ export default defineType({
       of: [{ type: 'string' }],
       options: {
         list: CATEGORIES.map(cat => ({
-          title: `${cat.icon} ${cat.title}`.trim(),
+          title: `${cat.emoji} ${cat.title}`.trim(),
           value: cat.slug,
         })),
       },
