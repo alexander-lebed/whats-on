@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { setRequestLocale } from 'next-intl/server';
+import { LanguageSwitcher } from '@/app/features';
 import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
@@ -33,9 +34,14 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </div>
+        <NextIntlClientProvider>
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-end py-4">
+              <LanguageSwitcher currentLocale={locale} />
+            </div>
+            {children}
+          </div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
