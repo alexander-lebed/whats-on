@@ -56,9 +56,16 @@ All code generated must adhere to the following standards. Always consult the **
 ---
 
 #### ✅ Testing & Documentation
-- Write **unit tests** using `Jest` and `Testing Library`. Use `screen` to get elements using their role. Use `userEvent` over `fireEvent`.
-- Sanity CMS: https://www.sanity.io/docs
-  - GROQ: https://www.sanity.io/docs/specifications/groq-syntax, https://www.sanity.io/docs/content-lake/query-cheat-sheet
+- **Unit testing**
+  - Write tests with `Jest` and `@testing-library/react`. Prefer `screen.getByRole` and `userEvent` over `fireEvent`.
+
+- **Internationalization (next-intl)**
+  - Getting started (App Router): [next-intl App Router guide](https://next-intl.dev/docs/getting-started/app-router)
+  - Usage: [next-intl Usage guide](https://next-intl.dev/docs/usage)
+
+- **Sanity CMS**
+  - Docs: [Sanity documentation](https://www.sanity.io/docs)
+  - GROQ: [Spec](https://www.sanity.io/docs/specifications/groq-syntax), [Cheat sheet](https://www.sanity.io/docs/content-lake/query-cheat-sheet)
 
 ---
 

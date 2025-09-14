@@ -1,0 +1,17 @@
+{
+  "title": "Events",
+  "heading": "Events list",
+  "category": {
+    "music": "Music",
+    "clubs-parties": "Clubs & Parties",
+    "stage-film": "Stage & Film",
+    "art-exhibitions": "Art & Exhibitions",
+    "eat-drink": "Eat & Drink",
+    "family": "Family & Kids",
+    "sports-wellness": "Sports & Wellness",
+    "festivals-fairs": "Festivals & Fairs",
+    "science-tech": "Science & Tech",
+    "networking-community": "Networking & Community",
+    "local-fiestas": "Local Fiestas"
+  }
+}

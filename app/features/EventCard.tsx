@@ -2,6 +2,7 @@
 import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { urlForImage } from '../utils/sanityImage';
@@ -39,6 +40,7 @@ const formatDateRange = (start?: string | null, end?: string | null): string => 
 export type EventCardProps = { item: EVENTS_QUERY_I18NResult[number] };
 
 export const EventCard: FC<EventCardProps> = ({ item }) => {
+  const t = useTranslations();
   const { title } = item;
   const imgUrl = urlForImage(item.image);
   const dateRange = formatDateRange(item.startDateTime, item.endDateTime);
@@ -72,7 +74,7 @@ export const EventCard: FC<EventCardProps> = ({ item }) => {
               <div className="mb-2 flex flex-wrap gap-2">
                 {item.categories.slice(0, 3).map(slug => {
                   const cat = CATEGORIES.find(c => c.slug === slug);
-                  const label = cat ? cat.title : slug; // TODO: i18n
+                  const label = cat ? t(cat.i18n) : slug;
                   return (
                     <span
                       key={slug}

@@ -1,5 +1,6 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import { Button } from '@/app/ui';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
@@ -10,6 +11,7 @@ export type EventsExplorerProps = {
 };
 
 export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
+  const t = useTranslations();
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const toggle = (slug: string) => {
@@ -42,12 +44,12 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
             <Button
               key={category.slug}
               variant="filter"
-              aria-label={category.title}
+              aria-label={t(category.i18n)}
               active={isActive}
               onClick={() => toggle(category.slug)}
             >
               <span aria-hidden> {category.icon} </span>
-              <span>{category.title}</span>
+              <span>{t(category.i18n)}</span>
             </Button>
           );
         })}
