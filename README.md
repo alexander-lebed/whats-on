@@ -1,3 +1,7 @@
+## What's On
+
+A lightweight city events explorer built with Next.js (App Router), localized, and powered by CMS.
+
 ## Getting Started
 
 Install and run the development server:
@@ -6,4 +10,4 @@ Install and run the development server:
 pnpm i
 pnpm dev
 ```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
