@@ -16,7 +16,7 @@ export default async function Page(props: Props) {
   setRequestLocale(locale);
   const t = await getTranslations();
 
-  const data = await sanityFetch<EVENTS_QUERY_I18NResult>(
+  const events = await sanityFetch<EVENTS_QUERY_I18NResult>(
     EVENTS_QUERY_I18N,
     { lang: locale },
     {
@@ -28,7 +28,7 @@ export default async function Page(props: Props) {
   return (
     <main className="py-8">
       <h1 className="mb-6 text-3xl font-bold tracking-tight">{t('events.title')}</h1>
-      <EventsExplorer items={data} />
+      <EventsExplorer events={events} />
     </main>
   );
 }

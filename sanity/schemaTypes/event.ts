@@ -1,6 +1,16 @@
 import { defineField, defineType } from 'sanity';
 import { CATEGORIES } from '@/app/constants';
 import { SANITY_LANGUAGES } from '@/sanity/constants';
+import ScheduleInput from './components/ScheduleInput';
+
+type ScheduleParent = {
+  mode?: 'single' | 'range';
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  date?: string;
+};
 
 export default defineType({
   name: 'event',
@@ -71,29 +81,93 @@ export default defineType({
       },
       validation: Rule => Rule.unique().max(3),
     }),
+    // Schedule: supports single-day and date-range with consistent field names
     defineField({
-      name: 'startDateTime',
-      title: 'Start date & time',
-      type: 'datetime',
-      validation: Rule => Rule.required(),
-    }),
-    defineField({
-      name: 'endDateTime',
-      title: 'End date & time',
-      type: 'datetime',
-      validation: Rule =>
-        Rule.custom((end, context) => {
-          const start = (context.parent as { startDateTime?: string } | undefined)?.startDateTime;
-          if (!end || !start) return true;
-          try {
-            const endMs = new Date(end as string).getTime();
-            const startMs = new Date(start as string).getTime();
-            if (Number.isNaN(endMs) || Number.isNaN(startMs)) return true;
-            return endMs >= startMs || 'End must be after start';
-          } catch {
-            return true;
-          }
+      name: 'schedule',
+      title: 'Schedule',
+      type: 'object',
+      components: { input: ScheduleInput },
+      fields: [
+        defineField({
+          name: 'mode',
+          title: 'Mode',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Single day', value: 'single' },
+              { title: 'Date range (recurring)', value: 'range' },
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'single',
+          validation: Rule => Rule.required(),
         }),
+        // Common, consistent names
+        defineField({
+          name: 'startDate',
+          title: 'Start date',
+          type: 'date',
+          validation: Rule => Rule.required(),
+        }),
+        defineField({
+          name: 'endDate',
+          title: 'End date',
+          type: 'date',
+          hidden: ({ parent }) => (parent as ScheduleParent)?.mode === 'single',
+          validation: Rule =>
+            Rule.custom((val, ctx) => {
+              if ((ctx.parent as ScheduleParent)?.mode !== 'range') return true;
+              if (!val) return 'Required';
+              const start = (ctx.parent as { startDate?: string }).startDate;
+              return !start || val >= start || 'End date must be on/after start date';
+            }),
+        }),
+        defineField({
+          name: 'startTime',
+          title: 'Start time',
+          type: 'timeValue',
+          validation: Rule => Rule.required(),
+        }),
+        defineField({
+          name: 'endTime',
+          title: 'End time',
+          type: 'timeValue',
+          validation: Rule =>
+            Rule.custom((val, ctx) => {
+              const start = (ctx.parent as { startTime?: string }).startTime;
+              const mode = (ctx.parent as ScheduleParent)?.mode ?? 'single';
+              if (!val) return 'Required';
+              if (!start) return true;
+              // In range mode enforce same-day end after start; in single allow overnight
+              return mode === 'range' ? val > start || 'End must be after start' : true;
+            }),
+        }),
+        defineField({
+          name: 'weekdays',
+          title: 'Weekdays',
+          type: 'array',
+          of: [{ type: 'string' }],
+          options: {
+            list: [
+              { title: 'Mon', value: 'mon' },
+              { title: 'Tue', value: 'tue' },
+              { title: 'Wed', value: 'wed' },
+              { title: 'Thu', value: 'thu' },
+              { title: 'Fri', value: 'fri' },
+              { title: 'Sat', value: 'sat' },
+              { title: 'Sun', value: 'sun' },
+            ],
+            layout: 'grid',
+          },
+          hidden: ({ parent }) => (parent as ScheduleParent)?.mode !== 'range',
+          validation: Rule =>
+            Rule.custom((val, ctx) =>
+              (ctx.parent as ScheduleParent)?.mode === 'range'
+                ? (val?.length ?? 0) > 0 || 'Pick at least one day'
+                : true
+            ),
+        }),
+      ],
     }),
     defineField({
       name: 'isDigital',
@@ -102,17 +176,17 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'organizer',
+      title: 'Organizer',
+      type: 'reference',
+      to: [{ type: 'organizer' }],
+    }),
+    defineField({
       name: 'place',
       title: 'Place',
       type: 'reference',
       to: [{ type: 'place' }, { type: 'organizer' }],
       description: 'Select a place or reuse the organizer when it is the place',
-    }),
-    defineField({
-      name: 'organizer',
-      title: 'Organizer',
-      type: 'reference',
-      to: [{ type: 'organizer' }],
     }),
     defineField({
       name: 'ticketUrl',
@@ -155,31 +229,34 @@ export default defineType({
     {
       name: 'startAsc',
       title: 'Start date (asc)',
-      by: [{ field: 'startDateTime', direction: 'asc' }],
+      by: [{ field: 'schedule.startDate', direction: 'asc' }],
     },
     {
       name: 'startDesc',
       title: 'Start date (desc)',
-      by: [{ field: 'startDateTime', direction: 'desc' }],
+      by: [{ field: 'schedule.startDate', direction: 'desc' }],
     },
     {
       name: 'featuredFirst',
       title: 'Featured first',
       by: [
         { field: 'isFeatured', direction: 'desc' },
-        { field: 'startDateTime', direction: 'asc' },
+        { field: 'schedule.startDate', direction: 'asc' },
       ],
     },
   ],
   preview: {
     select: {
       title: 'title',
-      start: 'startDateTime',
-      end: 'endDateTime',
+      startSingle: 'schedule.startDate',
+      startRange: 'schedule.startDate',
+      endRange: 'schedule.endDate',
+      sTime: 'schedule.startTime',
+      eTime: 'schedule.endTime',
       placeTitle: 'place.title',
       media: 'image',
     },
-    prepare({ title, start, end, placeTitle, media }) {
+    prepare({ title, startSingle, startRange, endRange, sTime, eTime, placeTitle, media }) {
       const getI18nValue = (arr: Array<{ _key: string; value: string }> | string) => {
         if (Array.isArray(arr) && arr.length) {
           const byKey = (k: string) => arr.find(x => x?._key === k)?.value;
@@ -192,21 +269,13 @@ export default defineType({
         return arr as string;
       };
       const displayTitle = getI18nValue(title);
-      const format = (dateStr?: string) => {
-        if (!dateStr) return null;
-        const date = new Date(dateStr);
-        if (Number.isNaN(date.getTime())) return null;
-        return {
-          full: date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }),
-          time: date.toLocaleTimeString(undefined, { timeStyle: 'short' }),
-        };
-      };
-      const startFmt = format(start);
-      const endFmt = format(end);
       const subtitleParts: string[] = [];
-      if (startFmt) {
-        subtitleParts.push(endFmt ? `${startFmt.full} – ${endFmt.time}` : startFmt.full);
-      }
+      if (startSingle)
+        subtitleParts.push(`${startSingle} ${sTime ?? ''}${eTime ? `–${eTime}` : ''}`.trim());
+      else if (startRange || endRange)
+        subtitleParts.push(
+          `${startRange ?? '—'} → ${endRange ?? '—'} ${sTime ?? ''}${eTime ? `–${eTime}` : ''}`.trim()
+        );
       if (placeTitle) subtitleParts.push(placeTitle);
       return {
         title: displayTitle,

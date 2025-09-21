@@ -43,9 +43,117 @@ export type Event = {
     _type: 'image';
   };
   categories?: Array<string>;
-  startDateTime: string;
-  endDateTime?: string;
+  schedule?: {
+    mode: 'single' | 'range';
+    startDate: string;
+    endDate?: string;
+    startTime:
+      | '07:00'
+      | '07:30'
+      | '08:00'
+      | '08:30'
+      | '09:00'
+      | '09:30'
+      | '10:00'
+      | '10:30'
+      | '11:00'
+      | '11:30'
+      | '12:00'
+      | '12:30'
+      | '13:00'
+      | '13:30'
+      | '14:00'
+      | '14:30'
+      | '15:00'
+      | '15:30'
+      | '16:00'
+      | '16:30'
+      | '17:00'
+      | '17:30'
+      | '18:00'
+      | '18:30'
+      | '19:00'
+      | '19:30'
+      | '20:00'
+      | '20:30'
+      | '21:00'
+      | '21:30'
+      | '22:00'
+      | '22:30'
+      | '23:00'
+      | '23:30'
+      | '00:00'
+      | '00:30'
+      | '01:00'
+      | '01:30'
+      | '02:00'
+      | '02:30'
+      | '03:00'
+      | '03:30'
+      | '04:00'
+      | '04:30'
+      | '05:00'
+      | '05:30'
+      | '06:00'
+      | '06:30';
+    endTime?:
+      | '07:00'
+      | '07:30'
+      | '08:00'
+      | '08:30'
+      | '09:00'
+      | '09:30'
+      | '10:00'
+      | '10:30'
+      | '11:00'
+      | '11:30'
+      | '12:00'
+      | '12:30'
+      | '13:00'
+      | '13:30'
+      | '14:00'
+      | '14:30'
+      | '15:00'
+      | '15:30'
+      | '16:00'
+      | '16:30'
+      | '17:00'
+      | '17:30'
+      | '18:00'
+      | '18:30'
+      | '19:00'
+      | '19:30'
+      | '20:00'
+      | '20:30'
+      | '21:00'
+      | '21:30'
+      | '22:00'
+      | '22:30'
+      | '23:00'
+      | '23:30'
+      | '00:00'
+      | '00:30'
+      | '01:00'
+      | '01:30'
+      | '02:00'
+      | '02:30'
+      | '03:00'
+      | '03:30'
+      | '04:00'
+      | '04:30'
+      | '05:00'
+      | '05:30'
+      | '06:00'
+      | '06:30';
+    weekdays?: Array<string>;
+  };
   isDigital?: boolean;
+  organizer?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'organizer';
+  };
   place?:
     | {
         _ref: string;
@@ -59,17 +167,23 @@ export type Event = {
         _weak?: boolean;
         [internalGroqTypeReferenceTo]?: 'organizer';
       };
-  organizer?: {
-    _ref: string;
-    _type: 'reference';
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'organizer';
-  };
   ticketUrl?: string;
   website?: string;
   price?: number;
   isFree?: boolean;
   isFeatured?: boolean;
+};
+
+export type Place = {
+  _id: string;
+  _type: 'place';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  address?: string;
+  location?: Geopoint;
 };
 
 export type Organizer = {
@@ -86,17 +200,55 @@ export type Organizer = {
   phone?: string;
 };
 
-export type Place = {
-  _id: string;
-  _type: 'place';
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  slug: Slug;
-  address?: string;
-  location?: Geopoint;
-};
+export type TimeValue =
+  | '07:00'
+  | '07:30'
+  | '08:00'
+  | '08:30'
+  | '09:00'
+  | '09:30'
+  | '10:00'
+  | '10:30'
+  | '11:00'
+  | '11:30'
+  | '12:00'
+  | '12:30'
+  | '13:00'
+  | '13:30'
+  | '14:00'
+  | '14:30'
+  | '15:00'
+  | '15:30'
+  | '16:00'
+  | '16:30'
+  | '17:00'
+  | '17:30'
+  | '18:00'
+  | '18:30'
+  | '19:00'
+  | '19:30'
+  | '20:00'
+  | '20:30'
+  | '21:00'
+  | '21:30'
+  | '22:00'
+  | '22:30'
+  | '23:00'
+  | '23:30'
+  | '00:00'
+  | '00:30'
+  | '01:00'
+  | '01:30'
+  | '02:00'
+  | '02:30'
+  | '03:00'
+  | '03:30'
+  | '04:00'
+  | '04:30'
+  | '05:00'
+  | '05:30'
+  | '06:00'
+  | '06:30';
 
 export type InternationalizedArrayTextValue = {
   _type: 'internationalizedArrayTextValue';
@@ -240,8 +392,9 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes =
   | Event
-  | Organizer
   | Place
+  | Organizer
+  | TimeValue
   | InternationalizedArrayTextValue
   | InternationalizedArrayStringValue
   | InternationalizedArrayText
@@ -260,7 +413,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./lib/sanity/queries.ts
 // Variable: EVENTS_QUERY_I18N
-// Query: *[    _type == "event"    && defined(startDateTime)    && defined(slug.current)    && !(_id in path('drafts.**'))    && (      dateTime(startDateTime) >= dateTime(now())      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))    )  ] | order(dateTime(startDateTime) asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": coalesce(categories, []),    "place": coalesce(place-> { _id, title, slug, address, location }, null),    organizer-> { _id, title, slug }  }
+// Query: *[    _type == "event"    && defined(schedule.startDate)    && defined(slug.current)    && !(_id in path('drafts.**'))  ] | order(schedule.startDate asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": coalesce(categories, []),    "place": coalesce(place-> { _id, title, slug, address, location }, null),    organizer-> { _id, title, slug }  }
 export type EVENTS_QUERY_I18NResult = Array<{
   _id: string;
   _type: 'event';
@@ -283,20 +436,122 @@ export type EVENTS_QUERY_I18NResult = Array<{
     _type: 'image';
   };
   categories: Array<string> | Array<never>;
-  startDateTime: string;
-  endDateTime?: string;
+  schedule?: {
+    mode: 'range' | 'single';
+    startDate: string;
+    endDate?: string;
+    startTime:
+      | '00:00'
+      | '00:30'
+      | '01:00'
+      | '01:30'
+      | '02:00'
+      | '02:30'
+      | '03:00'
+      | '03:30'
+      | '04:00'
+      | '04:30'
+      | '05:00'
+      | '05:30'
+      | '06:00'
+      | '06:30'
+      | '07:00'
+      | '07:30'
+      | '08:00'
+      | '08:30'
+      | '09:00'
+      | '09:30'
+      | '10:00'
+      | '10:30'
+      | '11:00'
+      | '11:30'
+      | '12:00'
+      | '12:30'
+      | '13:00'
+      | '13:30'
+      | '14:00'
+      | '14:30'
+      | '15:00'
+      | '15:30'
+      | '16:00'
+      | '16:30'
+      | '17:00'
+      | '17:30'
+      | '18:00'
+      | '18:30'
+      | '19:00'
+      | '19:30'
+      | '20:00'
+      | '20:30'
+      | '21:00'
+      | '21:30'
+      | '22:00'
+      | '22:30'
+      | '23:00'
+      | '23:30';
+    endTime?:
+      | '00:00'
+      | '00:30'
+      | '01:00'
+      | '01:30'
+      | '02:00'
+      | '02:30'
+      | '03:00'
+      | '03:30'
+      | '04:00'
+      | '04:30'
+      | '05:00'
+      | '05:30'
+      | '06:00'
+      | '06:30'
+      | '07:00'
+      | '07:30'
+      | '08:00'
+      | '08:30'
+      | '09:00'
+      | '09:30'
+      | '10:00'
+      | '10:30'
+      | '11:00'
+      | '11:30'
+      | '12:00'
+      | '12:30'
+      | '13:00'
+      | '13:30'
+      | '14:00'
+      | '14:30'
+      | '15:00'
+      | '15:30'
+      | '16:00'
+      | '16:30'
+      | '17:00'
+      | '17:30'
+      | '18:00'
+      | '18:30'
+      | '19:00'
+      | '19:30'
+      | '20:00'
+      | '20:30'
+      | '21:00'
+      | '21:30'
+      | '22:00'
+      | '22:30'
+      | '23:00'
+      | '23:30';
+    weekdays?: Array<string>;
+  };
   isDigital?: boolean;
+  organizer: {
+    _id: string;
+    title: string;
+    slug: Slug;
+  } | null;
   place: {
     _id: string;
     title: string;
     slug: Slug;
     address: string | null;
     location: Geopoint | null;
-  } | null;
-  organizer: {
-    _id: string;
-    title: string;
-    slug: Slug;
   } | null;
   ticketUrl?: string;
   website?: string;
@@ -309,6 +564,6 @@ export type EVENTS_QUERY_I18NResult = Array<{
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
-    '\n  *[\n    _type == "event"\n    && defined(startDateTime)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n    && (\n      dateTime(startDateTime) >= dateTime(now())\n      || (defined(endDateTime) && dateTime(endDateTime) >= dateTime(now()))\n    )\n  ] | order(dateTime(startDateTime) asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": coalesce(categories, []),\n    "place": coalesce(place-> { _id, title, slug, address, location }, null),\n    organizer-> { _id, title, slug }\n  }\n': EVENTS_QUERY_I18NResult;
+    '\n  *[\n    _type == "event"\n    && defined(schedule.startDate)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n  ] | order(schedule.startDate asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": coalesce(categories, []),\n    "place": coalesce(place-> { _id, title, slug, address, location }, null),\n    organizer-> { _id, title, slug }\n  }\n': EVENTS_QUERY_I18NResult;
   }
 }

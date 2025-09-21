@@ -16,8 +16,8 @@ const deskStructure = (S: StructureBuilder) =>
                   S.documentList()
                     .title('Upcoming events')
                     .schemaType('event')
-                    .filter('_type == "event" && startDateTime >= now()')
-                    .defaultOrdering([{ field: 'startDateTime', direction: 'asc' }])
+                    .filter('_type == "event" && schedule.startDate >= now()')
+                    .defaultOrdering([{ field: 'schedule.startDate', direction: 'asc' }])
                 ),
               S.listItem()
                 .title('Past')
@@ -25,8 +25,8 @@ const deskStructure = (S: StructureBuilder) =>
                   S.documentList()
                     .title('Past events')
                     .schemaType('event')
-                    .filter('_type == "event" && startDateTime < now()')
-                    .defaultOrdering([{ field: 'startDateTime', direction: 'desc' }])
+                    .filter('_type == "event" && schedule.startDate < now()')
+                    .defaultOrdering([{ field: 'schedule.startDate', direction: 'desc' }])
                 ),
               S.listItem()
                 .title('Featured')
@@ -35,7 +35,7 @@ const deskStructure = (S: StructureBuilder) =>
                     .title('Featured events')
                     .schemaType('event')
                     .filter('_type == "event" && isFeatured == true')
-                    .defaultOrdering([{ field: 'startDateTime', direction: 'asc' }])
+                    .defaultOrdering([{ field: 'schedule.startDate', direction: 'asc' }])
                 ),
             ])
         ),

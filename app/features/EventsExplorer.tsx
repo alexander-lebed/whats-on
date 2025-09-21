@@ -7,10 +7,10 @@ import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { EventsGrid } from './EventsGrid';
 
 export type EventsExplorerProps = {
-  items: EVENTS_QUERY_I18NResult;
+  events: EVENTS_QUERY_I18NResult;
 };
 
-export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
+export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const t = useTranslations();
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
@@ -23,9 +23,9 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
     });
   };
 
-  const filtered = useMemo(() => {
-    if (selected.size === 0) return items;
-    return items.filter(item => {
+  const filteredEvents = useMemo(() => {
+    if (selected.size === 0) return events;
+    return events.filter(item => {
       if (!item.categories || item.categories.length === 0) return false;
       const itemSet = new Set(item.categories);
       for (const s of selected) {
@@ -33,7 +33,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
       }
       return false;
     });
-  }, [items, selected]);
+  }, [events, selected]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -54,7 +54,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ items }) => {
           );
         })}
       </div>
-      <EventsGrid items={filtered} />
+      <EventsGrid events={filteredEvents} />
     </div>
   );
 };

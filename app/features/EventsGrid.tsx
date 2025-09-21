@@ -3,10 +3,10 @@ import { useTranslations } from 'next-intl';
 import EventCard, { EventCardProps } from './EventCard';
 
 export type EventsGridProps = {
-  items: Array<EventCardProps['item']>;
+  events: Array<EventCardProps['event']>;
 };
 
-export const EventsGrid: FC<EventsGridProps> = ({ items }) => {
+export const EventsGrid: FC<EventsGridProps> = ({ events }) => {
   const t = useTranslations();
   return (
     <section aria-labelledby="events-heading">
@@ -14,8 +14,8 @@ export const EventsGrid: FC<EventsGridProps> = ({ items }) => {
         {t('events.heading')}
       </h2>
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {items.map(item => (
-          <EventCard key={item._id} item={item} />
+        {events.map(item => (
+          <EventCard key={item._id} event={item} />
         ))}
       </ul>
     </section>

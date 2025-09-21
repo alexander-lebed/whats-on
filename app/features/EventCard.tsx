@@ -7,12 +7,20 @@ import { CATEGORIES } from '@/app/constants';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { urlForImage } from '../utils/sanityImage';
 
-// TODO: date-fns or Intl.DateTimeFormat
-// Deterministic UTC formatting to avoid server/client locale or tz mismatches
+// Format `schedule` into a compact date label (e.g., "Apr 5 – Apr 7")
 const formatDateRange = (start?: string | null, end?: string | null): string => {
   if (!start) return '';
-  const startDate = new Date(start);
-  const endDate = end ? new Date(end) : undefined;
+  const [y, m, d] = start.split('-').map(Number);
+  const startDate = new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1));
+  const endDate = end
+    ? new Date(
+        Date.UTC(
+          ...((end.split('-').map(Number) as [number, number, number]).map((v, i) =>
+            i === 1 ? v - 1 : v
+          ) as unknown as [number, number, number])
+        )
+      )
+    : undefined;
   const months = [
     'Jan',
     'Feb',
@@ -27,9 +35,9 @@ const formatDateRange = (start?: string | null, end?: string | null): string => 
     'Nov',
     'Dec',
   ];
-  const formatUTC = (d: Date) => `${months[d.getUTCMonth()]} ${d.getUTCDate()}`;
-  const ymd = (d: Date) =>
-    `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+  const formatUTC = (dt: Date) => `${months[dt.getUTCMonth()]} ${dt.getUTCDate()}`;
+  const ymd = (dt: Date) =>
+    `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`;
   const sameDay = endDate ? ymd(startDate) === ymd(endDate) : false;
   const startStr = formatUTC(startDate);
   if (!endDate) return startStr;
@@ -37,18 +45,18 @@ const formatDateRange = (start?: string | null, end?: string | null): string => 
   return sameDay ? startStr : `${startStr} – ${endStr}`;
 };
 
-export type EventCardProps = { item: EVENTS_QUERY_I18NResult[number] };
+export type EventCardProps = { event: EVENTS_QUERY_I18NResult[number] };
 
-export const EventCard: FC<EventCardProps> = ({ item }) => {
+export const EventCard: FC<EventCardProps> = ({ event }) => {
   const t = useTranslations();
-  const { title } = item;
-  const imgUrl = urlForImage(item.image);
-  const dateRange = formatDateRange(item.startDateTime, item.endDateTime);
+  const { title } = event;
+  const imgUrl = urlForImage(event.image);
+  const dateRange = formatDateRange(event.schedule?.startDate, event.schedule?.endDate);
 
   return (
     <li className="group list-none">
       <Link
-        href={`/event/${item.slug}`}
+        href={`/event/${event.slug}`}
         className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/20 rounded-2xl"
       >
         <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 bg-white transition-transform duration-200 group-hover:-translate-y-0.5">
@@ -70,9 +78,9 @@ export const EventCard: FC<EventCardProps> = ({ item }) => {
             )}
           </div>
           <div className="p-4">
-            {item.categories && item.categories?.length > 0 && (
+            {event.categories && event.categories?.length > 0 && (
               <div className="mb-2 flex flex-wrap gap-2">
-                {item.categories.slice(0, 3).map(slug => {
+                {event.categories.slice(0, 3).map(slug => {
                   const cat = CATEGORIES.find(c => c.slug === slug);
                   const label = cat ? t(cat.i18n) : slug;
                   return (
@@ -91,10 +99,10 @@ export const EventCard: FC<EventCardProps> = ({ item }) => {
             </h3>
             <p className="text-sm text-gray-600">
               {dateRange}
-              {item.place?.title ? (
+              {event.place?.title ? (
                 <>
                   <span className="mx-1">·</span>
-                  {item.place?.title}
+                  {event.place?.title}
                 </>
               ) : null}
             </p>
