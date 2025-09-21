@@ -20,12 +20,18 @@ export default function ScheduleInput(props: ObjectInputProps<ScheduleValue>) {
   const { value, onChange } = props;
 
   useEffect(() => {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     const mode = value.mode ?? 'single';
-    if (mode !== 'single') return; // only compute for single
+    if (mode !== 'single') {
+      return;
+    } // only compute for single
 
     const { startDate, startTime, endTime } = value;
-    if (!startDate || !startTime || !endTime) return;
+    if (!startDate || !startTime || !endTime) {
+      return;
+    }
 
     const base = new Date(0);
     const s = parse(startTime, 'HH:mm', base);

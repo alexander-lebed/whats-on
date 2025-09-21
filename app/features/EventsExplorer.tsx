@@ -17,19 +17,28 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const toggle = (slug: string) => {
     setSelected(prev => {
       const next = new Set(prev);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
+      if (next.has(slug)) {
+        next.delete(slug);
+      } else {
+        next.add(slug);
+      }
       return next;
     });
   };
 
   const filteredEvents = useMemo(() => {
-    if (selected.size === 0) return events;
+    if (selected.size === 0) {
+      return events;
+    }
     return events.filter(item => {
-      if (!item.categories || item.categories.length === 0) return false;
+      if (!item.categories || item.categories.length === 0) {
+        return false;
+      }
       const itemSet = new Set(item.categories);
       for (const s of selected) {
-        if (itemSet.has(s)) return true;
+        if (itemSet.has(s)) {
+          return true;
+        }
       }
       return false;
     });

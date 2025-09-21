@@ -23,7 +23,9 @@ export default defineType({
       type: 'internationalizedArrayString',
       validation: Rule =>
         Rule.custom<{ _key: string; value?: string }[]>(value => {
-          if (!value || value.length === 0) return 'Title is required';
+          if (!value || value.length === 0) {
+            return 'Title is required';
+          }
           const invalidItems = value.filter(
             item => !item?.value || String(item.value).trim().length === 0
           );
@@ -116,8 +118,12 @@ export default defineType({
           hidden: ({ parent }) => (parent as ScheduleParent)?.mode === 'single',
           validation: Rule =>
             Rule.custom((val, ctx) => {
-              if ((ctx.parent as ScheduleParent)?.mode !== 'range') return true;
-              if (!val) return 'Required';
+              if ((ctx.parent as ScheduleParent)?.mode !== 'range') {
+                return true;
+              }
+              if (!val) {
+                return 'Required';
+              }
               const start = (ctx.parent as { startDate?: string }).startDate;
               return !start || val >= start || 'End date must be on/after start date';
             }),
@@ -136,8 +142,12 @@ export default defineType({
             Rule.custom((val, ctx) => {
               const start = (ctx.parent as { startTime?: string }).startTime;
               const mode = (ctx.parent as ScheduleParent)?.mode ?? 'single';
-              if (!val) return 'Required';
-              if (!start) return true;
+              if (!val) {
+                return 'Required';
+              }
+              if (!start) {
+                return true;
+              }
               // In range mode enforce same-day end after start; in single allow overnight
               return mode === 'range' ? val > start || 'End must be after start' : true;
             }),
@@ -270,13 +280,16 @@ export default defineType({
       };
       const displayTitle = getI18nValue(title);
       const subtitleParts: string[] = [];
-      if (startSingle)
+      if (startSingle) {
         subtitleParts.push(`${startSingle} ${sTime ?? ''}${eTime ? `–${eTime}` : ''}`.trim());
-      else if (startRange || endRange)
+      } else if (startRange || endRange) {
         subtitleParts.push(
           `${startRange ?? '—'} → ${endRange ?? '—'} ${sTime ?? ''}${eTime ? `–${eTime}` : ''}`.trim()
         );
-      if (placeTitle) subtitleParts.push(placeTitle);
+      }
+      if (placeTitle) {
+        subtitleParts.push(placeTitle);
+      }
       return {
         title: displayTitle,
         subtitle: subtitleParts.filter(Boolean).join(' • '),

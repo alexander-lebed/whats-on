@@ -14,6 +14,7 @@ export default defineConfig([
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-destructuring': ['error', { object: true, array: false }],
+      curly: ['error', 'all'],
       'import/order': [
         'error',
         {
