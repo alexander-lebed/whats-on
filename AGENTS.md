@@ -68,6 +68,10 @@ All code generated must adhere to the following standards. Always consult the **
   - Docs: [Sanity documentation](https://www.sanity.io/docs)
   - GROQ: [Spec](https://www.sanity.io/docs/specifications/groq-syntax), [Cheat sheet](https://www.sanity.io/docs/content-lake/query-cheat-sheet)
 
+- **Date utilities**
+  - date-fns: [format](https://date-fns.org/v4.1.0/docs/format), [parseISO](https://date-fns.org/v4.1.0/docs/parseISO), [addDays](https://date-fns.org/v4.1.0/docs/addDays)
+  - Prefer date-fns over custom date math. Work with ISO strings and use `parseISO`, then format with `format`.
+
 ---
 
 #### ⚠️ Other Best Practices

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { addDays, parseISO, format, parse, isAfter } from 'date-fns';
 import type { ObjectInputProps } from 'sanity';
 import { set } from 'sanity';
 
@@ -10,23 +11,8 @@ type ScheduleValue = {
   endTime?: string; // HH:mm
 };
 
-const parseMinutes = (hhmm?: string): number | null => {
-  if (!hhmm) return null;
-  const [h, m] = hhmm.split(':');
-  const hour = Number(h);
-  const minute = Number(m);
-  if (Number.isNaN(hour) || Number.isNaN(minute)) return null;
-  return hour * 60 + minute;
-};
-
-const addOneDay = (yyyyMMdd: string): string => {
-  const d = new Date(`${yyyyMMdd}T00:00:00Z`);
-  // add 1 day in UTC to avoid TZ shifts; backend stores date only
-  d.setUTCDate(d.getUTCDate() + 1);
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(d.getUTCDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+const toNextDay = (yyyyMMdd: string): string => {
+  return format(addDays(parseISO(`${yyyyMMdd}T00:00:00Z`), 1), 'yyyy-MM-dd');
 };
 
 // Schedule object input that auto-computes endDate in single mode
@@ -34,19 +20,21 @@ export default function ScheduleInput(props: ObjectInputProps<ScheduleValue>) {
   const { value, onChange } = props;
 
   useEffect(() => {
-    const mode = value?.mode ?? 'single';
+    if (!value) return;
+    const mode = value.mode ?? 'single';
     if (mode !== 'single') return; // only compute for single
 
-    const startDate = value?.startDate;
-    const startMin = parseMinutes(value?.startTime);
-    const endMin = parseMinutes(value?.endTime);
-    if (!startDate || startMin == null || endMin == null) return;
+    const { startDate, startTime, endTime } = value;
+    if (!startDate || !startTime || !endTime) return;
 
-    const next = endMin <= startMin ? addOneDay(startDate) : startDate;
-    if (next !== value?.endDate) {
+    const base = new Date(0);
+    const s = parse(startTime, 'HH:mm', base);
+    const e = parse(startTime, 'HH:mm', base);
+    const next = isAfter(e, s) ? startDate : toNextDay(startDate);
+    if (next !== value.endDate) {
       onChange(set(next, ['endDate']));
     }
-  }, [value?.mode, value?.startDate, value?.startTime, value?.endTime, value?.endDate, onChange]);
+  }, [value, onChange]);
 
   // Render default object fields
   return props.renderDefault(props);
