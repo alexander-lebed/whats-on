@@ -3,7 +3,7 @@ import { Locale } from '@/app/types';
 import { sanityFetch } from '@/lib/sanity/client';
 import { EVENTS_QUERY_I18N } from '@/lib/sanity/queries';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
-import { EventsExplorer } from '../features';
+import { EventsExplorer } from '../../features';
 
 export const revalidate = 300;
 

@@ -1,10 +1,7 @@
 import { ReactNode } from 'react';
-import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
 import { setRequestLocale } from 'next-intl/server';
-import { LanguageSwitcher } from '@/app/features';
 import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
@@ -34,14 +31,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider>
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-end py-4">
-              <LanguageSwitcher currentLocale={locale} />
-            </div>
-            {children}
-          </div>
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
@@ -49,12 +39,4 @@ export default async function LocaleLayout({ children, params }: Props) {
 
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }));
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations();
-  return {
-    title: t('common.metadata.title'),
-    description: t('common.metadata.description'),
-  };
 }
