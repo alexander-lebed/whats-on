@@ -1,10 +1,10 @@
 'use client';
 import { FC } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import { formatDateRange } from '@/app/utils';
+import { Link } from '@/i18n/navigation';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { urlForImage } from '../utils/sanityImage';
 
@@ -21,7 +21,7 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
   return (
     <li className="group list-none">
       <Link
-        href={`/event/${event.slug}`}
+        href={`/events/${event.slug}`}
         className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/20 rounded-2xl"
       >
         <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 bg-white transition-transform duration-200 group-hover:-translate-y-0.5">

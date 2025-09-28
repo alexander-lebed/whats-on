@@ -1,8 +1,6 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
+import { fetchEvents } from '@/app/api';
 import { Locale } from '@/app/types';
-import { sanityFetch } from '@/lib/sanity/client';
-import { EVENTS_QUERY_I18N } from '@/lib/sanity/queries';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 import { EventsExplorer } from '../../features';
 
 export const revalidate = 300;
@@ -13,17 +11,8 @@ type Props = {
 
 export default async function Page(props: Props) {
   const { locale } = await props.params;
-  setRequestLocale(locale);
   const t = await getTranslations();
-
-  const events = await sanityFetch<EVENTS_QUERY_I18NResult>(
-    EVENTS_QUERY_I18N,
-    { lang: locale },
-    {
-      revalidate,
-      tags: ['events'],
-    }
-  );
+  const events = await fetchEvents(locale, revalidate);
 
   return (
     <main className="py-8">

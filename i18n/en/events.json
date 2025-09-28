@@ -1,6 +1,11 @@
 {
   "title": "Events",
   "heading": "Events list",
+  "all-dates": "All dates",
+  "show-all-dates": "+ Show all dates",
+  "getting-there": "Getting there",
+  "open-in-google-maps": "Open in Google Maps",
+  "website": "Website",
   "category": {
     "music": "Music",
     "clubs-parties": "Clubs & Parties",

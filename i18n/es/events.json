@@ -1,6 +1,11 @@
 {
   "title": "Eventos",
   "heading": "Lista de eventos",
+  "all-dates": "Todas las fechas",
+  "show-all-dates": "+ Mostrar todas las fechas",
+  "getting-there": "Cómo llegar",
+  "open-in-google-maps": "Abrir en Google Maps",
+  "website": "Sitio web",
   "category": {
     "music": "Música",
     "clubs-parties": "Clubs y Fiestas",

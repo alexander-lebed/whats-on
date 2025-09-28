@@ -11,12 +11,16 @@ type Props = {
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
   return (
-    <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-end py-4">
-        <LanguageSwitcher currentLocale={locale} />
-      </div>
-      {children}
-    </div>
+    <>
+      <header className="bg-background text-foreground">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-end py-4">
+            <LanguageSwitcher currentLocale={locale} />
+          </div>
+        </div>
+      </header>
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">{children}</div>
+    </>
   );
 }
 
