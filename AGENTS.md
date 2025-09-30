@@ -6,6 +6,7 @@ All code generated must adhere to the following standards. Always consult the **
 
 #### 🧹 Code Formatting
 - Always respect **ESLint** and **Prettier** configurations.
+- Always follow the repository ESLint rules defined in `eslint.config.mjs`.
 - Use formatting and lint scripts defined in `package.json` before committing or submitting code.
 - Run `pnpm lint` to check ESLint errors.
 - Run `pnpm lint:fix` to auto-fix ESLint errors and format with Prettier.

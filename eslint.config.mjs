@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 
 export default defineConfig([
   {
-    ignores: ['.next/**', 'node_modules/**', 'dist/**', 'coverage/**'],
+    ignores: ['.next/**', 'node_modules/**', 'dist/**', 'coverage/**', 'next-env.d.ts'],
   },
   ...compat.config({
     extends: ['next/core-web-vitals', 'next/typescript', 'prettier'],
