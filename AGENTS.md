@@ -65,6 +65,7 @@ All code generated must adhere to the following standards. Always consult the **
   - Getting started (App Router): [next-intl App Router guide](https://next-intl.dev/docs/getting-started/app-router)
   - Usage: [next-intl Usage guide](https://next-intl.dev/docs/usage)
   - Navigation [next-intl Navigation](https://next-intl.dev/docs/routing/navigation)
+  - Use kebab-case for i18n message keys (e.g., `common.header-title`, `events.empty-state.title`). Avoid camelCase and snake_case.
 
 - **Sanity CMS**
   - Docs: [Sanity documentation](https://www.sanity.io/docs)
