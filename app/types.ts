@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 
 export type Category = {
   slug: string;
@@ -14,3 +15,5 @@ export type Language = {
   name: string;
   locale: Locale;
 };
+
+export type EventPlace = EVENTS_QUERY_I18NResult[number]['place'];

@@ -76,6 +76,12 @@ All code generated must adhere to the following standards. Always consult the **
   - date-fns: [format](https://date-fns.org/v4.1.0/docs/format), [parseISO](https://date-fns.org/v4.1.0/docs/parseISO), [addDays](https://date-fns.org/v4.1.0/docs/addDays)
   - Prefer date-fns over custom date math. Work with ISO strings and use `parseISO`, then format with `format`.
 
+- **Google Maps (React)**
+  - Get Started: [vis.gl react-google-maps - Get Started](https://visgl.github.io/react-google-maps/docs/get-started)
+  - Introduction & Docs: [vis.gl react-google-maps - Docs](https://visgl.github.io/react-google-maps/docs)
+  - Map API: [<Map> Component](https://visgl.github.io/react-google-maps/docs/api-reference/components/map)
+  - AdvancedMarker API: [<AdvancedMarker> Component](https://visgl.github.io/react-google-maps/docs/api-reference/components/advanced-marker)
+
 ---
 
 #### ⚠️ Other Best Practices

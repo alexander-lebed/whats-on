@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { MapPin, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { Map } from '@/app/features';
 import type { Locale } from '@/app/types';
 import { urlForImage } from '@/app/utils/sanityImage';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
@@ -120,6 +121,11 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
           ) : null}
         </section>
       )}
+      {event.place?.location?.lat && event.place?.location?.lng ? (
+        <section aria-label="Map" className="rounded-2xl overflow-hidden border border-stone-300">
+          <Map places={[event.place]} />
+        </section>
+      ) : null}
     </article>
   );
 };
