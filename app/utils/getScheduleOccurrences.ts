@@ -1,10 +1,9 @@
 import { addDays, format, isBefore, isEqual, parseISO } from 'date-fns';
-import type { Locale } from '@/app/types';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
+import { Event, Locale } from '@/app/types';
 import { getDateFnsLocale } from './date';
 
 export const getScheduleOccurrences = (
-  schedule: EVENTS_QUERY_I18NResult[number]['schedule'],
+  schedule: Event['schedule'],
   locale: Locale
 ): Array<{ label: string; time: string }> => {
   if (!schedule) {

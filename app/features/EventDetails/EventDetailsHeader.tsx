@@ -2,12 +2,11 @@ import { FC, ReactElement, cloneElement, isValidElement } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
-import type { Locale } from '@/app/types';
+import { Event, Locale } from '@/app/types';
 import { formatDayShort } from '@/app/utils';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 
 type Props = {
-  event: EVENTS_QUERY_I18NResult[number];
+  event: Event;
   locale: Locale;
 };
 

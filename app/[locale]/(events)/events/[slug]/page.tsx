@@ -4,8 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { fetchEvents } from '@/app/api';
 import { LANGUAGES } from '@/app/constants';
 import { EventDetails } from '@/app/features';
-import type { Locale } from '@/app/types';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
+import { Event, Locale } from '@/app/types';
 import EventScript from './EventScript';
 
 export const revalidate = 300;
@@ -14,10 +13,7 @@ type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
-async function getEvent(
-  locale: Locale,
-  slug: string
-): Promise<EVENTS_QUERY_I18NResult[number] | undefined> {
+async function getEvent(locale: Locale, slug: string): Promise<Event | undefined> {
   const events = await fetchEvents(locale);
   return events.find(e => e.slug === slug);
 }

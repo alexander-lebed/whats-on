@@ -16,4 +16,4 @@ export type Language = {
   locale: Locale;
 };
 
-export type EventPlace = EVENTS_QUERY_I18NResult[number]['place'];
+export type Event = EVENTS_QUERY_I18NResult[number];

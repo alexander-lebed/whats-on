@@ -3,12 +3,11 @@
 import type { FC } from 'react';
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import type { Locale } from '@/app/types';
+import { Event, Locale } from '@/app/types';
 import { getScheduleOccurrences } from '@/app/utils';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 
 type EventDatesProps = {
-  schedule: EVENTS_QUERY_I18NResult[number]['schedule'];
+  schedule: Event['schedule'];
   locale: Locale;
 };
 

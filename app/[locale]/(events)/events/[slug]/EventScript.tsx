@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import Script from 'next/script';
-import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
+import { Event } from '@/app/types';
 
 type EventScriptProps = {
-  event: EVENTS_QUERY_I18NResult[number];
+  event: Event;
 };
 
 const EventScript: FC<EventScriptProps> = ({ event }) => {
