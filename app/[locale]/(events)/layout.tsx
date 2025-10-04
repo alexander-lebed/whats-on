@@ -2,19 +2,24 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LanguageSwitcher } from '@/app/features';
+import { Link } from '@/i18n/navigation';
 
 type Props = {
   children: ReactNode;
   params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({ children, params }: Props) {
+export default async function Layout({ children, params }: Props) {
   const { locale } = await params;
+  const t = await getTranslations('events');
   return (
     <>
       <header className="bg-background text-foreground">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-end py-4">
+          <div className="flex items-center justify-between gap-4 py-4">
+            <Link href="/" className="hover:text-white">
+              {t('title')}
+            </Link>
             <LanguageSwitcher currentLocale={locale} />
           </div>
         </div>
