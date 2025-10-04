@@ -67,6 +67,41 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
       {/* Dates */}
       <EventDetailsDates schedule={event.schedule} locale={locale} />
 
+      {/* Tickets & pricing */}
+      {(event.ticketUrl || event.isFree || typeof event.price === 'number') && (
+        <section aria-labelledby="tickets-heading" className="border-l-2 pl-4">
+          <h2 id="tickets-heading" className="mb-3 text-sm font-semibold uppercase tracking-wide">
+            {t('events.tickets')}
+          </h2>
+
+          {event.ticketUrl ? (
+            <p className="flex items-center gap-2">
+              <ExternalLink aria-hidden className="h-5 w-5" />
+              <a
+                className="text-primary hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={event.ticketUrl}
+              >
+                {t('events.tickets')}
+              </a>
+            </p>
+          ) : null}
+
+          {event.isFree === true || typeof event.price === 'number' ? (
+            <p className="mt-4">
+              <span className="font-medium">{t('events.price')}:</span>{' '}
+              {event.isFree === true || !event.price || event.price <= 0
+                ? t('events.free')
+                : new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    currency: 'EUR',
+                  }).format(event.price)}
+            </p>
+          ) : null}
+        </section>
+      )}
+
       {/* Address */}
       {(event.place || event.website) && (
         <section aria-labelledby="getting-there-heading" className="border-l-2 pl-4">
