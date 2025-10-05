@@ -64,6 +64,9 @@ const buttonVariants = cva(
   }
 );
 
+export type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
+export type ButtonSize = VariantProps<typeof buttonVariants>['size'];
+
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     ref?: Ref<HTMLButtonElement>;
