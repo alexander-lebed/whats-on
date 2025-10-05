@@ -3,6 +3,10 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/app/utils';
 
+export const VARIANTS = ['default', 'destructive', 'outline', 'link', 'filter'] as const;
+
+export const SIZES = ['default', 'sm', 'lg', 'icon'] as const;
+
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
