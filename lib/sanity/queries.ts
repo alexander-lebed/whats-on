@@ -23,7 +23,6 @@ export const EVENTS_QUERY_I18N = groq`
     "title": coalesce(${i18nPick('title')}, ""),
     "summary": coalesce(${i18nPick('summary')}, ""),
     "categories": coalesce(categories, []),
-    "place": coalesce(place-> { _id, title, slug, address, location }, null),
-    organizer-> { _id, title, slug }
+    "place": coalesce(place-> { _id, title, slug, address, location }, null)
   }
 `;

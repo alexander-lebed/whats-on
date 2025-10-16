@@ -6,32 +6,22 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'name',
+      title: 'Name',
       type: 'string',
-      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: { source: 'name', maxLength: 96 },
       validation: Rule => Rule.required(),
-    }),
-    defineField({
-      name: 'address',
-      title: 'Address',
-      type: 'string',
-    }),
-    defineField({
-      name: 'location',
-      title: 'Location',
-      type: 'geopoint',
     }),
     defineField({
       name: 'email',
       title: 'Email',
       type: 'email',
+      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'phone',
@@ -40,6 +30,6 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'email' },
+    select: { title: 'name', subtitle: 'email' },
   },
 });

@@ -195,8 +195,8 @@ export default defineType({
       name: 'place',
       title: 'Place',
       type: 'reference',
-      to: [{ type: 'place' }, { type: 'organizer' }],
-      description: 'Select a place or reuse the organizer when it is the place',
+      to: [{ type: 'place' }],
+      description: 'Select a place for your venue',
     }),
     defineField({
       name: 'ticketUrl',
