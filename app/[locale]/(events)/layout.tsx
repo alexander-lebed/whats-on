@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { LanguageSwitcher } from '@/app/features';
+import { ThemeToggle } from '@/app/ui';
 import { Link } from '@/i18n/navigation';
 
 type Props = {
@@ -20,7 +21,10 @@ export default async function Layout({ children, params }: Props) {
             <Link href="/" className="hover:text-white">
               {t('title')}
             </Link>
-            <LanguageSwitcher currentLocale={locale} />
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <LanguageSwitcher currentLocale={locale} />
+            </div>
           </div>
         </div>
       </header>

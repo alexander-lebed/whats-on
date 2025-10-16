@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  --background: var(--color-stone-900);
-  --foreground: var(--color-stone-50);
+  --background: var(--color-stone-50);
+  --foreground: var(--color-stone-900);
 
   --primary: var(--color-pink-600);
 }
@@ -13,6 +13,24 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--color-stone-900);
+    --foreground: var(--color-stone-50);
+  }
+}
+
+[data-theme="dark"] {
+  --background: var(--color-stone-900);
+  --foreground: var(--color-stone-50);
+}
+
+/* Force light theme when user explicitly chooses it */
+[data-theme="light"] {
+  --background: var(--color-stone-50);
+  --foreground: var(--color-stone-900);
 }
 
 body {

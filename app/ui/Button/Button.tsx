@@ -8,7 +8,7 @@ export const VARIANTS = ['default', 'destructive', 'outline', 'link', 'filter'] 
 export const SIZES = ['default', 'sm', 'lg', 'icon'] as const;
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -19,9 +19,10 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         filter: [
           'border',
-          'border-white/10',
-          'bg-white/7',
-          'text-white',
+          'border-foreground/15',
+          'bg-foreground/5',
+          'text-foreground',
+          'hover:bg-foreground/10',
           'hover:border-primary',
           'focus-visible:border-primary',
           'focus-visible:ring-0',

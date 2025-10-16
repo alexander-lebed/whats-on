@@ -28,9 +28,7 @@ export default async function Page({ params }: Props) {
   return (
     <>
       <EventScript event={event} />
-      {/* To make light background */}
-      <div aria-hidden className="fixed inset-0 -z-10 bg-foreground" />
-      <main className="py-4 sm:py-8 text-background">
+      <main className="py-4 sm:py-8">
         <div className="mx-auto w-full max-w-[900px] px-1 sm:px-6 lg:px-0">
           <EventDetails event={event} locale={locale} />
         </div>

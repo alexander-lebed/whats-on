@@ -41,9 +41,9 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
           {markers.map(m => (
             <AdvancedMarker key={m.title} position={m.position} title={m.title}>
               <Pin
-                background="var(--background)"
-                borderColor="var(--foreground)"
-                glyphColor="var(--foreground)"
+                background="var(--color-stone-900)"
+                borderColor="var(--color-stone-900)"
+                glyphColor="var(--color-stone-50)"
               />
             </AdvancedMarker>
           ))}
