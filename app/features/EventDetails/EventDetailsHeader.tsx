@@ -38,12 +38,12 @@ const EventDetailsHeader: FC<Props> = ({ event, locale }) => {
             })}
           </div>
         ) : null}
-        {event.place?.title ? (
+        {event.place?.name ? (
           <div className="flex items-center gap-2">
             <span aria-hidden className="text-sm">
               <MapPin size="1.3em" />
             </span>
-            <span>{event.place.title}</span>
+            <span>{event.place.name}</span>
           </div>
         ) : null}
         {event.schedule ? (

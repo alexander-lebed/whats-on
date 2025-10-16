@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Map } from '@/app/features';
 import { Event, Locale } from '@/app/types';
+import { getPlaceAddress } from '@/app/utils';
 import { urlForImage } from '@/app/utils/sanityImage';
 import EventDetailsDates from './EventDetailsDates';
 import EventDetailsHeader from './EventDetailsHeader';
@@ -115,9 +116,9 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
             <div className="mb-2">
               <div className="mb-1 flex items-center gap-2">
                 <MapPin aria-hidden className="h-5 w-5" />
-                <span>{event.place.title}</span>
+                <span>{event.place.name}</span>
               </div>
-              {event.place.address ? <p>{event.place.address}</p> : null}
+              {event.place.address ? <p>{getPlaceAddress(event.place)}</p> : null}
               {event.place.address && (
                 <p className="mt-2">
                   <a
@@ -129,7 +130,7 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
                         const { lat, lng } = event.place.location;
                         return `https://maps.google.com/?q=${lat},${lng}`;
                       }
-                      return `https://maps.google.com/?q=${encodeURIComponent(event.place?.address ?? event.place?.title ?? '')}`;
+                      return `https://maps.google.com/?q=${encodeURIComponent(getPlaceAddress(event.place) || event.place?.name)}`;
                     })()}
                   >
                     {t('events.open-in-google-maps')}{' '}

@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import Script from 'next/script';
 import { Event } from '@/app/types';
+import { getPlaceAddress } from '@/app/utils';
 
 type EventScriptProps = {
   event: Event;
@@ -20,8 +21,8 @@ const EventScript: FC<EventScriptProps> = ({ event }) => {
     location: event.place
       ? {
           '@type': 'Place',
-          name: event.place.title,
-          address: event.place.address ?? undefined,
+          name: event.place.name,
+          address: getPlaceAddress(event.place),
         }
       : undefined,
     offers: event.ticketUrl

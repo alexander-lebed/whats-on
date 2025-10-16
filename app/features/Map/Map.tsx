@@ -11,7 +11,7 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
       places
         .filter(p => p && p.location?.lat && p.location?.lng)
         .map(p => ({
-          title: p!.title,
+          title: p!.name,
           position: {
             lat: p!.location!.lat!,
             lng: p!.location!.lng!,

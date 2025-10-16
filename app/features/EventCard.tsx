@@ -64,10 +64,10 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
             </h3>
             <p className="text-sm text-gray-600">
               {dateRange}
-              {event.place?.title ? (
+              {event.place?.name ? (
                 <>
                   <span className="mx-1">·</span>
-                  {event.place?.title}
+                  {event.place?.name}
                 </>
               ) : null}
             </p>

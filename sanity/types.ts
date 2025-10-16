@@ -173,9 +173,11 @@ export type Place = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title: string;
+  name: string;
   slug: Slug;
-  address?: string;
+  address: string;
+  zipCode?: string;
+  city?: string;
   location?: Geopoint;
 };
 
@@ -404,7 +406,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./lib/sanity/queries.ts
 // Variable: EVENTS_QUERY_I18N
-// Query: *[    _type == "event"    && defined(schedule.startDate)    && defined(slug.current)    && !(_id in path('drafts.**'))  ] | order(schedule.startDate asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": coalesce(categories, []),    "place": coalesce(place-> { _id, title, slug, address, location }, null)  }
+// Query: *[    _type == "event"    && defined(schedule.startDate)    && defined(slug.current)    && !(_id in path('drafts.**'))  ] | order(schedule.startDate asc) {    ..., // include all fields by default    "slug": slug.current,    "title": coalesce(coalesce(  title[ _key == $lang ][0].value,  title[ _key == 'en' ][0].value,  title[ _key == 'es' ][0].value,  title[0].value,  null), ""),    "summary": coalesce(coalesce(  summary[ _key == $lang ][0].value,  summary[ _key == 'en' ][0].value,  summary[ _key == 'es' ][0].value,  summary[0].value,  null), ""),    "categories": coalesce(categories, []),    "place": coalesce(place-> { _id, name, slug, address, city, zipCode, location }, null)  }
 export type EVENTS_QUERY_I18NResult = Array<{
   _id: string;
   _type: 'event';
@@ -540,9 +542,11 @@ export type EVENTS_QUERY_I18NResult = Array<{
   };
   place: {
     _id: string;
-    title: string;
+    name: string;
     slug: Slug;
-    address: string | null;
+    address: string;
+    city: string | null;
+    zipCode: string | null;
     location: Geopoint | null;
   } | null;
   ticketUrl?: string;
@@ -556,6 +560,6 @@ export type EVENTS_QUERY_I18NResult = Array<{
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
-    '\n  *[\n    _type == "event"\n    && defined(schedule.startDate)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n  ] | order(schedule.startDate asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": coalesce(categories, []),\n    "place": coalesce(place-> { _id, title, slug, address, location }, null)\n  }\n': EVENTS_QUERY_I18NResult;
+    '\n  *[\n    _type == "event"\n    && defined(schedule.startDate)\n    && defined(slug.current)\n    && !(_id in path(\'drafts.**\'))\n  ] | order(schedule.startDate asc) {\n    ..., // include all fields by default\n    "slug": slug.current,\n    "title": coalesce(coalesce(\n  title[ _key == $lang ][0].value,\n  title[ _key == \'en\' ][0].value,\n  title[ _key == \'es\' ][0].value,\n  title[0].value,\n  null\n), ""),\n    "summary": coalesce(coalesce(\n  summary[ _key == $lang ][0].value,\n  summary[ _key == \'en\' ][0].value,\n  summary[ _key == \'es\' ][0].value,\n  summary[0].value,\n  null\n), ""),\n    "categories": coalesce(categories, []),\n    "place": coalesce(place-> { _id, name, slug, address, city, zipCode, location }, null)\n  }\n': EVENTS_QUERY_I18NResult;
   }
 }

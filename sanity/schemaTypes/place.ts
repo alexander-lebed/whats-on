@@ -6,8 +6,8 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'name',
+      title: 'Name',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -15,12 +15,23 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: { source: 'name', maxLength: 96 },
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'address',
       title: 'Address',
+      type: 'string',
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'zipCode',
+      title: 'ZIP code',
+      type: 'string',
+    }),
+    defineField({
+      name: 'city',
+      title: 'City',
       type: 'string',
     }),
     defineField({
@@ -30,6 +41,6 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'address' },
+    select: { title: 'name', subtitle: 'address' },
   },
 });
