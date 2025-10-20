@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import type { IconName } from 'lucide-react/dynamic';
 import { EVENTS_QUERY_I18NResult } from '@/sanity/types';
 
 export type Category = {
@@ -7,6 +8,7 @@ export type Category = {
   i18n: string;
   iconComponent: ReactNode;
   emoji: string /* displayed in Sanity */;
+  iconName: IconName;
 };
 
 export type Locale = 'en' | 'es';

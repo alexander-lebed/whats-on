@@ -1,5 +1,6 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import { Button } from '@/app/ui';
@@ -58,7 +59,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
               aria-label={t(category.i18n)}
               onPress={() => toggle(category.slug)}
             >
-              <span aria-hidden>{category.iconComponent}</span>
+              <DynamicIcon name={category.iconName} size="1rem" aria-hidden />
               <span>{t(category.i18n)}</span>
             </Button>
           );

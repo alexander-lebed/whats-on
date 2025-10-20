@@ -19,6 +19,7 @@ export const CATEGORIES: Category[] = [
     title: 'Music',
     i18n: 'events.category.music',
     iconComponent: <Music />,
+    iconName: 'music',
     emoji: '🎵',
   },
   {
@@ -26,6 +27,7 @@ export const CATEGORIES: Category[] = [
     title: 'Clubs & Parties',
     i18n: 'events.category.clubs-parties',
     iconComponent: <Martini />,
+    iconName: 'martini',
     emoji: '🍸',
   },
   {
@@ -33,6 +35,7 @@ export const CATEGORIES: Category[] = [
     title: 'Stage & Film',
     i18n: 'events.category.stage-film',
     iconComponent: <Drama />,
+    iconName: 'drama',
     emoji: '🎭',
   },
   {
@@ -40,6 +43,7 @@ export const CATEGORIES: Category[] = [
     title: 'Art & Exhibitions',
     i18n: 'events.category.art-exhibitions',
     iconComponent: <Palette />,
+    iconName: 'palette',
     emoji: '🖼️',
   },
   {
@@ -47,6 +51,7 @@ export const CATEGORIES: Category[] = [
     title: 'Eat & Drink',
     i18n: 'events.category.eat-drink',
     iconComponent: <Utensils />,
+    iconName: 'utensils',
     emoji: '🍴',
   },
   {
@@ -54,6 +59,7 @@ export const CATEGORIES: Category[] = [
     title: 'Family & Kids',
     i18n: 'events.category.family',
     iconComponent: <Users />,
+    iconName: 'users',
     emoji: '👪',
   },
   {
@@ -61,6 +67,7 @@ export const CATEGORIES: Category[] = [
     title: 'Sports & Wellness',
     i18n: 'events.category.sports-wellness',
     iconComponent: <Volleyball />,
+    iconName: 'volleyball',
     emoji: '🏐',
   },
   {
@@ -68,6 +75,7 @@ export const CATEGORIES: Category[] = [
     title: 'Festivals & Fairs',
     i18n: 'events.category.festivals-fairs',
     iconComponent: <FerrisWheel />,
+    iconName: 'ferris-wheel',
     emoji: '🎡',
   },
   {
@@ -75,6 +83,7 @@ export const CATEGORIES: Category[] = [
     title: 'Science & Tech',
     i18n: 'events.category.science-tech',
     iconComponent: <Lightbulb />,
+    iconName: 'lightbulb',
     emoji: '💡',
   },
   {
@@ -82,6 +91,7 @@ export const CATEGORIES: Category[] = [
     title: 'Networking & Community',
     i18n: 'events.category.networking-community',
     iconComponent: <Handshake />,
+    iconName: 'handshake',
     emoji: '🤝',
   },
   {
@@ -89,6 +99,7 @@ export const CATEGORIES: Category[] = [
     title: 'Local Fiestas',
     i18n: 'events.category.local-fiestas',
     iconComponent: <Landmark />,
+    iconName: 'landmark',
     emoji: '🏛️',
   },
 ];
