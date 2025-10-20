@@ -52,14 +52,15 @@ const EventDetailsHeader: FC<Props> = ({ event, locale }) => {
               <span>
                 {formatDayShort(event.schedule.startDate, locale)}
                 {event.schedule.startTime || event.schedule.endTime ? ', ' : ''}
-                {event.schedule.startTime}
+                {event.schedule.startTime ?? ''}
                 {event.schedule.endTime ? ` – ${event.schedule.endTime}` : ''}
               </span>
             ) : (
               <span>
                 {formatDayShort(event.schedule.startDate, locale)}
-                {` – ${formatDayShort(event.schedule.endDate, locale)}, `}
-                {event.schedule.startTime}
+                {` – ${formatDayShort(event.schedule.endDate, locale)}`}
+                {event.schedule.startTime || event.schedule.endTime ? ', ' : ''}
+                {event.schedule.startTime ?? ''}
                 {event.schedule.endTime ? ` – ${event.schedule.endTime}` : ''}
               </span>
             )}

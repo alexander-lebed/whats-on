@@ -29,14 +29,15 @@ export default function ScheduleInput(props: ObjectInputProps<ScheduleValue>) {
     } // only compute for single
 
     const { startDate, startTime, endTime } = value;
+    // Only attempt to compute next day when both times are present
     if (!startDate || !startTime || !endTime) {
       return;
     }
 
     const base = new Date(0);
-    const s = parse(startTime, 'HH:mm', base);
-    const e = parse(startTime, 'HH:mm', base);
-    const next = isAfter(e, s) ? startDate : toNextDay(startDate);
+    const startParsed = parse(startTime, 'HH:mm', base);
+    const endParsed = parse(endTime, 'HH:mm', base);
+    const next = isAfter(endParsed, startParsed) ? startDate : toNextDay(startDate);
     if (next !== value.endDate) {
       onChange(set(next, ['endDate']));
     }

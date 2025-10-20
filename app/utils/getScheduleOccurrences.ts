@@ -10,7 +10,7 @@ export const getScheduleOccurrences = (
     return [];
   }
   const { startTime, endTime } = schedule;
-  const timeLabel = endTime ? `${startTime} – ${endTime}` : startTime;
+  const timeLabel = startTime && endTime ? `${startTime} – ${endTime}` : (startTime ?? '');
 
   if (schedule.mode === 'single' || !schedule.endDate) {
     return [

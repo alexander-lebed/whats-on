@@ -47,7 +47,7 @@ export type Event = {
     mode: 'single' | 'range';
     startDate: string;
     endDate?: string;
-    startTime:
+    startTime?:
       | '07:00'
       | '07:30'
       | '08:00'
@@ -433,7 +433,7 @@ export type EVENTS_QUERY_I18NResult = Array<{
     mode: 'range' | 'single';
     startDate: string;
     endDate?: string;
-    startTime:
+    startTime?:
       | '00:00'
       | '00:30'
       | '01:00'

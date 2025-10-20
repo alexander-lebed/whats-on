@@ -132,7 +132,6 @@ export default defineType({
           name: 'startTime',
           title: 'Start time',
           type: 'timeValue',
-          validation: Rule => Rule.required(),
         }),
         defineField({
           name: 'endTime',
@@ -142,13 +141,9 @@ export default defineType({
             Rule.custom((val, ctx) => {
               const start = (ctx.parent as { startTime?: string }).startTime;
               const mode = (ctx.parent as ScheduleParent)?.mode ?? 'single';
-              if (!val) {
-                return 'Required';
-              }
-              if (!start) {
+              if (!val || !start) {
                 return true;
               }
-              // In range mode enforce same-day end after start; in single allow overnight
               return mode === 'range' ? val > start || 'End must be after start' : true;
             }),
         }),
