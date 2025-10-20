@@ -4,10 +4,8 @@ import { FC } from 'react';
 import { Button as HButton, type ButtonProps as HButtonProps } from '@heroui/button';
 
 export type ButtonProps = HButtonProps;
-type ButtonVariant = NonNullable<ButtonProps['variant']>;
 
-// Keep in sync with library variants; compiler checks via `satisfies`
-export const VARIANTS = [
+export const VARIANTS: ButtonProps['variant'][] = [
   'solid',
   'bordered',
   'flat',
@@ -15,7 +13,7 @@ export const VARIANTS = [
   'light',
   'faded',
   'shadow',
-] as const satisfies readonly ButtonVariant[];
+];
 export const SIZES: ButtonProps['size'][] = ['sm', 'md', 'lg'];
 export const COLORS: ButtonProps['color'][] = [
   'default',

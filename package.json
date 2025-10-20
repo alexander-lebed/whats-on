@@ -29,7 +29,11 @@
   },
   "dependencies": {
     "@heroui/button": "^2.2.27",
+    "@heroui/checkbox": "^2.3.27",
+    "@heroui/date-picker": "^2.3.28",
     "@heroui/dropdown": "^2.3.27",
+    "@heroui/input": "^2.4.28",
+    "@heroui/radio": "^2.3.27",
     "@heroui/system": "^2.4.23",
     "@heroui/theme": "^2.4.23",
     "@sanity/client": "^7.11.0",
