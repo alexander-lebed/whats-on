@@ -3,14 +3,10 @@ import type { StorybookConfig } from '@storybook/nextjs-vite';
 const config: StorybookConfig = {
   framework: {
     name: '@storybook/nextjs-vite',
-    options: {
-      image: {
-        loading: 'eager',
-      },
-    },
+    options: {},
   },
   stories: ['../**/*.stories.@(ts|tsx)'],
-  // No addons needed; Storybook 9 ships core essentials by default
+  addons: ['@storybook/addon-themes'],
 };
 
 export default config;

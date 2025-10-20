@@ -25,15 +25,14 @@
   }
 }
 
-[class="dark"] {
-  --background: var(--color-stone-900);
-  --foreground: var(--color-stone-50);
-}
-
-/* Force light theme when user explicitly chooses it */
-[class="light"] {
+.light {
   --background: var(--color-stone-50);
   --foreground: var(--color-stone-900);
+}
+
+.dark {
+  --background: var(--color-stone-900);
+  --foreground: var(--color-stone-50);
 }
 
 body {
