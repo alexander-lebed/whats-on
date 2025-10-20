@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import { Globe } from 'lucide-react';
 import { LANGUAGES } from '@/app/constants';
 import { Button } from '@/app/ui';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/app/ui';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@/app/ui';
 import { usePathname, useRouter } from '@/i18n/navigation';
 
 type LanguageSwitcherProps = {
@@ -25,21 +25,21 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ currentLocale }) =
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="destructive" size="sm" className="gap-2">
+    <Dropdown>
+      <DropdownTrigger asChild>
+        <Button variant="light" size="sm">
           <Globe className="h-4 w-4" />
           {current.name}
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      </DropdownTrigger>
+      <DropdownMenu onAction={key => handleSelect(key as string)}>
         {LANGUAGES.filter(lang => lang.locale !== currentLocale).map(lang => (
-          <DropdownMenuItem key={lang.locale} onSelect={() => handleSelect(lang.locale)}>
+          <DropdownItem variant="flat" key={lang.locale} id={lang.locale}>
             {lang.name}
-          </DropdownMenuItem>
+          </DropdownItem>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+    </Dropdown>
   );
 };
 

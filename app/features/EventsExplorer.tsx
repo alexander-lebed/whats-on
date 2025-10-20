@@ -52,12 +52,13 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
           return (
             <Button
               key={category.slug}
-              variant="filter"
+              variant={isActive ? 'solid' : 'flat'}
+              color={isActive ? 'primary' : undefined}
+              radius="full"
               aria-label={t(category.i18n)}
-              active={isActive}
-              onClick={() => toggle(category.slug)}
+              onPress={() => toggle(category.slug)}
             >
-              <span aria-hidden> {category.iconComponent} </span>
+              <span aria-hidden>{category.iconComponent}</span>
               <span>{t(category.i18n)}</span>
             </Button>
           );

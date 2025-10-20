@@ -15,7 +15,7 @@ export default async function Layout({ children, params }: Props) {
   const t = await getTranslations('events');
   return (
     <>
-      <header className="bg-background text-foreground">
+      <header className="dark bg-stone-900 text-stone-50">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 py-4">
             <Link href="/" className="hover:text-white">

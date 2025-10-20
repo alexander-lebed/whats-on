@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
+import { HeroProvider } from '@/app/providers';
 import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
@@ -31,7 +32,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <HeroProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </HeroProvider>
       </body>
     </html>
   );

@@ -1,0 +1,1 @@
+export { HeroProvider } from './HeroProvider';

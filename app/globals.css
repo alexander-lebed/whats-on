@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@plugin '../hero.ts';
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: var(--color-stone-50);
@@ -22,13 +25,13 @@
   }
 }
 
-[data-theme="dark"] {
+[class="dark"] {
   --background: var(--color-stone-900);
   --foreground: var(--color-stone-50);
 }
 
 /* Force light theme when user explicitly chooses it */
-[data-theme="light"] {
+[class="light"] {
   --background: var(--color-stone-50);
   --foreground: var(--color-stone-900);
 }

@@ -1,5 +1,6 @@
+import type { ButtonProps } from '@heroui/button';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Button, VARIANTS, SIZES } from '@/app/ui/Button';
+import { Button } from '@/app/ui/Button';
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -10,7 +11,11 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     size: {
       control: 'select',
-      options: SIZES,
+      options: ['sm', 'md', 'lg'],
+    },
+    variant: {
+      control: 'select',
+      options: ['solid', 'bordered', 'flat', 'ghost', 'light', 'faded', 'shadow'],
     },
   },
 };
@@ -21,11 +26,15 @@ type Story = StoryObj<typeof Button>;
 
 export const AllVariants: Story = {
   args: {
-    size: 'default',
+    size: 'md',
   },
   render: args => (
     <div className="flex gap-5 flex-wrap">
-      {VARIANTS.map(variant => (
+      {(
+        ['solid', 'bordered', 'flat', 'ghost', 'light', 'faded', 'shadow'] as NonNullable<
+          ButtonProps['variant']
+        >[]
+      ).map(variant => (
         <Button key={variant} variant={variant} size={args.size}>
           {variant}
         </Button>
