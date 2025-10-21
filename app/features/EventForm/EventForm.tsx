@@ -13,6 +13,8 @@ import { Textarea } from '@/app/ui';
 import { Checkbox, CheckboxGroup } from '@/app/ui';
 import { TimeInput } from '@/app/ui';
 import { cn } from '@/app/utils';
+import { useRouter } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import PlaceAutocomplete, { PlacePayload } from '../PlaceAutocomplete/PlaceAutocomplete';
 
 const schema = z
@@ -56,6 +58,7 @@ type FormValues = z.infer<typeof schema>;
 export const EventForm: FC = () => {
   const locale = useLocale();
   const t = useTranslations();
+  const router = useRouter();
   const [place, setPlace] = useState<PlacePayload | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -173,7 +176,8 @@ export const EventForm: FC = () => {
       if (!res.ok) {
         throw new Error('Failed');
       }
-      // TODO: toast "Event submitted"
+      const data = (await res.json()) as { id: string; slug: string };
+      router.push(`/events/${data.slug}`);
     } catch (e) {
       console.error(e);
       // TODO: toast Failed to submit
