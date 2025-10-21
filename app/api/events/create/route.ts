@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
     const priceStr = (form.get('price') as string) || '';
     const categoriesJson = (form.get('categories') as string) || '[]';
     const placeCandidateJson = (form.get('placeCandidate') as string) || 'null';
+    const organizerEmail = ((form.get('organizerEmail') as string) || '').trim();
+    const organizerPhone = ((form.get('organizerPhone') as string) || '').trim();
 
     const title = JSON.parse(titleJson);
     const summary = JSON.parse(summaryJson);
@@ -45,7 +47,12 @@ export async function POST(req: NextRequest) {
 
     // Ensure place exists if provided
     let placeRef: { _type: 'reference'; _ref: string } | undefined;
-    if (!isDigital && placeCandidate && Number.isFinite(placeCandidate.lat) && Number.isFinite(placeCandidate.lng)) {
+    if (
+      !isDigital &&
+      placeCandidate &&
+      Number.isFinite(placeCandidate.lat) &&
+      Number.isFinite(placeCandidate.lng)
+    ) {
       const existing = await sanityWriteClient.fetch(
         `*[_type=="place" && address==$address && location.lat==$lat && location.lng==$lng][0]{_id}`,
         { address: placeCandidate.address, lat: placeCandidate.lat, lng: placeCandidate.lng }
@@ -61,10 +68,14 @@ export async function POST(req: NextRequest) {
         });
         placeId = createPlace._id as string;
       }
-      if (placeId) {placeRef = { _type: 'reference', _ref: placeId };}
+      if (placeId) {
+        placeRef = { _type: 'reference', _ref: placeId };
+      }
     }
 
-    const english = (title as Array<{ _key: string; value: string }>).find(x => x._key === 'en')?.value;
+    const english = (title as Array<{ _key: string; value: string }>).find(
+      x => x._key === 'en'
+    )?.value;
     const baseSlug = english || (title[0]?.value as string) || 'event';
     const slug = slugify(baseSlug, { lower: true, strict: true }).slice(0, 90);
 
@@ -86,12 +97,40 @@ export async function POST(req: NextRequest) {
       eventDoc.image = { _type: 'image', asset: { _type: 'reference', _ref: imageAssetRef } };
     }
 
+    // Ensure organizer exists and link by email if provided
+    if (organizerEmail) {
+      const existingOrganizer = await sanityWriteClient.fetch(
+        `*[_type=="organizer" && email==$email][0]{_id,name}`,
+        { email: organizerEmail }
+      );
+      let organizerId: string | undefined = existingOrganizer?._id as string | undefined;
+      if (!organizerId) {
+        const nameFromTitle = Array.isArray(title)
+          ? title.find(x => x?._key === 'en')?.value || title[0]?.value || 'Organizer'
+          : 'Organizer';
+        const createdOrganizer = await sanityWriteClient.create({
+          _type: 'organizer',
+          name: nameFromTitle,
+          slug: { _type: 'slug', current: slugify(nameFromTitle, { lower: true }) },
+          email: organizerEmail,
+          phone: organizerPhone || undefined,
+        });
+        organizerId = createdOrganizer._id as string;
+      } else if (organizerPhone) {
+        // Update phone if provided and organizer exists
+        try {
+          await sanityWriteClient.patch(organizerId).set({ phone: organizerPhone }).commit();
+        } catch {}
+      }
+      if (organizerId) {
+        eventDoc.organizer = { _type: 'reference', _ref: organizerId };
+      }
+    }
+
     const created = await sanityWriteClient.create(eventDoc);
     return Response.json({ id: created._id, slug }, { status: 201 });
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
     return Response.json({ error: 'Failed to create event' }, { status: 500 });
   }
 }
-
-

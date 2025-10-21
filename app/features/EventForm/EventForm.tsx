@@ -32,6 +32,8 @@ const schema = z
     isFree: z.coerce.boolean().default(true),
     price: z.coerce.number().positive().optional(),
     image: z.any().optional(),
+    contactEmail: z.string().email().optional(),
+    contactPhone: z.string().optional(),
   })
   .refine(val => LANGUAGES.every(l => (val.title?.[l.locale] ?? '').toString().trim().length > 0), {
     message: 'All languages: title is required',
@@ -68,6 +70,8 @@ export const EventForm: FC = () => {
       startTime: '',
       endTime: '',
       weekdays: [],
+      contactEmail: '',
+      contactPhone: '',
     },
   });
 
@@ -156,6 +160,13 @@ export const EventForm: FC = () => {
       const file = imageInput?.files?.[0];
       if (file) {
         fd.append('image', file);
+      }
+
+      if (values.contactEmail) {
+        fd.append('organizerEmail', values.contactEmail);
+      }
+      if (values.contactPhone) {
+        fd.append('organizerPhone', values.contactPhone);
       }
 
       const res = await fetch('/api/events/create', { method: 'POST', body: fd });
@@ -327,6 +338,22 @@ export const EventForm: FC = () => {
             {...register('price')}
           />
         )}
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xl font-bold">{t('events.create.contact-section')}</h2>
+        <Input
+          label={t('events.create.contact-email')}
+          type="email"
+          placeholder="name@example.com"
+          {...register('contactEmail')}
+        />
+        <Input
+          label={t('events.create.contact-phone')}
+          type="tel"
+          placeholder="+34 600 000 000"
+          {...register('contactPhone')}
+        />
       </section>
 
       <div>

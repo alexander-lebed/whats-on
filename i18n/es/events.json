@@ -58,6 +58,9 @@
     "ticket-url": "URL de entradas",
     "min-price": "Precio mín.",
     "submit": "Enviar",
-    "page-title": "Crear un evento"
+    "page-title": "Crear un evento",
+    "contact-section": "Contacto",
+    "contact-email": "Correo de contacto",
+    "contact-phone": "Teléfono de contacto"
   }
 }
