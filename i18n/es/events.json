@@ -9,6 +9,15 @@
   "tickets": "Entradas",
   "price": "Precio",
   "free": "Gratis",
+  "weekday": {
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
+  },
   "category": {
     "music": "Música",
     "clubs-parties": "Clubs y Fiestas",
@@ -21,5 +30,34 @@
     "science-tech": "Ciencia y Tecnología",
     "networking-community": "Networking y Comunidad",
     "local-fiestas": "Fiestas Locales"
+  },
+  "create": {
+    "description-in-language": "Descripción en {language}",
+    "name-label": "Nombre ({language})",
+    "description-label": "Descripción ({language})",
+    "category-section": "Categoría",
+    "when-section": "Cuándo",
+    "select-dates": "Seleccionar fechas",
+    "single-day": "Un día",
+    "date-range": "Rango de fechas",
+    "start-date": "Fecha de inicio",
+    "end-date": "Fecha de fin",
+    "start-time": "Hora de inicio",
+    "end-time": "Hora de fin",
+    "weekdays-label": "Días de la semana (al menos uno)",
+    "where-section": "Dónde",
+    "digital-checkbox": "Este evento es digital",
+    "search-location-placeholder": "Buscar ubicación",
+    "website-url": "URL del sitio web",
+    "image-section": "Imagen",
+    "image-label": "Imagen",
+    "image-preview-title": "Vista previa de la imagen",
+    "tickets-section": "Entradas",
+    "pricing-label": "Precios",
+    "paid": "De pago",
+    "ticket-url": "URL de entradas",
+    "min-price": "Precio mín.",
+    "submit": "Enviar",
+    "page-title": "Crear un evento"
   }
 }

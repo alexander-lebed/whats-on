@@ -108,3 +108,14 @@ export const LANGUAGES: Language[] = [
   { name: 'Español', locale: 'es' },
   { name: 'English', locale: 'en' },
 ];
+
+// TODO: Add i18n keys
+export const WEEKDAYS: { slug: string; title: string }[] = [
+  { slug: 'monday', title: 'Monday' },
+  { slug: 'tuesday', title: 'Tuesday' },
+  { slug: 'wednesday', title: 'Wednesday' },
+  { slug: 'thursday', title: 'Thursday' },
+  { slug: 'friday', title: 'Friday' },
+  { slug: 'saturday', title: 'Saturday' },
+  { slug: 'sunday', title: 'Sunday' },
+];

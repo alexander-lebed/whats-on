@@ -1,8 +1,7 @@
 import type { FC } from 'react';
 import { MapPin, ExternalLink } from 'lucide-react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Map } from '@/app/features';
+import { ImageHero, Map } from '@/app/features';
 import { Event, Locale } from '@/app/types';
 import { getPlaceAddress } from '@/app/utils';
 import { urlForImage } from '@/app/utils/sanityImage';
@@ -24,38 +23,7 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
         <EventDetailsHeader event={event} locale={locale} />
       </div>
 
-      {/* Hero */}
-      <div className="w-full">
-        <div
-          className="relative w-full overflow-hidden rounded-2xl"
-          style={{ aspectRatio: '16 / 9' }}
-        >
-          {imgUrl ? (
-            <>
-              {/* Blurred background to avoid black bars while preserving full image in foreground */}
-              <Image
-                src={imgUrl}
-                alt=""
-                aria-hidden
-                fill
-                priority
-                className="object-cover blur-2xl scale-110 opacity-40"
-                sizes="100vw"
-              />
-              <Image
-                src={imgUrl}
-                alt={event.title}
-                fill
-                priority
-                className="object-contain"
-                sizes="100vw"
-              />
-            </>
-          ) : (
-            <div className="h-full w-full bg-gray-100" />
-          )}
-        </div>
-      </div>
+      <ImageHero imgUrl={imgUrl} title={event.title} />
 
       {/* Header & meta (shown under image on mobile only) */}
       <div className="sm:hidden">

@@ -9,6 +9,15 @@
   "tickets": "Tickets",
   "price": "Price",
   "free": "Free",
+  "weekday": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
   "category": {
     "music": "Music",
     "clubs-parties": "Clubs & Parties",
@@ -21,5 +30,35 @@
     "science-tech": "Science & Tech",
     "networking-community": "Networking & Community",
     "local-fiestas": "Local Fiestas"
+  },
+
+  "create": {
+    "description-in-language": "Description in {language}",
+    "name-label": "Name ({language})",
+    "description-label": "Description ({language})",
+    "category-section": "Category",
+    "when-section": "When",
+    "select-dates": "Select dates",
+    "single-day": "Single day",
+    "date-range": "Date range",
+    "start-date": "Start date",
+    "end-date": "End date",
+    "start-time": "Start time",
+    "end-time": "End time",
+    "weekdays-label": "Weekdays (at least one)",
+    "where-section": "Where",
+    "digital-checkbox": "This event is digital",
+    "search-location-placeholder": "Search location",
+    "website-url": "Website URL",
+    "image-section": "Image",
+    "image-label": "Image",
+    "image-preview-title": "Image preview",
+    "tickets-section": "Tickets",
+    "pricing-label": "Pricing",
+    "paid": "Paid",
+    "ticket-url": "Ticket URL",
+    "min-price": "Min. price",
+    "submit": "Submit",
+    "page-title": "Create an event"
   }
 }

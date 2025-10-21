@@ -22,6 +22,9 @@ export default async function Layout({ children, params }: Props) {
               {t('title')}
             </Link>
             <div className="flex items-center gap-3">
+              <Link href={{ pathname: '/events/create' }} className="hover:text-white text-sm">
+                Submit new event
+              </Link>
               <ThemeToggle />
               <LanguageSwitcher currentLocale={locale} />
             </div>

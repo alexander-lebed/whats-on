@@ -28,14 +28,18 @@
     ]
   },
   "dependencies": {
+    "@heroui/autocomplete": "^2.3.28",
     "@heroui/button": "^2.2.27",
     "@heroui/checkbox": "^2.3.27",
+    "@heroui/date-input": "^2.3.27",
     "@heroui/date-picker": "^2.3.28",
     "@heroui/dropdown": "^2.3.27",
+    "@heroui/form": "^2.1.27",
     "@heroui/input": "^2.4.28",
     "@heroui/radio": "^2.3.27",
     "@heroui/system": "^2.4.23",
     "@heroui/theme": "^2.4.23",
+    "@hookform/resolvers": "^5.2.2",
     "@sanity/client": "^7.11.0",
     "@sanity/image-url": "^1.2.0",
     "@storybook/react": "^9.1.13",
@@ -51,7 +55,10 @@
     "next-sanity": "^10.0.16",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwind-merge": "^3.3.1"
+    "react-hook-form": "^7.65.0",
+    "slugify": "^1.6.6",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

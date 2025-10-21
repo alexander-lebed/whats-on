@@ -33,7 +33,7 @@ export const getScheduleOccurrences = (
   let cursor = start;
   const hardCap = 366;
   while ((isBefore(cursor, end) || isEqual(cursor, end)) && out.length < hardCap) {
-    const weekday = format(cursor, 'eee').toLowerCase().slice(0, 3);
+    const weekday = format(cursor, 'eeee').toLowerCase();
     const include = preferred ? preferred.has(weekday) : true;
     if (include) {
       out.push({
