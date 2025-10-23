@@ -237,7 +237,7 @@ export const EventForm: FC = () => {
               variant={inputVariant}
               isRequired
               isInvalid={!!errors.image}
-              errorMessage={errors.image?.message as string}
+              errorMessage={errors.image?.message ? t(errors.image.message as string) : undefined}
               name={imageField.name}
               onBlur={imageField.onBlur}
               ref={imageField.ref}
@@ -262,7 +262,11 @@ export const EventForm: FC = () => {
               variant={inputVariant}
               isRequired
               isInvalid={!!errors.title?.[lang.locale]}
-              errorMessage={errors.title?.[lang.locale]?.message}
+              errorMessage={
+                errors.title?.[lang.locale]?.message
+                  ? t(errors.title?.[lang.locale]?.message as string)
+                  : undefined
+              }
               {...register(`title.${lang.locale}`)}
             />
             <Textarea
@@ -271,7 +275,11 @@ export const EventForm: FC = () => {
               isRequired
               minRows={4}
               isInvalid={!!errors.summary?.[lang.locale]}
-              errorMessage={errors.summary?.[lang.locale]?.message}
+              errorMessage={
+                errors.summary?.[lang.locale]?.message
+                  ? t(errors.summary?.[lang.locale]?.message as string)
+                  : undefined
+              }
               {...register(`summary.${lang.locale}`)}
             />
           </div>
@@ -289,7 +297,7 @@ export const EventForm: FC = () => {
             })
           }
           isInvalid={!!errors.categories}
-          errorMessage={errors.categories?.message}
+          errorMessage={errors.categories?.message ? t(errors.categories?.message) : undefined}
         >
           {CATEGORIES.map(cat => (
             <Checkbox key={cat.slug} value={cat.slug}>
@@ -326,7 +334,7 @@ export const EventForm: FC = () => {
             type="date"
             isRequired
             isInvalid={!!errors.startDate}
-            errorMessage={errors.startDate?.message}
+            errorMessage={errors.startDate?.message ? t(errors.startDate?.message) : undefined}
             {...register('startDate')}
           />
           {scheduleMode === 'range' && (
@@ -336,7 +344,7 @@ export const EventForm: FC = () => {
               type="date"
               isRequired
               isInvalid={!!errors.endDate}
-              errorMessage={errors.endDate?.message}
+              errorMessage={errors.endDate?.message ? t(errors.endDate?.message) : undefined}
               {...register('endDate')}
             />
           )}
@@ -348,7 +356,7 @@ export const EventForm: FC = () => {
             variant={inputVariant}
             hourCycle={24}
             isInvalid={!!errors.startTime}
-            errorMessage={errors.startTime?.message}
+            errorMessage={errors.startTime?.message ? t(errors.startTime.message) : undefined}
             onChange={val =>
               setValue('startTime', toHHmm(val), {
                 shouldValidate: true,
@@ -362,7 +370,7 @@ export const EventForm: FC = () => {
             variant={inputVariant}
             hourCycle={24}
             isInvalid={!!errors.endTime}
-            errorMessage={errors.endTime?.message}
+            errorMessage={errors.endTime?.message ? t(errors.endTime.message) : undefined}
             onChange={val =>
               setValue('endTime', toHHmm(val), {
                 shouldValidate: true,
@@ -386,7 +394,7 @@ export const EventForm: FC = () => {
                 });
               }}
               isInvalid={!!errors.weekdays}
-              errorMessage={errors.weekdays?.message}
+              errorMessage={errors.weekdays?.message ? t(errors.weekdays.message) : undefined}
             >
               {availableWeekdaySlugs.map(slug => (
                 <Checkbox key={slug} value={slug}>
@@ -434,6 +442,8 @@ export const EventForm: FC = () => {
               errorMessage={
                 isSubmitted || touchedFields.placeSelected
                   ? errors.placeSelected?.message
+                    ? t(errors.placeSelected.message)
+                    : undefined
                   : undefined
               }
               onClear={() => {
@@ -486,7 +496,7 @@ export const EventForm: FC = () => {
           placeholder="https://"
           variant={inputVariant}
           isInvalid={!!errors.ticketUrl}
-          errorMessage={errors.ticketUrl?.message}
+          errorMessage={errors.ticketUrl?.message ? t(errors.ticketUrl.message) : undefined}
           {...register('ticketUrl')}
         />
         {!isFree && (
@@ -511,7 +521,7 @@ export const EventForm: FC = () => {
           placeholder="https://"
           variant={inputVariant}
           isInvalid={!!errors.website}
-          errorMessage={errors.website?.message}
+          errorMessage={errors.website?.message ? t(errors.website.message) : undefined}
           {...register('website')}
         />
         <Input
@@ -521,7 +531,7 @@ export const EventForm: FC = () => {
           variant={inputVariant}
           isRequired
           isInvalid={!!errors.contactEmail}
-          errorMessage={errors.contactEmail?.message}
+          errorMessage={errors.contactEmail?.message ? t(errors.contactEmail.message) : undefined}
           {...register('contactEmail')}
         />
         <Input
