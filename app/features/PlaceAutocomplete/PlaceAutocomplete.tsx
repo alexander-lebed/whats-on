@@ -3,7 +3,7 @@
 import { FC, Key, useCallback, useEffect, useRef, useState } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import slugify from 'slugify';
-import { GOOGLE_MAPS_API_KEY } from '@/app/features/Map/constants';
+import { GOOGLE_MAPS_API_KEY, CASTELLON_BOUNDS } from '@/app/features/Map/constants';
 import { Autocomplete, type AutocompleteProps, type UIAutocompleteItem } from '@/app/ui';
 
 export type Geopoint = { lat?: number; lng?: number } | undefined;
@@ -72,7 +72,17 @@ const InnerPlaceAutocomplete: FC<PlaceAutocompleteProps> = ({
         return;
       }
       setIsLoading(true);
-      svc.getPlacePredictions({ input: query, sessionToken: token, language: locale }, preds => {
+      // Bias and restrict predictions around Castellón province (Spain)
+      // Using the city center as bias and ~100km radius to cover the province
+      const request: google.maps.places.AutocompletionRequest = {
+        input: query,
+        sessionToken: token,
+        language: locale,
+        region: 'es',
+        locationRestriction: CASTELLON_BOUNDS,
+        componentRestrictions: { country: 'es' },
+      };
+      return svc.getPlacePredictions(request, preds => {
         const mapped: UIAutocompleteItem[] = (preds ?? []).map(p => ({
           key: p.place_id!,
           label: p.structured_formatting?.main_text ?? p.description ?? 'Place',

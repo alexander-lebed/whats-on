@@ -2,7 +2,7 @@
 
 import { FC, useMemo } from 'react';
 import { APIProvider, Map as GoogleMap, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
-import { DEFAULT_CENTER, GOOGLE_MAP_ID, GOOGLE_MAPS_API_KEY } from './constants';
+import { CASTELLON_CENTER, GOOGLE_MAP_ID, GOOGLE_MAPS_API_KEY } from './constants';
 import type { MapProps, MarkerProps } from './types';
 
 const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
@@ -24,7 +24,7 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
     return null;
   }
 
-  const center = markers.length > 0 ? markers[0].position : DEFAULT_CENTER;
+  const center = markers.length > 0 ? markers[0].position : CASTELLON_CENTER;
 
   return (
     <APIProvider apiKey={GOOGLE_MAPS_API_KEY} onError={console.error} onLoad={() => {}}>
@@ -32,7 +32,7 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
         <GoogleMap
           mapId={GOOGLE_MAP_ID}
           style={{ width: '100%', height: '100%' }}
-          defaultCenter={DEFAULT_CENTER}
+          defaultCenter={CASTELLON_CENTER}
           center={center}
           defaultZoom={15}
           gestureHandling="greedy"
