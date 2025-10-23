@@ -1,7 +1,8 @@
 'use client';
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseISO, eachDayOfInterval, getDay } from 'date-fns';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -57,6 +58,8 @@ export const EventForm: FC = () => {
   });
 
   const scheduleMode = (watch('scheduleMode') ?? 'single') as FormValues['scheduleMode'];
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
   const isDigital = !!watch('isDigital');
   const isFree = !!watch('isFree');
 
@@ -85,6 +88,43 @@ export const EventForm: FC = () => {
     register('image');
     register('placeSelected');
   }, [register]);
+
+  const availableWeekdaySlugs = useMemo<string[]>(() => {
+    if (scheduleMode !== 'range') {
+      return [];
+    }
+    if (!startDate || !endDate) {
+      return [];
+    }
+    if (endDate < startDate) {
+      return [];
+    }
+    try {
+      const s = parseISO(startDate);
+      const e = parseISO(endDate);
+      const unique = new Set<string>();
+      const weekdayIndexToSlug = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ];
+      eachDayOfInterval({ start: s, end: e }).forEach(d => {
+        const idx = getDay(d); // 0 = Sunday, 6 = Saturday
+        const slug = weekdayIndexToSlug[idx];
+        if (slug) {
+          unique.add(slug);
+        }
+      });
+      // Preserve display order defined in WEEKDAYS
+      return WEEKDAYS.map(d => d.slug).filter(slug => unique.has(slug));
+    } catch {
+      return [];
+    }
+  }, [scheduleMode, startDate, endDate]);
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -294,32 +334,31 @@ export const EventForm: FC = () => {
               })
             }
           />
-        </div>
 
-        {scheduleMode === 'range' && (
-          <div className="mt-2">
+          {scheduleMode === 'range' && startDate && endDate && (
             <CheckboxGroup
               label={t('events.create.weekdays-label')}
               isRequired
               value={watch('weekdays')}
-              onValueChange={val =>
-                setValue('weekdays', val, {
+              onValueChange={val => {
+                const filtered = val.filter(w => availableWeekdaySlugs.includes(w));
+                setValue('weekdays', filtered, {
                   shouldValidate: true,
                   shouldDirty: true,
                   shouldTouch: true,
-                })
-              }
+                });
+              }}
               isInvalid={!!errors.weekdays}
               errorMessage={errors.weekdays?.message}
             >
-              {WEEKDAYS.map(d => (
-                <Checkbox key={d.slug} value={d.slug}>
-                  {t(`events.weekday.${d.slug}`)}
+              {availableWeekdaySlugs.map(slug => (
+                <Checkbox key={slug} value={slug}>
+                  {t(`events.weekday.${slug}`)}
                 </Checkbox>
               ))}
             </CheckboxGroup>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       <section className="flex flex-col gap-3">

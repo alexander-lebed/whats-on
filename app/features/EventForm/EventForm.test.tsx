@@ -131,7 +131,8 @@ describe('EventForm', () => {
     expect(submit).toBeDisabled();
 
     // Test weekdays validation
-    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.monday' }));
+    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.friday' }));
+    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.saturday' }));
     expect(submit).toBeDisabled();
 
     // Select mocked Location
@@ -155,5 +156,48 @@ describe('EventForm', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     expect(pushMock).toHaveBeenCalledWith('/events/my-event');
+  });
+
+  test('validates weekdays for the selected date-range', async () => {
+    render(<EventForm />);
+
+    // Switch to date range mode
+    await user.click(screen.getByRole('radio', { name: 'events.create.date-range' }));
+
+    // Before dates are selected, weekday checkboxes should not be visible
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.monday' })
+    ).not.toBeInTheDocument();
+
+    // Select start date (Friday, Dec 26, 2025)
+    const startDateInput = screen.getByLabelText('events.create.start-date');
+    await user.type(startDateInput, '2025-12-26');
+
+    // Select end date (Saturday, Dec 27, 2025)
+    const endDateInput = screen.getByLabelText('events.create.end-date');
+    await user.type(endDateInput, '2025-12-27');
+
+    // Only Friday and Saturday should be available
+    await waitFor(() => {
+      expect(screen.getByRole('checkbox', { name: 'events.weekday.friday' })).toBeInTheDocument();
+      expect(screen.getByRole('checkbox', { name: 'events.weekday.saturday' })).toBeInTheDocument();
+    });
+
+    // Other weekdays should not be visible
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.monday' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.tuesday' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.wednesday' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.thursday' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: 'events.weekday.sunday' })
+    ).not.toBeInTheDocument();
   });
 });
