@@ -375,59 +375,40 @@ export const EventForm: FC = () => {
         >
           {t('events.create.digital-checkbox')}
         </Checkbox>
-        {!isDigital ? (
-          <>
-            <PlaceAutocomplete
-              label={t('events.create.location-label')}
-              placeholder={t('events.create.search-location-placeholder')}
-              locale={locale}
-              isRequired
-              onSelect={p => {
-                setPlace(p);
-                setValue('placeSelected', !!p, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
-              }}
-              isInvalid={
-                (isSubmitted || touchedFields.placeSelected) && !!errors.placeSelected?.message
-              }
-              errorMessage={
-                isSubmitted || touchedFields.placeSelected
-                  ? errors.placeSelected?.message
-                  : undefined
-              }
-              onClear={() => {
-                setPlace(null);
-                setValue('placeSelected', false, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                  shouldTouch: true,
-                });
-              }}
-              onBlur={() => {
-                setValue('placeSelected', !!place, {
-                  shouldValidate: true,
-                  shouldTouch: true,
-                });
-              }}
-            />
-            <Input
-              label={t('events.create.website-url')}
-              placeholder="https://"
-              isInvalid={!!errors.website}
-              errorMessage={errors.website?.message}
-              {...register('website')}
-            />
-          </>
-        ) : (
-          <Input
-            label={t('events.create.website-url')}
-            placeholder="https://"
-            isInvalid={!!errors.website}
-            errorMessage={errors.website?.message}
-            {...register('website')}
+        {!isDigital && (
+          <PlaceAutocomplete
+            label={t('events.create.location-label')}
+            placeholder={t('events.create.search-location-placeholder')}
+            locale={locale}
+            isRequired
+            onSelect={p => {
+              setPlace(p);
+              setValue('placeSelected', !!p, {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              });
+            }}
+            isInvalid={
+              (isSubmitted || touchedFields.placeSelected) && !!errors.placeSelected?.message
+            }
+            errorMessage={
+              isSubmitted || touchedFields.placeSelected ? errors.placeSelected?.message : undefined
+            }
+            onClear={() => {
+              setPlace(null);
+              setValue('placeSelected', false, {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              });
+            }}
+            onBlur={() => {
+              setValue('placeSelected', !!place, {
+                shouldValidate: true,
+                shouldTouch: true,
+              });
+            }}
           />
         )}
       </section>
@@ -472,6 +453,13 @@ export const EventForm: FC = () => {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.contact-section')}</h2>
+        <Input
+          label={t('events.create.website-url')}
+          placeholder="https://"
+          isInvalid={!!errors.website}
+          errorMessage={errors.website?.message}
+          {...register('website')}
+        />
         <Input
           label={t('events.create.contact-email')}
           type="email"
