@@ -11,3 +11,11 @@ jest.mock('next/image', () => ({
     );
   },
 }));
+
+// Global mock for next-intl used across tests
+jest.mock('next-intl', () => ({
+  __esModule: true,
+  NextIntlClientProvider: ({ children }) => children,
+  useTranslations: () => (key) => key,
+  useLocale: () => 'en',
+}));

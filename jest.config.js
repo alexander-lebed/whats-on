@@ -2,20 +2,26 @@
 const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
 });
 
-// Add any custom config to be passed to Jest
-const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js', '<rootDir>/app/setupTests.ts'],
-  testEnvironment: 'jest-environment-jsdom',
-  moduleNameMapper: {
-    // Handle module aliases (this will be automatically configured for you soon)
-    '^@/app/(.*)$': '<rootDir>/app/$1',
-  },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
-};
-
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig);
+module.exports = async () => ({
+  ...(await createJestConfig({
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js', '<rootDir>/app/setupTests.ts'],
+    testEnvironment: 'jest-environment-jsdom',
+    moduleNameMapper: {
+      '^@/app/(.*)$': '<rootDir>/app/$1',
+      '^@/(.*)$': '<rootDir>/$1',
+      '^zod/v4/core$': '<rootDir>/node_modules/zod/v4/core/index.cjs',
+      '^zod$': '<rootDir>/node_modules/zod/index.cjs',
+      '^lucide-react/dynamic$': '<rootDir>/test/__mocks__/lucide-dynamic.js',
+    },
+    testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    transform: {
+      '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+    },
+  })()),
+  // Ensure ESM-only next-intl and use-intl are transformed
+  transformIgnorePatterns: ['node_modules/(?!next-intl|use-intl|@hookform/resolvers)/'],
+});

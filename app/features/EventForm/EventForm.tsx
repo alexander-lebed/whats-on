@@ -1,68 +1,45 @@
 'use client';
 
 import { FC, useState, useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LANGUAGES, CATEGORIES, WEEKDAYS } from '@/app/constants';
-import { ImageHero } from '@/app/features';
+import { ImageHero, PlaceAutocomplete } from '@/app/features';
+import { PlacePayload } from '@/app/features/PlaceAutocomplete';
 import { Event } from '@/app/types';
-import { Button, RadioGroup, Radio } from '@/app/ui';
-import { Input } from '@/app/ui';
-import { Textarea } from '@/app/ui';
-import { Checkbox, CheckboxGroup } from '@/app/ui';
-import { TimeInput } from '@/app/ui';
+import {
+  Button,
+  RadioGroup,
+  Radio,
+  Input,
+  TimeInput,
+  Textarea,
+  Checkbox,
+  CheckboxGroup,
+} from '@/app/ui';
 import { cn } from '@/app/utils';
 import { useRouter } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
-import PlaceAutocomplete, { PlacePayload } from '../PlaceAutocomplete/PlaceAutocomplete';
+import { formSchema } from './constants';
 
-const schema = z
-  .object({
-    title: z.record(z.string(), z.string()),
-    summary: z.record(z.string(), z.string()),
-    categories: z.array(z.string()).max(3),
-    scheduleMode: z.union([z.literal('single'), z.literal('range')]).default('single'),
-    startDate: z.string().min(1),
-    endDate: z.string().optional(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    weekdays: z.array(z.string()).optional(),
-    isDigital: z.coerce.boolean().default(false),
-    website: z.string().url().optional(),
-    ticketUrl: z.string().url().optional(),
-    isFree: z.coerce.boolean().default(true),
-    price: z.coerce.number().positive().optional(),
-    image: z.any().optional(),
-    contactEmail: z.string().email().optional(),
-    contactPhone: z.string().optional(),
-  })
-  .refine(val => LANGUAGES.every(l => (val.title?.[l.locale] ?? '').toString().trim().length > 0), {
-    message: 'All languages: title is required',
-    path: ['title'],
-  })
-  .refine(
-    val => LANGUAGES.every(l => (val.summary?.[l.locale] ?? '').toString().trim().length > 0),
-    {
-      message: 'All languages: description is required',
-      path: ['summary'],
-    }
-  )
-  .refine(v => (v.scheduleMode === 'single' ? true : Boolean(v.endDate)), {
-    message: 'End date is required for range',
-    path: ['endDate'],
-  });
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.input<typeof formSchema>;
 
 export const EventForm: FC = () => {
   const locale = useLocale();
   const t = useTranslations();
   const router = useRouter();
   const [place, setPlace] = useState<PlacePayload | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
-  const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitted, touchedFields, isValid, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    mode: 'onBlur',
     defaultValues: {
       title: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
       summary: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
@@ -75,12 +52,13 @@ export const EventForm: FC = () => {
       weekdays: [],
       contactEmail: '',
       contactPhone: '',
+      placeSelected: false,
     },
   });
 
-  const scheduleMode = watch('scheduleMode');
-  const isDigital = watch('isDigital');
-  const isFree = watch('isFree');
+  const scheduleMode = (watch('scheduleMode') ?? 'single') as FormValues['scheduleMode'];
+  const isDigital = !!watch('isDigital');
+  const isFree = !!watch('isFree');
 
   const toHHmm = (v: unknown): string => {
     if (!v) {
@@ -104,10 +82,11 @@ export const EventForm: FC = () => {
     register('startTime');
     register('endTime');
     register('weekdays');
+    register('image');
+    register('placeSelected');
   }, [register]);
 
   const onSubmit = async (values: FormValues) => {
-    setSubmitting(true);
     try {
       const fd = new FormData();
       const titlePayload = LANGUAGES.map(l => ({ _key: l.locale, value: values.title[l.locale] }));
@@ -116,15 +95,8 @@ export const EventForm: FC = () => {
         value: values.summary[l.locale],
       }));
 
-      // In range mode, ensure at least one weekday is selected
-      if (values.scheduleMode === 'range' && (!values.weekdays || values.weekdays.length === 0)) {
-        // TODO: warn "Please select at least one weekday"
-        setSubmitting(false);
-        return;
-      }
-
       const schedule: Event['schedule'] = {
-        mode: values.scheduleMode,
+        mode: values.scheduleMode ?? 'single',
         startDate: values.startDate,
         endDate: values.scheduleMode === 'range' ? values.endDate : undefined,
         startTime: values.startTime || undefined,
@@ -159,8 +131,7 @@ export const EventForm: FC = () => {
         );
       }
 
-      const imageInput = document.getElementById('image-input') as HTMLInputElement | null;
-      const file = imageInput?.files?.[0];
+      const file = (values.image as FileList | undefined)?.[0];
       if (file) {
         fd.append('image', file);
       }
@@ -181,8 +152,6 @@ export const EventForm: FC = () => {
     } catch (e) {
       console.error(e);
       // TODO: toast Failed to submit
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -190,20 +159,28 @@ export const EventForm: FC = () => {
     <form className="flex flex-col gap-6 pb-10" onSubmit={handleSubmit(onSubmit)}>
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.image-section')}</h2>
-        <Input
-          id="image-input"
-          type="file"
-          accept="image/*"
-          label={t('events.create.image-label')}
-          onChange={e => {
-            const file = e.currentTarget.files?.[0];
-            if (!file) {
-              return setPreview(null);
-            }
-            const url = URL.createObjectURL(file);
-            setPreview(url);
-          }}
-        />
+        {(() => {
+          const imageField = register('image');
+          return (
+            <Input
+              id="image-input"
+              type="file"
+              accept="image/*"
+              label={t('events.create.image-label')}
+              isRequired
+              isInvalid={!!errors.image}
+              errorMessage={errors.image?.message as string}
+              name={imageField.name}
+              onBlur={imageField.onBlur}
+              ref={imageField.ref}
+              onChange={e => {
+                imageField.onChange(e);
+                const file = (e.currentTarget as HTMLInputElement)?.files?.[0];
+                setPreview(file ? URL.createObjectURL(file) : null);
+              }}
+            />
+          );
+        })()}
         <ImageHero imgUrl={preview} title={t('events.create.image-preview-title')} />
       </section>
 
@@ -211,25 +188,38 @@ export const EventForm: FC = () => {
         <h2 className="text-xl font-bold">Overview</h2>
         {LANGUAGES.map(lang => (
           <div key={lang.locale} className="flex flex-col gap-3">
-            <h3 className="text-lg font-medium">
-              {t('events.create.description-in-language', { language: lang.name })}
-            </h3>
+            <h3>{t('events.create.description-in-language', { language: lang.name })}</h3>
             <Input
               label={t('events.create.name-label', { language: lang.name })}
-              {...register(`title.${lang.locale}` as const)}
+              isRequired
+              isInvalid={!!errors.title?.[lang.locale]}
+              errorMessage={errors.title?.[lang.locale]?.message}
+              {...register(`title.${lang.locale}`)}
             />
             <Textarea
               label={t('events.create.description-label', { language: lang.name })}
+              isRequired
               minRows={4}
-              {...register(`summary.${lang.locale}` as const)}
+              isInvalid={!!errors.summary?.[lang.locale]}
+              errorMessage={errors.summary?.[lang.locale]?.message}
+              {...register(`summary.${lang.locale}`)}
             />
           </div>
         ))}
 
-        <h3 className="text-lg font-medium">{t('events.create.category-section')}</h3>
         <CheckboxGroup
+          label={t('events.create.category-section')}
+          isRequired
           value={watch('categories')}
-          onValueChange={val => setValue('categories', val as string[])}
+          onValueChange={val =>
+            setValue('categories', val, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            })
+          }
+          isInvalid={!!errors.categories}
+          errorMessage={errors.categories?.message}
         >
           {CATEGORIES.map(cat => (
             <Checkbox key={cat.slug} value={cat.slug}>
@@ -245,15 +235,35 @@ export const EventForm: FC = () => {
           label={t('events.create.select-dates')}
           orientation="horizontal"
           value={scheduleMode}
-          onValueChange={val => setValue('scheduleMode', val as 'single' | 'range')}
+          onValueChange={val =>
+            setValue('scheduleMode', val as FormValues['scheduleMode'], {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            })
+          }
         >
           <Radio value="single">{t('events.create.single-day')}</Radio>
           <Radio value="range">{t('events.create.date-range')}</Radio>
         </RadioGroup>
         <div className={cn('grid gap-3', scheduleMode === 'range' && 'grid-cols-2')}>
-          <Input label={t('events.create.start-date')} type="date" {...register('startDate')} />
+          <Input
+            label={t('events.create.start-date')}
+            type="date"
+            isRequired
+            isInvalid={!!errors.startDate}
+            errorMessage={errors.startDate?.message}
+            {...register('startDate')}
+          />
           {scheduleMode === 'range' && (
-            <Input label={t('events.create.end-date')} type="date" {...register('endDate')} />
+            <Input
+              label={t('events.create.end-date')}
+              type="date"
+              isRequired
+              isInvalid={!!errors.endDate}
+              errorMessage={errors.endDate?.message}
+              {...register('endDate')}
+            />
           )}
         </div>
 
@@ -261,12 +271,28 @@ export const EventForm: FC = () => {
           <TimeInput
             label={t('events.create.start-time')}
             hourCycle={24}
-            onChange={val => setValue('startTime', toHHmm(val))}
+            isInvalid={!!errors.startTime}
+            errorMessage={errors.startTime?.message}
+            onChange={val =>
+              setValue('startTime', toHHmm(val), {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              })
+            }
           />
           <TimeInput
             label={t('events.create.end-time')}
             hourCycle={24}
-            onChange={val => setValue('endTime', toHHmm(val))}
+            isInvalid={!!errors.endTime}
+            errorMessage={errors.endTime?.message}
+            onChange={val =>
+              setValue('endTime', toHHmm(val), {
+                shouldValidate: true,
+                shouldDirty: true,
+                shouldTouch: true,
+              })
+            }
           />
         </div>
 
@@ -274,8 +300,17 @@ export const EventForm: FC = () => {
           <div className="mt-2">
             <CheckboxGroup
               label={t('events.create.weekdays-label')}
+              isRequired
               value={watch('weekdays')}
-              onValueChange={val => setValue('weekdays', val as string[])}
+              onValueChange={val =>
+                setValue('weekdays', val, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                })
+              }
+              isInvalid={!!errors.weekdays}
+              errorMessage={errors.weekdays?.message}
             >
               {WEEKDAYS.map(d => (
                 <Checkbox key={d.slug} value={d.slug}>
@@ -289,19 +324,61 @@ export const EventForm: FC = () => {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.where-section')}</h2>
-        <Checkbox isSelected={isDigital} onValueChange={v => setValue('isDigital', v)}>
+        <Checkbox
+          isSelected={isDigital}
+          onValueChange={(v: boolean) =>
+            setValue('isDigital', v, {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            })
+          }
+        >
           {t('events.create.digital-checkbox')}
         </Checkbox>
         {!isDigital ? (
           <>
             <PlaceAutocomplete
-              locale={locale}
+              label={t('events.create.location-label')}
               placeholder={t('events.create.search-location-placeholder')}
-              onSelect={setPlace}
+              locale={locale}
+              isRequired
+              onSelect={p => {
+                setPlace(p);
+                setValue('placeSelected', !!p, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+              isInvalid={
+                (isSubmitted || touchedFields.placeSelected) && !!errors.placeSelected?.message
+              }
+              errorMessage={
+                isSubmitted || touchedFields.placeSelected
+                  ? errors.placeSelected?.message
+                  : undefined
+              }
+              onClear={() => {
+                setPlace(null);
+                setValue('placeSelected', false, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+              onBlur={() => {
+                setValue('placeSelected', !!place, {
+                  shouldValidate: true,
+                  shouldTouch: true,
+                });
+              }}
             />
             <Input
               label={t('events.create.website-url')}
               placeholder="https://"
+              isInvalid={!!errors.website}
+              errorMessage={errors.website?.message}
               {...register('website')}
             />
           </>
@@ -309,6 +386,8 @@ export const EventForm: FC = () => {
           <Input
             label={t('events.create.website-url')}
             placeholder="https://"
+            isInvalid={!!errors.website}
+            errorMessage={errors.website?.message}
             {...register('website')}
           />
         )}
@@ -320,7 +399,13 @@ export const EventForm: FC = () => {
           label={t('events.create.pricing-label')}
           orientation="horizontal"
           value={isFree ? 'free' : 'paid'}
-          onValueChange={v => setValue('isFree', v === 'free')}
+          onValueChange={v =>
+            setValue('isFree', v === 'free', {
+              shouldValidate: true,
+              shouldDirty: true,
+              shouldTouch: true,
+            })
+          }
         >
           <Radio value="free">{t('events.free')}</Radio>
           <Radio value="paid">{t('events.create.paid')}</Radio>
@@ -328,6 +413,8 @@ export const EventForm: FC = () => {
         <Input
           label={t('events.create.ticket-url')}
           placeholder="https://"
+          isInvalid={!!errors.ticketUrl}
+          errorMessage={errors.ticketUrl?.message}
           {...register('ticketUrl')}
         />
         {!isFree && (
@@ -350,6 +437,8 @@ export const EventForm: FC = () => {
           label={t('events.create.contact-email')}
           type="email"
           placeholder="name@example.com"
+          isInvalid={!!errors.contactEmail}
+          errorMessage={errors.contactEmail?.message}
           {...register('contactEmail')}
         />
         <Input
@@ -360,16 +449,19 @@ export const EventForm: FC = () => {
         />
       </section>
 
-      <div>
+      <div className="flex items-center gap-3">
         <Button
           type="submit"
           variant="solid"
           color="primary"
-          isDisabled={submitting}
-          isLoading={submitting}
+          isDisabled={isSubmitting || !isValid}
+          isLoading={isSubmitting}
         >
           {t('events.create.submit')}
         </Button>
+        {!isValid && (
+          <p className="text-sm text-default-500">{t('events.create.required-fields-message')}</p>
+        )}
       </div>
     </form>
   );

@@ -33,7 +33,7 @@
   },
 
   "create": {
-    "description-in-language": "Description in {language}",
+    "description-in-language": "Describe your event in {language}",
     "name-label": "Name ({language})",
     "description-label": "Description ({language})",
     "category-section": "Category",
@@ -48,7 +48,8 @@
     "weekdays-label": "Weekdays (at least one)",
     "where-section": "Where",
     "digital-checkbox": "This event is digital",
-    "search-location-placeholder": "Search location",
+    "location-label": "Location",
+    "search-location-placeholder": "Place name or address",
     "website-url": "Website URL",
     "image-section": "Image",
     "image-label": "Image",
@@ -62,6 +63,23 @@
     "page-title": "Create an event",
     "contact-section": "Contact",
     "contact-email": "Contact email",
-    "contact-phone": "Contact phone"
+    "contact-phone": "Contact phone",
+    "required-fields-message": "Please fill in all required fields."
+  },
+  "validation": {
+    "required": "This field is required",
+    "image-required": "Please upload an image",
+    "categories-required": "Please select at least one category",
+    "max-3-categories": "You can select up to 3 categories",
+    "end-date-required": "End date is required for a date range",
+    "end-date-after-start": "End date must be on or after start date",
+    "weekdays-required": "Pick at least one weekday",
+    "ticket-required-when-price": "Ticket URL is required when price is set",
+    "invalid-url": "Please enter a valid URL",
+    "invalid-email": "Please enter a valid email",
+    "end-time-after-start-time": "End time must be after start time",
+    "location-required": "Please select a location",
+    "invalid-number": "Please enter a valid number",
+    "non-negative-number": "Must be a non-negative number"
   }
 }

@@ -1,19 +1,159 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import EventForm from './EventForm';
+import { PlaceAutocompleteProps } from '@/app/features/PlaceAutocomplete/PlaceAutocomplete';
+import { EventForm } from './EventForm';
 
-// Mock LocationAutocomplete to avoid Maps dependency
-jest.mock('../PlaceAutocomplete/PlaceAutocomplete', () => ({
+// Mock ImageHero component to avoid render dependency
+jest.mock('../ImageHero.tsx', () => ({
   __esModule: true,
-  default: ({ onSelect }: any) => (
-    <button onClick={() => onSelect({ name: 'Place', address: 'Addr', lat: 1, lng: 2 })}>
-      Pick Place
-    </button>
-  ),
+  default: () => null,
+  ImageHero: () => null,
 }));
 
-describe('EventForm', () => {
-  test('submits single-day event', async () => {});
+jest.mock('../PlaceAutocomplete/PlaceAutocomplete.tsx', () => ({
+  __esModule: true,
+  default: (props: PlaceAutocompleteProps) => {
+    const { label, onSelect } = props;
+    return React.createElement(
+      'button',
+      {
+        'aria-label': label,
+        onClick: () =>
+          onSelect({
+            slug: { _type: 'slug', current: 'place' },
+            name: 'Place',
+            address: 'Addr',
+            location: { lat: 1, lng: 2 },
+          }),
+      },
+      'Pick Location'
+    );
+  },
+}));
 
-  test('submits date-range event', async () => {});
+// Mock router (next-intl navigation)
+const pushMock = jest.fn();
+jest.mock('../../../i18n/navigation', () => ({
+  __esModule: true,
+  useRouter: () => ({ push: pushMock }),
+}));
+
+beforeAll(() => {
+  global.URL.createObjectURL = jest.fn(() => 'blob://preview');
+});
+
+beforeEach(() => {
+  pushMock.mockReset();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  global.fetch = jest.fn(() =>
+    Promise.resolve({ ok: true, json: () => Promise.resolve({ id: '1', slug: 'my-event' }) })
+  );
+});
+
+describe('EventForm', () => {
+  const user = userEvent.setup();
+
+  test('validates and submits date-range event form', async () => {
+    render(<EventForm />);
+
+    const submit = screen.getByRole('button', { name: 'events.create.submit' });
+    expect(submit).toBeDisabled();
+    expect(screen.queryByText('events.create.required-fields-message')).toBeInTheDocument();
+
+    // Test image field validation
+    const imageInput = screen.getByLabelText('events.create.image-label');
+    await user.click(imageInput);
+    await user.tab(); // Blur
+    expect(submit).toBeDisabled();
+
+    // Upload image
+    const file = new File(['x'], 'pic.jpg', { type: 'image/jpeg' });
+    await user.upload(imageInput, file);
+    await user.tab();
+    expect(submit).toBeDisabled();
+
+    // Test name fields validation
+    const names = screen.getAllByRole('textbox', {
+      name: 'events.create.name-label',
+    });
+    for (const name of names) {
+      await user.click(name);
+      await user.tab(); // Blur
+      expect(submit).toBeDisabled();
+
+      await user.type(name, 'Event name');
+      await user.tab();
+      expect(submit).toBeDisabled();
+    }
+
+    // Test description fields validation
+    const descriptions = screen.getAllByRole('textbox', {
+      name: 'events.create.description-label',
+    });
+    for (const description of descriptions) {
+      await user.click(description);
+      await user.tab(); // Blur
+      expect(submit).toBeDisabled();
+
+      await user.type(description, 'Event description');
+      await user.tab();
+      expect(submit).toBeDisabled();
+    }
+
+    // Test category validation
+    await user.click(screen.getByRole('checkbox', { name: 'events.category.music' }));
+    expect(submit).toBeDisabled();
+
+    // Switch to the date range
+    await user.click(screen.getByRole('radio', { name: 'events.create.date-range' }));
+    expect(submit).toBeDisabled();
+
+    // Test start date validation
+    const startDateInput = screen.getByLabelText('events.create.start-date');
+    await user.click(startDateInput);
+    await user.tab(); // Blur
+    expect(submit).toBeDisabled();
+
+    await user.type(startDateInput, '2025-12-26');
+    await user.tab();
+    expect(submit).toBeDisabled();
+
+    // Test end date validation
+    const endDateInput = screen.getByLabelText('events.create.end-date');
+    await user.click(endDateInput);
+    await user.tab(); // Blur
+    expect(submit).toBeDisabled();
+
+    await user.type(endDateInput, '2025-12-27');
+    await user.tab();
+    expect(submit).toBeDisabled();
+
+    // Test weekdays validation
+    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.monday' }));
+    expect(submit).toBeDisabled();
+
+    // Select mocked Location
+    await user.click(
+      screen.getByRole('button', {
+        name: 'events.create.location-label',
+      })
+    );
+
+    // Fill contact email to satisfy schema's optional email constraint
+    await user.type(screen.getByLabelText('events.create.contact-email'), 'name@example.com');
+    await user.tab();
+
+    // Now the required fields should be filled and the Submit button should be enabled
+    await waitFor(() =>
+      expect(screen.queryByText('events.create.required-fields-message')).not.toBeInTheDocument()
+    );
+    expect(submit).toBeEnabled();
+
+    fireEvent.submit(submit);
+
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    expect(pushMock).toHaveBeenCalledWith('/events/my-event');
+  });
 });

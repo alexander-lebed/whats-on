@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import slugify from 'slugify';
 import { sanityWriteClient } from '@/lib/sanity/writeClient';
+import { Event } from '@/sanity/types';
 
 export const runtime = 'nodejs';
 
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
       const arrayBuffer = await image.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const asset = await sanityWriteClient.assets.upload('image', buffer, {
-        filename: (image as any).name || 'event-image',
+        filename: image.name || 'event-image',
         contentType: image.type,
       });
       imageAssetRef = asset?._id ? asset._id : asset?._ref;
@@ -79,7 +80,7 @@ export async function POST(req: NextRequest) {
     const baseSlug = english || (title[0]?.value as string) || 'event';
     const slug = slugify(baseSlug, { lower: true, strict: true }).slice(0, 90);
 
-    const eventDoc: any = {
+    const eventDoc: Partial<Event> = {
       _type: 'event',
       title,
       slug: { _type: 'slug', current: slug },
@@ -127,7 +128,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const created = await sanityWriteClient.create(eventDoc);
+    const created = await sanityWriteClient.create(eventDoc as Event);
     return Response.json({ id: created._id, slug }, { status: 201 });
   } catch (err) {
     console.error(err);

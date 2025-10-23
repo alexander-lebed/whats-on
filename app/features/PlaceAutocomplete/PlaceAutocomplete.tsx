@@ -1,11 +1,10 @@
 'use client';
 
 import { FC, Key, useCallback, useEffect, useRef, useState } from 'react';
-// import { Key } from '@react-types/shared';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import slugify from 'slugify';
 import { GOOGLE_MAPS_API_KEY } from '@/app/features/Map/constants';
-import { Autocomplete, type UIAutocompleteItem } from '@/app/ui';
+import { Autocomplete, type AutocompleteProps, type UIAutocompleteItem } from '@/app/ui';
 
 export type Geopoint = { lat?: number; lng?: number } | undefined;
 
@@ -18,13 +17,19 @@ export type PlacePayload = {
   location?: Geopoint;
 };
 
-type InnerProps = {
+export type PlaceAutocompleteProps = Omit<AutocompleteProps, 'onSelect'> & {
   locale: string;
-  placeholder?: string;
   onSelect: (place: PlacePayload) => void;
+  onClear?: () => void;
 };
 
-const InnerPlaceAutocomplete: FC<InnerProps> = ({ locale, placeholder, onSelect }) => {
+const InnerPlaceAutocomplete: FC<PlaceAutocompleteProps> = ({
+  locale,
+  placeholder,
+  onSelect,
+  onClear,
+  ...rest
+}) => {
   const places = useMapsLibrary('places');
   const [inputValue, setInputValue] = useState('');
   const [selectedKey, setSelectedKey] = useState<Key | null>(null);
@@ -35,6 +40,7 @@ const InnerPlaceAutocomplete: FC<InnerProps> = ({ locale, placeholder, onSelect 
   const svcRef = useRef<google.maps.places.AutocompleteService | null>(null);
   const detailsSvcRef = useRef<google.maps.places.PlacesService | null>(null);
   const detailsDivRef = useRef<HTMLDivElement | null>(null);
+  const prevInputValueRef = useRef('');
 
   useEffect(() => {
     if (!places) {
@@ -82,11 +88,19 @@ const InnerPlaceAutocomplete: FC<InnerProps> = ({ locale, placeholder, onSelect 
   useEffect(() => {
     if (!inputValue) {
       setItems([]);
-      return;
+      // clear selection when the input transitions from non-empty to empty
+      if (selectedKey !== null) {
+        setSelectedKey(null);
+      }
+      if (prevInputValueRef.current) {
+        onClear?.();
+      }
+    } else {
+      const id = setTimeout(() => fetchPredictions(inputValue), 200);
+      return () => clearTimeout(id);
     }
-    const id = setTimeout(() => fetchPredictions(inputValue), 200);
-    return () => clearTimeout(id);
-  }, [inputValue, fetchPredictions]);
+    prevInputValueRef.current = inputValue;
+  }, [inputValue, fetchPredictions, selectedKey, onClear]);
 
   const endSession = () => {
     sessionRef.current = null;
@@ -161,6 +175,7 @@ const InnerPlaceAutocomplete: FC<InnerProps> = ({ locale, placeholder, onSelect 
     <div>
       <div style={{ display: 'none' }} ref={detailsDivRef} />
       <Autocomplete
+        {...rest}
         placeholder={placeholder}
         items={items}
         inputValue={inputValue}
@@ -175,9 +190,7 @@ const InnerPlaceAutocomplete: FC<InnerProps> = ({ locale, placeholder, onSelect 
   );
 };
 
-type Props = InnerProps;
-
-const PlaceAutocomplete: FC<Props> = props => {
+const PlaceAutocomplete: FC<PlaceAutocompleteProps> = props => {
   if (!GOOGLE_MAPS_API_KEY) {
     return null;
   }

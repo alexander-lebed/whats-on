@@ -32,7 +32,7 @@
     "local-fiestas": "Fiestas Locales"
   },
   "create": {
-    "description-in-language": "Descripción en {language}",
+    "description-in-language": "Describe tu evento en {language}",
     "name-label": "Nombre ({language})",
     "description-label": "Descripción ({language})",
     "category-section": "Categoría",
@@ -47,7 +47,8 @@
     "weekdays-label": "Días de la semana (al menos uno)",
     "where-section": "Dónde",
     "digital-checkbox": "Este evento es digital",
-    "search-location-placeholder": "Buscar ubicación",
+    "location-label": "Ubicación",
+    "search-location-placeholder": "Nombre del lugar o dirección",
     "website-url": "URL del sitio web",
     "image-section": "Imagen",
     "image-label": "Imagen",
@@ -61,6 +62,23 @@
     "page-title": "Crear un evento",
     "contact-section": "Contacto",
     "contact-email": "Correo de contacto",
-    "contact-phone": "Teléfono de contacto"
+    "contact-phone": "Teléfono de contacto",
+    "required-fields-message": "Por favor, completa todos los campos obligatorios."
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "image-required": "Por favor, sube una imagen",
+    "categories-required": "Selecciona al menos una categoría",
+    "max-3-categories": "Puedes seleccionar hasta 3 categorías",
+    "end-date-required": "La fecha de fin es obligatoria para un rango",
+    "end-date-after-start": "La fecha de fin debe ser igual o posterior a la de inicio",
+    "weekdays-required": "Elige al menos un día de la semana",
+    "ticket-required-when-price": "La URL de entradas es obligatoria cuando hay precio",
+    "invalid-url": "Introduce una URL válida",
+    "invalid-email": "Introduce un correo válido",
+    "end-time-after-start-time": "La hora de fin debe ser posterior a la de inicio",
+    "location-required": "Selecciona una ubicación",
+    "invalid-number": "Introduce un número válido",
+    "non-negative-number": "Debe ser un número no negativo"
   }
 }
