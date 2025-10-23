@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LANGUAGES, CATEGORIES, WEEKDAYS } from '@/app/constants';
-import { ImageHero, PlaceAutocomplete } from '@/app/features';
+import { ImageHero, PlaceAutocomplete, Map } from '@/app/features';
 import { PlacePayload } from '@/app/features/PlaceAutocomplete';
 import { Event } from '@/app/types';
 import {
@@ -89,43 +89,6 @@ export const EventForm: FC = () => {
     register('placeSelected');
   }, [register]);
 
-  const availableWeekdaySlugs = useMemo<string[]>(() => {
-    if (scheduleMode !== 'range') {
-      return [];
-    }
-    if (!startDate || !endDate) {
-      return [];
-    }
-    if (endDate < startDate) {
-      return [];
-    }
-    try {
-      const s = parseISO(startDate);
-      const e = parseISO(endDate);
-      const unique = new Set<string>();
-      const weekdayIndexToSlug = [
-        'sunday',
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
-      ];
-      eachDayOfInterval({ start: s, end: e }).forEach(d => {
-        const idx = getDay(d); // 0 = Sunday, 6 = Saturday
-        const slug = weekdayIndexToSlug[idx];
-        if (slug) {
-          unique.add(slug);
-        }
-      });
-      // Preserve display order defined in WEEKDAYS
-      return WEEKDAYS.map(d => d.slug).filter(slug => unique.has(slug));
-    } catch {
-      return [];
-    }
-  }, [scheduleMode, startDate, endDate]);
-
   const onSubmit = async (values: FormValues) => {
     try {
       const fd = new FormData();
@@ -194,6 +157,60 @@ export const EventForm: FC = () => {
       // TODO: toast Failed to submit
     }
   };
+
+  const availableWeekdaySlugs = useMemo<string[]>(() => {
+    if (scheduleMode !== 'range') {
+      return [];
+    }
+    if (!startDate || !endDate) {
+      return [];
+    }
+    if (endDate < startDate) {
+      return [];
+    }
+    try {
+      const s = parseISO(startDate);
+      const e = parseISO(endDate);
+      const unique = new Set<string>();
+      const weekdayIndexToSlug = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+      ];
+      eachDayOfInterval({ start: s, end: e }).forEach(d => {
+        const idx = getDay(d); // 0 = Sunday, 6 = Saturday
+        const slug = weekdayIndexToSlug[idx];
+        if (slug) {
+          unique.add(slug);
+        }
+      });
+      // Preserve display order defined in WEEKDAYS
+      return WEEKDAYS.map(d => d.slug).filter(slug => unique.has(slug));
+    } catch {
+      return [];
+    }
+  }, [scheduleMode, startDate, endDate]);
+
+  const placeForMap = useMemo<Event['place'] | undefined>(() => {
+    if (!place || !place.location?.lat || !place.location.lng) {
+      return undefined;
+    }
+    return {
+      ...place,
+      _id: 'candidate',
+      city: place.city ?? null,
+      zipCode: place.zipCode ?? null,
+      location: {
+        _type: 'geopoint',
+        lat: place.location.lat,
+        lng: place.location.lng,
+      },
+    };
+  }, [place]);
 
   return (
     <form className="flex flex-col gap-6 pb-10" onSubmit={handleSubmit(onSubmit)}>
@@ -376,40 +393,53 @@ export const EventForm: FC = () => {
           {t('events.create.digital-checkbox')}
         </Checkbox>
         {!isDigital && (
-          <PlaceAutocomplete
-            label={t('events.create.location-label')}
-            placeholder={t('events.create.search-location-placeholder')}
-            locale={locale}
-            isRequired
-            onSelect={p => {
-              setPlace(p);
-              setValue('placeSelected', !!p, {
-                shouldValidate: true,
-                shouldDirty: true,
-                shouldTouch: true,
-              });
-            }}
-            isInvalid={
-              (isSubmitted || touchedFields.placeSelected) && !!errors.placeSelected?.message
-            }
-            errorMessage={
-              isSubmitted || touchedFields.placeSelected ? errors.placeSelected?.message : undefined
-            }
-            onClear={() => {
-              setPlace(null);
-              setValue('placeSelected', false, {
-                shouldValidate: true,
-                shouldDirty: true,
-                shouldTouch: true,
-              });
-            }}
-            onBlur={() => {
-              setValue('placeSelected', !!place, {
-                shouldValidate: true,
-                shouldTouch: true,
-              });
-            }}
-          />
+          <>
+            <PlaceAutocomplete
+              label={t('events.create.location-label')}
+              placeholder={t('events.create.search-location-placeholder')}
+              locale={locale}
+              isRequired
+              onSelect={p => {
+                setPlace(p);
+                setValue('placeSelected', !!p, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+              isInvalid={
+                (isSubmitted || touchedFields.placeSelected) && !!errors.placeSelected?.message
+              }
+              errorMessage={
+                isSubmitted || touchedFields.placeSelected
+                  ? errors.placeSelected?.message
+                  : undefined
+              }
+              onClear={() => {
+                setPlace(null);
+                setValue('placeSelected', false, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+              onBlur={() => {
+                setValue('placeSelected', !!place, {
+                  shouldValidate: true,
+                  shouldTouch: true,
+                });
+              }}
+            />
+            <Map
+              className="rounded-xl overflow-hidden"
+              places={placeForMap ? [placeForMap] : []}
+              center={
+                placeForMap?.location?.lat && placeForMap?.location?.lng
+                  ? { lat: placeForMap.location.lat, lng: placeForMap.location.lng }
+                  : undefined
+              }
+            />
+          </>
         )}
       </section>
 

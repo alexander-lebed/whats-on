@@ -32,7 +32,8 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
         <GoogleMap
           mapId={GOOGLE_MAP_ID}
           style={{ width: '100%', height: '100%' }}
-          defaultCenter={center}
+          defaultCenter={DEFAULT_CENTER}
+          center={center}
           defaultZoom={15}
           gestureHandling="greedy"
           disableDefaultUI
