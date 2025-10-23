@@ -1,5 +1,6 @@
 'use client';
 import { FC } from 'react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
@@ -22,9 +23,9 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
     <li className="group list-none">
       <Link
         href={`/events/${event.slug}`}
-        className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/20 rounded-2xl"
+        className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/20 dark:focus:ring-white/20 dark:focus:ring-offset-gray-900 rounded-2xl"
       >
-        <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 bg-white transition-transform duration-200 group-hover:-translate-y-0.5">
+        <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-gray-100 dark:bg-white/10 transition-transform duration-200 group-hover:-translate-y-0.5">
           <div
             className="relative w-full overflow-hidden rounded-b-none rounded-t-2xl"
             style={{ aspectRatio: '4 / 3' }}
@@ -39,7 +40,7 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               />
             ) : (
-              <div className="h-full w-full bg-gray-100" />
+              <div className="h-full w-full bg-gray-100 dark:bg-gray-800" />
             )}
           </div>
           <div className="p-4">
@@ -51,18 +52,19 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
                   return (
                     <span
                       key={slug}
-                      className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+                      className="rounded-full flex items-center gap-1 bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/10 dark:text-gray-300"
                     >
+                      {cat && <DynamicIcon name={cat.iconName} size="1em" />}
                       {label}
                     </span>
                   );
                 })}
               </div>
             )}
-            <h3 className="mb-1 line-clamp-2 text-lg font-semibold leading-snug text-gray-900">
+            <h3 className="mb-1 line-clamp-2 text-lg font-semibold leading-snug text-gray-900 dark:text-gray-100">
               {title}
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {dateRange}
               {event.place?.name ? (
                 <>
