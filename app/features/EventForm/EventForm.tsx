@@ -26,6 +26,8 @@ import { formSchema } from './constants';
 
 type FormValues = z.input<typeof formSchema>;
 
+const inputVariant = 'faded';
+
 export const EventForm: FC = () => {
   const locale = useLocale();
   const t = useTranslations();
@@ -224,6 +226,7 @@ export const EventForm: FC = () => {
               type="file"
               accept="image/*"
               label={t('events.create.image-label')}
+              variant={inputVariant}
               isRequired
               isInvalid={!!errors.image}
               errorMessage={errors.image?.message as string}
@@ -248,6 +251,7 @@ export const EventForm: FC = () => {
             <h3>{t('events.create.description-in-language', { language: lang.name })}</h3>
             <Input
               label={t('events.create.name-label', { language: lang.name })}
+              variant={inputVariant}
               isRequired
               isInvalid={!!errors.title?.[lang.locale]}
               errorMessage={errors.title?.[lang.locale]?.message}
@@ -255,6 +259,7 @@ export const EventForm: FC = () => {
             />
             <Textarea
               label={t('events.create.description-label', { language: lang.name })}
+              variant={inputVariant}
               isRequired
               minRows={4}
               isInvalid={!!errors.summary?.[lang.locale]}
@@ -306,6 +311,7 @@ export const EventForm: FC = () => {
         <div className={cn('grid gap-3', scheduleMode === 'range' && 'grid-cols-2')}>
           <Input
             label={t('events.create.start-date')}
+            variant={inputVariant}
             type="date"
             isRequired
             isInvalid={!!errors.startDate}
@@ -315,6 +321,7 @@ export const EventForm: FC = () => {
           {scheduleMode === 'range' && (
             <Input
               label={t('events.create.end-date')}
+              variant={inputVariant}
               type="date"
               isRequired
               isInvalid={!!errors.endDate}
@@ -327,6 +334,7 @@ export const EventForm: FC = () => {
         <div className="grid grid-cols-2 gap-3">
           <TimeInput
             label={t('events.create.start-time')}
+            variant={inputVariant}
             hourCycle={24}
             isInvalid={!!errors.startTime}
             errorMessage={errors.startTime?.message}
@@ -340,6 +348,7 @@ export const EventForm: FC = () => {
           />
           <TimeInput
             label={t('events.create.end-time')}
+            variant={inputVariant}
             hourCycle={24}
             isInvalid={!!errors.endTime}
             errorMessage={errors.endTime?.message}
@@ -397,6 +406,7 @@ export const EventForm: FC = () => {
             <PlaceAutocomplete
               label={t('events.create.location-label')}
               placeholder={t('events.create.search-location-placeholder')}
+              variant={inputVariant}
               locale={locale}
               isRequired
               onSelect={p => {
@@ -463,14 +473,16 @@ export const EventForm: FC = () => {
         <Input
           label={t('events.create.ticket-url')}
           placeholder="https://"
+          variant={inputVariant}
           isInvalid={!!errors.ticketUrl}
           errorMessage={errors.ticketUrl?.message}
           {...register('ticketUrl')}
         />
         {!isFree && (
           <Input
-            label={t('events.create.min-price')}
             type="number"
+            label={t('events.create.min-price')}
+            variant={inputVariant}
             startContent={
               <div className="pointer-events-none flex items-center">
                 <span className="text-default-400 text-small">€</span>
@@ -486,22 +498,25 @@ export const EventForm: FC = () => {
         <Input
           label={t('events.create.website-url')}
           placeholder="https://"
+          variant={inputVariant}
           isInvalid={!!errors.website}
           errorMessage={errors.website?.message}
           {...register('website')}
         />
         <Input
-          label={t('events.create.contact-email')}
           type="email"
+          label={t('events.create.contact-email')}
           placeholder="name@example.com"
+          variant={inputVariant}
           isInvalid={!!errors.contactEmail}
           errorMessage={errors.contactEmail?.message}
           {...register('contactEmail')}
         />
         <Input
-          label={t('events.create.contact-phone')}
           type="tel"
+          label={t('events.create.contact-phone')}
           placeholder="+34 600 000 000"
+          variant={inputVariant}
           {...register('contactPhone')}
         />
       </section>
