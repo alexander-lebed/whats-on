@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { cookies } from 'next/headers';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import { HeroProvider } from '@/app/providers';
@@ -20,7 +21,7 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({ children, params }: Props) {
+export default async function MainLayout({ children, params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     // Let Next.js render 404
@@ -29,8 +30,12 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
 
+  // SSR: read theme from cookie and apply to <html> to avoid reset on locale navigation
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get('theme')?.value;
+
   return (
-    <html lang={locale}>
+    <html lang={locale} className={themeCookie} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <HeroProvider>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
