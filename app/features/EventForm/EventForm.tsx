@@ -252,7 +252,7 @@ export const EventForm: FC = () => {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-bold">Overview</h2>
+        <h2 className="text-xl font-bold">{t('events.create.overview-section')}</h2>
         {LANGUAGES.map(lang => (
           <div key={lang.locale} className="flex flex-col gap-3">
             <h3>{t('events.create.description-in-language', { language: lang.name })}</h3>

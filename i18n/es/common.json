@@ -2,5 +2,8 @@
   "metadata": {
     "title": "Go Castellón",
     "description": "Eventos en Castellón"
+  },
+  "theme": {
+    "toggle-label": "Cambiar a modo {mode}"
   }
 }

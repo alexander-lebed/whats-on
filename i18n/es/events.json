@@ -63,7 +63,8 @@
     "contact-section": "Contacto",
     "contact-email": "Correo de contacto",
     "contact-phone": "Teléfono de contacto",
-    "required-fields-message": "Por favor, completa todos los campos obligatorios."
+    "required-fields-message": "Por favor, completa todos los campos obligatorios.",
+    "overview-section": "Resumen"
   },
   "validation": {
     "required": "Este campo es obligatorio",

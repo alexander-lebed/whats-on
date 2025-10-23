@@ -2,5 +2,8 @@
   "metadata": {
     "title": "Go Castellón",
     "description": "Events in Castellon"
+  },
+  "theme": {
+    "toggle-label": "Change to {mode} mode"
   }
 }
