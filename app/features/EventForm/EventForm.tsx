@@ -519,6 +519,7 @@ export const EventForm: FC = () => {
           label={t('events.create.contact-email')}
           placeholder="name@example.com"
           variant={inputVariant}
+          isRequired
           isInvalid={!!errors.contactEmail}
           errorMessage={errors.contactEmail?.message}
           {...register('contactEmail')}
