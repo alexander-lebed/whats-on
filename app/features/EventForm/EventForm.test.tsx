@@ -11,6 +11,12 @@ jest.mock('../ImageHero.tsx', () => ({
   ImageHero: () => null,
 }));
 
+jest.mock('lucide-react/dynamic', () => ({
+  DynamicIcon: () => {
+    return null;
+  },
+}));
+
 jest.mock('../PlaceAutocomplete/PlaceAutocomplete.tsx', () => ({
   __esModule: true,
   default: (props: PlaceAutocompleteProps) => {

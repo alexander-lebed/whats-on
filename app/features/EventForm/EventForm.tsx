@@ -4,6 +4,7 @@ import { FC, useState, useEffect, useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import confetti from 'canvas-confetti';
 import { parseISO, eachDayOfInterval, getDay } from 'date-fns';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -292,7 +293,10 @@ export const EventForm: FC = () => {
         >
           {CATEGORIES.map(cat => (
             <Checkbox key={cat.slug} value={cat.slug}>
-              {t(cat.i18n)}
+              <div className="flex items-center gap-2" aria-label={t(cat.i18n)}>
+                <DynamicIcon name={cat.iconName} size="1em" />
+                <span>{t(cat.i18n)}</span>
+              </div>
             </Checkbox>
           ))}
         </CheckboxGroup>
