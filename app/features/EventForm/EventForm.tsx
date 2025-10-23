@@ -215,7 +215,7 @@ export const EventForm: FC = () => {
   }, [place]);
 
   return (
-    <form className="flex flex-col gap-6 pb-10" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-10 pb-20" onSubmit={handleSubmit(onSubmit)}>
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.image-section')}</h2>
         {(() => {
