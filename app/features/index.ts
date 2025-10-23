@@ -10,3 +10,4 @@ export { default as ImageHero } from './ImageHero';
 export { default as Map } from './Map/Map';
 export { default as EventForm } from './EventForm';
 export { default as PlaceAutocomplete } from './PlaceAutocomplete';
+export { default as SubmitEventButton } from './SubmitEventButton';

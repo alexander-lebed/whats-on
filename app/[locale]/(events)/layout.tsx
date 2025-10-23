@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { LanguageSwitcher } from '@/app/features';
+import { LanguageSwitcher, SubmitEventButton } from '@/app/features';
 import { ThemeToggle } from '@/app/ui';
 import { Link } from '@/i18n/navigation';
 
@@ -22,9 +22,7 @@ export default async function Layout({ children, params }: Props) {
               {t('title')}
             </Link>
             <div className="flex items-center gap-3">
-              <Link href={{ pathname: '/events/create' }} className="hover:text-white text-sm">
-                Submit new event
-              </Link>
+              <SubmitEventButton />
               <ThemeToggle />
               <LanguageSwitcher currentLocale={locale} />
             </div>

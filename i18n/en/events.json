@@ -1,5 +1,6 @@
 {
   "title": "Events",
+  "submit-event-button": "Submit new event",
   "heading": "Events list",
   "all-dates": "All dates",
   "show-all-dates": "+ Show all dates",
