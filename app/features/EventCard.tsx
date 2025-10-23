@@ -21,18 +21,15 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
 
   return (
     <li className="group list-none">
-      <Link
-        href={`/events/${event.slug}`}
-        className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black/20 dark:focus:ring-white/20 dark:focus:ring-offset-gray-900 rounded-2xl"
-      >
-        <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-gray-100 dark:bg-white/10 transition-transform duration-200 group-hover:-translate-y-0.5">
+      <Link href={`/events/${event.slug}`} className="block rounded-2xl">
+        <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-gray-100 dark:bg-white/10">
           <div
             className="relative w-full overflow-hidden rounded-b-none rounded-t-2xl"
             style={{ aspectRatio: '4 / 3' }}
           >
             {imgUrl ? (
               <Image
-                className="object-cover"
+                className="object-cover transform-gpu transition-transform duration-300 ease-out group-hover:scale-105"
                 alt={title}
                 priority
                 fill
