@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useDarkMode } from '@/app/hooks';
@@ -10,8 +10,16 @@ export const ThemeToggle: FC = () => {
   const t = useTranslations();
   const { theme, toggle } = useDarkMode();
 
-  const Icon = theme === 'dark' ? Sun : Moon;
-  const label = t('common.theme.toggle-label', { mode: theme === 'dark' ? 'light' : 'dark' });
+  // Render stable, theme-agnostic markup on SSR/first client render
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const Icon = mounted ? (theme === 'dark' ? Sun : Moon) : Sun;
+  const label = mounted
+    ? t('common.theme.toggle-label', { mode: theme === 'dark' ? 'light' : 'dark' })
+    : undefined;
 
   return (
     <Button variant="light" size="sm" isIconOnly title={label} aria-label={label} onPress={toggle}>
