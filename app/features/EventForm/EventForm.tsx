@@ -1,7 +1,8 @@
 'use client';
 
-import { FC, useState, useEffect, useMemo } from 'react';
+import { FC, useState, useEffect, useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import confetti from 'canvas-confetti';
 import { parseISO, eachDayOfInterval, getDay } from 'date-fns';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -32,6 +33,7 @@ export const EventForm: FC = () => {
   const locale = useLocale();
   const t = useTranslations();
   const router = useRouter();
+  const [, startTransition] = useTransition();
   const [place, setPlace] = useState<PlacePayload | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const {
@@ -154,6 +156,11 @@ export const EventForm: FC = () => {
       }
       const data = (await res.json()) as { id: string; slug: string };
       router.push(`/events/${data.slug}`);
+      startTransition(() => {
+        const defaults = { spread: 60, startVelocity: 55, ticks: 70, zIndex: 9999 } as const;
+        confetti({ ...defaults, particleCount: 80, angle: 60, origin: { x: 0, y: 1 } });
+        confetti({ ...defaults, particleCount: 80, angle: 120, origin: { x: 1, y: 1 } });
+      });
     } catch (e) {
       console.error(e);
       // TODO: toast Failed to submit

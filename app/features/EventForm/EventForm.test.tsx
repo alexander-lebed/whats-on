@@ -39,6 +39,9 @@ jest.mock('../../../i18n/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
+// Mock canvas-confetti
+jest.mock('canvas-confetti', () => jest.fn());
+
 beforeAll(() => {
   global.URL.createObjectURL = jest.fn(() => 'blob://preview');
 });
