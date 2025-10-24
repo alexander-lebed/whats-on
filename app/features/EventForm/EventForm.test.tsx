@@ -125,7 +125,7 @@ describe('EventForm', () => {
     await user.tab(); // Blur
     expect(submit).toBeDisabled();
 
-    await user.type(startDateInput, '2025-12-26');
+    await user.type(startDateInput, '2026-12-25');
     await user.tab();
     expect(submit).toBeDisabled();
 
@@ -135,7 +135,7 @@ describe('EventForm', () => {
     await user.tab(); // Blur
     expect(submit).toBeDisabled();
 
-    await user.type(endDateInput, '2025-12-27');
+    await user.type(endDateInput, '2026-12-26');
     await user.tab();
     expect(submit).toBeDisabled();
 
@@ -178,13 +178,11 @@ describe('EventForm', () => {
       screen.queryByRole('checkbox', { name: 'events.weekday.monday' })
     ).not.toBeInTheDocument();
 
-    // Select start date (Friday, Dec 26, 2025)
     const startDateInput = screen.getByLabelText('events.create.start-date');
-    await user.type(startDateInput, '2025-12-26');
+    await user.type(startDateInput, '2026-12-25');
 
-    // Select end date (Saturday, Dec 27, 2025)
     const endDateInput = screen.getByLabelText('events.create.end-date');
-    await user.type(endDateInput, '2025-12-27');
+    await user.type(endDateInput, '2026-12-26');
 
     // Only Friday and Saturday should be available
     await waitFor(() => {

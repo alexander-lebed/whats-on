@@ -3,7 +3,7 @@
 import { FC, useState, useEffect, useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import confetti from 'canvas-confetti';
-import { parseISO, eachDayOfInterval, getDay } from 'date-fns';
+import { parseISO, eachDayOfInterval, getDay, format, startOfToday } from 'date-fns';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -67,6 +67,7 @@ export const EventForm: FC = () => {
   const endDate = watch('endDate');
   const isDigital = !!watch('isDigital');
   const isFree = !!watch('isFree');
+  const todayISO = useMemo(() => format(startOfToday(), 'yyyy-MM-dd'), []);
 
   const toHHmm = (v: unknown): string => {
     if (!v) {
@@ -335,6 +336,7 @@ export const EventForm: FC = () => {
             isRequired
             isInvalid={!!errors.startDate}
             errorMessage={errors.startDate?.message ? t(errors.startDate?.message) : undefined}
+            min={todayISO}
             {...register('startDate')}
           />
           {scheduleMode === 'range' && (
@@ -345,6 +347,7 @@ export const EventForm: FC = () => {
               isRequired
               isInvalid={!!errors.endDate}
               errorMessage={errors.endDate?.message ? t(errors.endDate?.message) : undefined}
+              min={startDate || todayISO}
               {...register('endDate')}
             />
           )}
