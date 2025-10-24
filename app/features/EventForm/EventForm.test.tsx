@@ -75,12 +75,14 @@ describe('EventForm', () => {
     const imageInput = screen.getByLabelText('events.create.image-label');
     await user.click(imageInput);
     await user.tab(); // Blur
+    expect(screen.queryByText('events.validation.image-required')).toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Upload image
     const file = new File(['x'], 'pic.jpg', { type: 'image/jpeg' });
     await user.upload(imageInput, file);
     await user.tab();
+    expect(screen.queryByText('events.validation.image-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Test name fields validation
@@ -90,6 +92,7 @@ describe('EventForm', () => {
     for (const name of names) {
       await user.click(name);
       await user.tab(); // Blur
+      expect(screen.getAllByText('events.validation.required'));
       expect(submit).toBeDisabled();
 
       await user.type(name, 'Event name');
@@ -104,15 +107,25 @@ describe('EventForm', () => {
     for (const description of descriptions) {
       await user.click(description);
       await user.tab(); // Blur
+      expect(screen.getAllByText('events.validation.required'));
       expect(submit).toBeDisabled();
 
       await user.type(description, 'Event description');
       await user.tab();
       expect(submit).toBeDisabled();
     }
+    expect(screen.queryByText('events.validation.required')).not.toBeInTheDocument();
 
     // Test category validation
-    await user.click(screen.getByRole('checkbox', { name: 'events.category.music' }));
+    const musicCategory = screen.getByRole('checkbox', { name: 'events.category.music' });
+    // Toggle the same category to see the error message
+    await user.click(musicCategory);
+    await user.click(musicCategory);
+    await user.tab(); // Blur
+    expect(screen.queryByText('events.validation.categories-required')).toBeInTheDocument();
+    await user.click(musicCategory);
+    await user.tab(); // Blur
+    expect(screen.queryByText('events.validation.categories-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Switch to the date range
@@ -123,25 +136,36 @@ describe('EventForm', () => {
     const startDateInput = screen.getByLabelText('events.create.start-date');
     await user.click(startDateInput);
     await user.tab(); // Blur
+    expect(screen.queryByText('events.validation.required')).toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     await user.type(startDateInput, '2026-12-25');
     await user.tab();
+    expect(screen.queryByText('events.validation.required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Test end date validation
     const endDateInput = screen.getByLabelText('events.create.end-date');
     await user.click(endDateInput);
     await user.tab(); // Blur
+    expect(screen.queryByText('events.validation.end-date-required')).toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     await user.type(endDateInput, '2026-12-26');
     await user.tab();
+    expect(screen.queryByText('events.validation.end-date-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Test weekdays validation
-    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.friday' }));
+    const fridayWeekday = screen.getByRole('checkbox', { name: 'events.weekday.friday' });
+    // Toggle Friday to see the error message
+    await user.click(fridayWeekday);
+    await user.click(fridayWeekday);
+    await user.tab();
+    expect(screen.queryByText('events.validation.weekdays-required')).toBeInTheDocument();
+    await user.click(fridayWeekday);
     await user.click(screen.getByRole('checkbox', { name: 'events.weekday.saturday' }));
+    expect(screen.queryByText('events.validation.weekdays-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
     // Select mocked Location
@@ -151,7 +175,7 @@ describe('EventForm', () => {
       })
     );
 
-    // Fill contact email to satisfy schema's optional email constraint
+    // Fill contact email to satisfy the schema's optional email constraint
     await user.type(screen.getByLabelText('events.create.contact-email'), 'name@example.com');
     await user.tab();
 
