@@ -16,6 +16,6 @@ jest.mock('next/image', () => ({
 jest.mock('next-intl', () => ({
   __esModule: true,
   NextIntlClientProvider: ({ children }) => children,
-  useTranslations: () => (key) => key,
+  useTranslations: () => key => key,
   useLocale: () => 'en',
 }));

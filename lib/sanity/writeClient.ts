@@ -7,5 +7,3 @@ export const sanityWriteClient = createClient({
   token: process.env.NEXT_PUBLIC_SANITY_API_TOKEN,
   useCdn: false,
 });
-
-
