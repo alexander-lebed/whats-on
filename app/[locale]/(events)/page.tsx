@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server';
 import { fetchEvents } from '@/app/api';
 import { Locale } from '@/app/types';
 import { EventsExplorer } from '../../features';
@@ -14,7 +13,7 @@ export default async function Page(props: Props) {
   const events = await fetchEvents(locale, revalidate);
 
   return (
-    <main className="py-8">
+    <main className="sm:py-8">
       <EventsExplorer events={events} />
     </main>
   );

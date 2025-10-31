@@ -6,6 +6,7 @@ import { endOfWeek, format, startOfToday } from 'date-fns';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
+import { useBreakpoint } from '@/app/hooks';
 import { Button, DateRangePicker } from '@/app/ui';
 import { eventDateOverlapsRange, calendarDateToIso } from '@/app/utils';
 import type { EVENTS_QUERY_I18NResult } from '@/sanity/types';
@@ -17,6 +18,7 @@ export type EventsExplorerProps = {
 
 export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const t = useTranslations();
+  const { isMobile } = useBreakpoint();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [dateRange, setDateRange] = useState<RangeValue<DateValue> | null>(null);
 
@@ -105,13 +107,14 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
 
   return (
     <>
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-3 sm:mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t('events.title')}</h1>
         <div className="flex flex-col gap-2 w-full sm:w-auto sm:min-w-[240px]">
           <DateRangePicker
             className="w-full"
             label={t('events.when')}
             variant="flat"
+            size={isMobile ? 'sm' : undefined}
             labelPlacement="inside"
             granularity="day"
             value={dateRange}
@@ -149,6 +152,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
                 variant={isActive ? 'solid' : 'flat'}
                 color={isActive ? 'primary' : undefined}
                 radius="full"
+                size={isMobile ? 'sm' : undefined}
                 aria-label={t(category.i18n)}
                 onPress={() => toggle(category.slug)}
               >
