@@ -5,6 +5,7 @@ import {
   DateRangePicker as HDateRangePicker,
   type DateRangePickerProps as HDateRangePickerProps,
 } from '@heroui/date-picker';
+import { cn } from '@/app/utils/cn';
 
 export type DateRangePickerProps = HDateRangePickerProps;
 
@@ -25,7 +26,23 @@ export const COLORS: DateRangePickerProps['color'][] = [
 ];
 
 const DateRangePicker: FC<DateRangePickerProps> = props => {
-  return <HDateRangePicker {...props} />;
+  const { classNames, ...rest } = props;
+
+  // Render a hollow circle (1-2px border, no fill) for selection edges.
+  const selectedEdgeHollowCircle =
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-start="true"]]:!bg-transparent ' +
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-start="true"]]:border-2 ' +
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-start="true"]]:border-primary ' +
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-end="true"]]:!bg-transparent ' +
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-end="true"]]:border-2 ' +
+    '[&_[data-selected="true"][data-range-selection="true"][data-selection-end="true"]]:border-primary ';
+
+  const mergedClassNames = {
+    ...classNames,
+    calendarContent: cn(selectedEdgeHollowCircle, classNames?.calendarContent),
+  } as DateRangePickerProps['classNames'];
+
+  return <HDateRangePicker {...rest} classNames={mergedClassNames} />;
 };
 
 export default DateRangePicker;
