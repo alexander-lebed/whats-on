@@ -122,7 +122,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             value={dateRange}
             onChange={setDateRange}
             minValue={minValue}
-            visibleMonths={2}
+            visibleMonths={isMobile ? 1 : 2}
             firstDayOfWeek="mon"
             selectorButtonPlacement="start"
             classNames={{
