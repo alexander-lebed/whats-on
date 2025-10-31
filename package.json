@@ -40,6 +40,8 @@
     "@heroui/system": "^2.4.23",
     "@heroui/theme": "^2.4.23",
     "@hookform/resolvers": "^5.2.2",
+    "@internationalized/date": "^3.10.0",
+    "@react-types/shared": "^3.32.1",
     "@sanity/client": "^7.11.0",
     "@sanity/image-url": "^1.2.0",
     "@storybook/react": "^9.1.13",
