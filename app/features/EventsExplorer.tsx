@@ -3,6 +3,7 @@ import { FC, useMemo, useState } from 'react';
 import { CalendarDate, parseDate, today, type DateValue } from '@internationalized/date';
 import type { RangeValue } from '@react-types/shared';
 import { endOfWeek, format, startOfToday } from 'date-fns';
+import { CalendarDays } from 'lucide-react';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
@@ -117,6 +118,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             size={isMobile ? 'sm' : undefined}
             labelPlacement="inside"
             granularity="day"
+            selectorIcon={<CalendarDays size="1em" />}
             value={dateRange}
             onChange={setDateRange}
             minValue={minValue}
