@@ -3,8 +3,13 @@
 import { ReactNode } from 'react';
 import { HeroUIProvider } from '@heroui/system';
 
-export function HeroProvider({ children }: { children: ReactNode }) {
-  return <HeroUIProvider>{children}</HeroUIProvider>;
+type HeroProviderProps = {
+  children: ReactNode;
+  locale?: string;
+};
+
+export function HeroProvider({ children, locale = 'en' }: HeroProviderProps) {
+  return <HeroUIProvider locale={locale}>{children}</HeroUIProvider>;
 }
 
 export default HeroProvider;

@@ -37,7 +37,7 @@ export default async function MainLayout({ children, params }: Props) {
   return (
     <html lang={locale} className={themeCookie} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <HeroProvider>
+        <HeroProvider locale={locale}>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </HeroProvider>
       </body>
