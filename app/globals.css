@@ -6,8 +6,7 @@
 :root {
   --background: var(--color-stone-50);
   --foreground: var(--color-stone-900);
-
-  --primary: var(--color-pink-600);
+  --primary: var(--color-orange-500);
 }
 
 @theme inline {
@@ -33,6 +32,7 @@
 .dark {
   --background: var(--color-stone-900);
   --foreground: var(--color-stone-50);
+  --primary: var(--color-orange-600);
 }
 
 body {
