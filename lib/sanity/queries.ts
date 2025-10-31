@@ -10,7 +10,7 @@ const i18nPick = (field: string) => `coalesce(
   null
 )`;
 
-// Localized events list: require schedule present, exclude outdated events, and order by most recent date (endDate or startDate)
+// Localized events list: require schedule present, exclude outdated events, and order by start date (ascending - soonest first)
 export const EVENTS_QUERY_I18N = groq`
   *[
     _type == "event"
@@ -18,7 +18,7 @@ export const EVENTS_QUERY_I18N = groq`
     && defined(slug.current)
     && !(_id in path('drafts.**'))
     && coalesce(schedule.endDate, schedule.startDate) >= now()
-  ] | order(coalesce(schedule.endDate, schedule.startDate) desc) {
+  ] | order(schedule.startDate asc) {
     ..., // include all fields by default
     "slug": slug.current,
     "title": coalesce(${i18nPick('title')}, ""),
