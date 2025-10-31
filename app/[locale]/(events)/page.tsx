@@ -13,7 +13,7 @@ export default async function Page(props: Props) {
   const events = await fetchEvents(locale, revalidate);
 
   return (
-    <main className="sm:py-8">
+    <main className="py-4 sm:py-8 mb-20">
       <EventsExplorer events={events} />
     </main>
   );
