@@ -1,8 +1,8 @@
 'use client';
 import { FC, useMemo, useState } from 'react';
-import { CalendarDate, parseDate, type DateValue } from '@internationalized/date';
+import { CalendarDate, parseDate, today, type DateValue } from '@internationalized/date';
 import type { RangeValue } from '@react-types/shared';
-import { format, startOfToday } from 'date-fns';
+import { endOfWeek, format, startOfToday } from 'date-fns';
 import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
@@ -82,20 +82,58 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   // Set the minimum date to today
   const minValue = parseDate(format(startOfToday(), 'yyyy-MM-dd'));
 
+  // Preset handlers
+  const handlePresetToday = () => {
+    const todayDate = today('UTC');
+    setDateRange({ start: todayDate, end: todayDate });
+  };
+
+  const handlePresetTomorrow = () => {
+    const tomorrowDate = today('UTC').add({ days: 1 });
+    setDateRange({ start: tomorrowDate, end: tomorrowDate });
+  };
+
+  const handlePresetThisWeek = () => {
+    const todayDate = startOfToday();
+    const weekEnd = endOfWeek(todayDate, { weekStartsOn: 1 }); // Sunday
+    // Start from today, not the beginning of the week
+    setDateRange({
+      start: parseDate(format(todayDate, 'yyyy-MM-dd')),
+      end: parseDate(format(weekEnd, 'yyyy-MM-dd')),
+    });
+  };
+
   return (
     <>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t('events.title')}</h1>
-        <DateRangePicker
-          className="w-full sm:w-auto sm:min-w-[240px]"
-          label={t('events.when')}
-          variant="flat"
-          labelPlacement="inside"
-          granularity="day"
-          value={dateRange}
-          onChange={setDateRange}
-          minValue={minValue}
-        />
+        <div className="flex flex-col gap-2 w-full sm:w-auto sm:min-w-[240px]">
+          <DateRangePicker
+            className="w-full"
+            label={t('events.when')}
+            variant="flat"
+            labelPlacement="inside"
+            granularity="day"
+            value={dateRange}
+            onChange={setDateRange}
+            minValue={minValue}
+            visibleMonths={2}
+            firstDayOfWeek="mon"
+            CalendarBottomContent={
+              <div className="flex flex-wrap gap-2 p-2 border-t border-default-200">
+                <Button size="sm" variant="flat" onPress={handlePresetToday} className="text-xs">
+                  {t('events.presets.today')}
+                </Button>
+                <Button size="sm" variant="flat" onPress={handlePresetTomorrow} className="text-xs">
+                  {t('events.presets.tomorrow')}
+                </Button>
+                <Button size="sm" variant="flat" onPress={handlePresetThisWeek} className="text-xs">
+                  {t('events.presets.this-week')}
+                </Button>
+              </div>
+            }
+          />
+        </div>
       </div>
       <div className="flex flex-col gap-6">
         <div className="flex flex-wrap gap-3">

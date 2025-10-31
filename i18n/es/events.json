@@ -5,6 +5,11 @@
   "all-dates": "Todas las fechas",
   "show-all-dates": "+ Mostrar todas las fechas",
   "when": "¿Cuándo?",
+  "presets": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "this-week": "Esta semana"
+  },
   "getting-there": "Cómo llegar",
   "open-in-google-maps": "Abrir en Google Maps",
   "website": "Sitio web",
