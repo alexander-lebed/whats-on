@@ -119,6 +119,9 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             minValue={minValue}
             visibleMonths={2}
             firstDayOfWeek="mon"
+            classNames={{
+              popoverContent: 'border border-default-200',
+            }}
             CalendarBottomContent={
               <div className="flex flex-wrap gap-2 p-2 border-t border-default-200">
                 <Button size="sm" variant="flat" onPress={handlePresetToday} className="text-xs">
