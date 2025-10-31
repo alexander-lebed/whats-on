@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
@@ -40,6 +41,7 @@ export default async function MainLayout({ children, params }: Props) {
         <HeroProvider locale={locale}>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </HeroProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
