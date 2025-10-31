@@ -494,26 +494,28 @@ export const EventForm: FC = () => {
           <Radio value="free">{t('events.free')}</Radio>
           <Radio value="paid">{t('events.create.paid')}</Radio>
         </RadioGroup>
-        <Input
-          label={t('events.create.ticket-url')}
-          placeholder="https://"
-          variant={inputVariant}
-          isInvalid={!!errors.ticketUrl}
-          errorMessage={errors.ticketUrl?.message ? t(errors.ticketUrl.message) : undefined}
-          {...register('ticketUrl')}
-        />
         {!isFree && (
-          <Input
-            type="number"
-            label={t('events.create.min-price')}
-            variant={inputVariant}
-            startContent={
-              <div className="pointer-events-none flex items-center">
-                <span className="text-default-400 text-small">€</span>
-              </div>
-            }
-            {...register('price')}
-          />
+          <>
+            <Input
+              label={t('events.create.ticket-url')}
+              placeholder="https://"
+              variant={inputVariant}
+              isInvalid={!!errors.ticketUrl}
+              errorMessage={errors.ticketUrl?.message ? t(errors.ticketUrl.message) : undefined}
+              {...register('ticketUrl')}
+            />
+            <Input
+              type="number"
+              label={t('events.create.min-price')}
+              variant={inputVariant}
+              startContent={
+                <div className="pointer-events-none flex items-center">
+                  <span className="text-default-400 text-small">€</span>
+                </div>
+              }
+              {...register('price')}
+            />
+          </>
         )}
       </section>
 
