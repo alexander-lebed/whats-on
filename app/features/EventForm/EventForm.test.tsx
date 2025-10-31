@@ -156,15 +156,14 @@ describe('EventForm', () => {
     expect(screen.queryByText('events.validation.end-date-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
-    // Test weekdays validation
-    const fridayWeekday = screen.getByRole('checkbox', { name: 'events.weekday.friday' });
-    // Toggle Friday to see the error message
-    await user.click(fridayWeekday);
-    await user.click(fridayWeekday);
-    await user.tab();
-    expect(screen.queryByText('events.validation.weekdays-required')).toBeInTheDocument();
-    await user.click(fridayWeekday);
-    await user.click(screen.getByRole('checkbox', { name: 'events.weekday.saturday' }));
+    // Test weekdays validation - weekdays should be auto-selected when dates change
+    await waitFor(() => {
+      const fridayWeekday = screen.getByRole('checkbox', { name: 'events.weekday.friday' });
+      const saturdayWeekday = screen.getByRole('checkbox', { name: 'events.weekday.saturday' });
+      // Both should be checked by default
+      expect(fridayWeekday).toBeChecked();
+      expect(saturdayWeekday).toBeChecked();
+    });
     expect(screen.queryByText('events.validation.weekdays-required')).not.toBeInTheDocument();
     expect(submit).toBeDisabled();
 
@@ -208,10 +207,15 @@ describe('EventForm', () => {
     const endDateInput = screen.getByLabelText('events.create.end-date');
     await user.type(endDateInput, '2026-12-26');
 
-    // Only Friday and Saturday should be available
+    // Only Friday and Saturday should be available and automatically selected
     await waitFor(() => {
-      expect(screen.getByRole('checkbox', { name: 'events.weekday.friday' })).toBeInTheDocument();
-      expect(screen.getByRole('checkbox', { name: 'events.weekday.saturday' })).toBeInTheDocument();
+      const fridayCheckbox = screen.getByRole('checkbox', { name: 'events.weekday.friday' });
+      const saturdayCheckbox = screen.getByRole('checkbox', { name: 'events.weekday.saturday' });
+      expect(fridayCheckbox).toBeInTheDocument();
+      expect(saturdayCheckbox).toBeInTheDocument();
+      // Both should be checked by default when dates change
+      expect(fridayCheckbox).toBeChecked();
+      expect(saturdayCheckbox).toBeChecked();
     });
 
     // Other weekdays should not be visible

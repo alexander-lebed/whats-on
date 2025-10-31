@@ -206,6 +206,17 @@ export const EventForm: FC = () => {
     }
   }, [scheduleMode, startDate, endDate]);
 
+  // Select all available weekdays when start/end date changes
+  useEffect(() => {
+    if (scheduleMode === 'range' && availableWeekdaySlugs.length > 0) {
+      setValue('weekdays', availableWeekdaySlugs, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    }
+  }, [scheduleMode, availableWeekdaySlugs, setValue]);
+
   const placeForMap = useMemo<Event['place'] | undefined>(() => {
     if (!place || !place.location?.lat || !place.location.lng) {
       return undefined;
