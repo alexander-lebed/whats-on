@@ -6,6 +6,7 @@ export * from './Form';
 export * from './TimeInput';
 export * from './Textarea';
 export * from './DatePicker';
+export * from './DateRangePicker';
 export * from './Checkbox';
 export * from './RadioGroup';
 export * from './Autocomplete';
