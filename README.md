@@ -2,6 +2,8 @@
 
 A lightweight city events explorer built with Next.js (App Router), localized, and powered by CMS.
 
+**Live:** [https://go-castellon.vercel.app/](https://go-castellon.vercel.app/)
+
 ## Getting Started
 
 Install and run the development server:
