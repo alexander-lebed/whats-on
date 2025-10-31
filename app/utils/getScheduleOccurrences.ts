@@ -15,7 +15,7 @@ export const getScheduleOccurrences = (
   if (schedule.mode === 'single' || !schedule.endDate) {
     return [
       {
-        label: format(parseISO(`${schedule.startDate}T00:00:00Z`), 'd MMMM', {
+        label: format(parseISO(`${schedule.startDate}T00:00:00Z`), 'd MMM (EEE)', {
           locale: getDateFnsLocale(locale),
         }),
         time: timeLabel,
@@ -37,7 +37,7 @@ export const getScheduleOccurrences = (
     const include = preferred ? preferred.has(weekday) : true;
     if (include) {
       out.push({
-        label: format(cursor, 'd MMMM', { locale: getDateFnsLocale(locale) }),
+        label: format(cursor, 'd MMM (EEE)', { locale: getDateFnsLocale(locale) }),
         time: timeLabel,
       });
     }
