@@ -119,6 +119,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             minValue={minValue}
             visibleMonths={2}
             firstDayOfWeek="mon"
+            selectorButtonPlacement="start"
             classNames={{
               popoverContent: 'border border-default-200',
             }}
