@@ -32,6 +32,8 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
                 className="object-cover transform-gpu transition-transform duration-300 ease-out group-hover:scale-105"
                 alt={title}
                 priority
+                // To improve LCP
+                fetchPriority="high"
                 fill
                 src={imgUrl}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
