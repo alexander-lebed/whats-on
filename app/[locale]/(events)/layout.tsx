@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { LanguageSwitcher, SubmitEventButton } from '@/app/features';
 import { ThemeToggle } from '@/app/ui';
@@ -18,8 +19,15 @@ export default async function Layout({ children, params }: Props) {
       <header className="dark bg-stone-900 text-stone-50">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 py-4">
-            <Link href="/" className="hover:text-white">
-              {t('title')}
+            <Link href="/" className="hover:text-white flex items-center gap-1">
+              <Image
+                src="/square-orange.png"
+                alt={t('title')}
+                width={28}
+                height={28}
+                className="object-contain"
+              />
+              <span className="font-bold">{t('brand')}</span>
             </Link>
             <div className="flex items-center gap-3">
               <SubmitEventButton />
