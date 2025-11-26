@@ -27,7 +27,7 @@ export default async function Layout({ children, params }: Props) {
                 height={28}
                 className="object-contain"
               />
-              <span className="font-bold">{t('brand')}</span>
+              <span className="hidden sm:inline font-bold">{t('brand')}</span>
             </Link>
             <div className="flex items-center gap-3">
               <SubmitEventButton />
