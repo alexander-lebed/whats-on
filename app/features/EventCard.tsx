@@ -1,6 +1,5 @@
 'use client';
-import { FC } from 'react';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { cloneElement, FC } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
@@ -53,7 +52,7 @@ export const EventCard: FC<EventCardProps> = ({ event }) => {
                       key={slug}
                       className="rounded-full flex items-center gap-1 bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/10 dark:text-gray-300"
                     >
-                      {cat && <DynamicIcon name={cat.iconName} size="1em" />}
+                      {cat && cloneElement(cat.iconComponent, { size: '1em' })}
                       {label}
                     </span>
                   );

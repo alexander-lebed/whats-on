@@ -1,10 +1,9 @@
 'use client';
-import { FC, useMemo, useState } from 'react';
+import { cloneElement, FC, useMemo, useState } from 'react';
 import { CalendarDate, parseDate, today, type DateValue } from '@internationalized/date';
 import type { RangeValue } from '@react-types/shared';
 import { endOfWeek, format, startOfToday } from 'date-fns';
 import { CalendarDays } from 'lucide-react';
-import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import { useBreakpoint } from '@/app/hooks';
@@ -158,7 +157,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
                 aria-label={t(category.i18n)}
                 onPress={() => toggle(category.slug)}
               >
-                <DynamicIcon name={category.iconName} size="1rem" aria-hidden />
+                {cloneElement(category.iconComponent, { size: '1rem', 'aria-hidden': true })}
                 <span>{t(category.i18n)}</span>
               </Button>
             );

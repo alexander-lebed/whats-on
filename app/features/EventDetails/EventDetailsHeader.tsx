@@ -1,6 +1,5 @@
-import { FC } from 'react';
+import { cloneElement, FC } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
-import { DynamicIcon } from 'lucide-react/dynamic';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
 import { Event, Locale } from '@/app/types';
@@ -27,7 +26,7 @@ const EventDetailsHeader: FC<Props> = ({ event, locale }) => {
               return (
                 <span key={slug} className="inline-flex items-center gap-2">
                   <span aria-hidden>
-                    <DynamicIcon name={cat.iconName} size="1.1em" aria-hidden />
+                    {cloneElement(cat.iconComponent, { size: '1.1em', 'aria-hidden': true })}
                   </span>
                   <span className="align-middle">{t(cat.i18n)}</span>
                 </span>
