@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { THEME_COOKIE_KEY } from '@/app/constants';
 import { isClient } from '@/app/utils';
 
 type ThemeMode = 'light' | 'dark';
@@ -10,7 +11,6 @@ type UseDarkModeReturn = {
   toggle: () => void;
 };
 
-const THEME_COOKIE_KEY = 'events-theme';
 const THEME_COOKIE_MAX_AGE = 31536000; // 1 year in seconds
 const THEME_EVENT = 'events-theme-mode';
 
@@ -42,14 +42,21 @@ const getInitialTheme = (): ThemeMode => {
     return 'light';
   }
   const root = document.documentElement;
+  // Check if theme is already applied (from blocking script or SSR)
   if (root.classList.contains('dark')) {
     return 'dark';
   }
   if (root.classList.contains('light')) {
     return 'light';
   }
+  // Check cookie first
   const fromCookie = getCookie(THEME_COOKIE_KEY);
-  return fromCookie === 'dark' ? 'dark' : 'light';
+  if (fromCookie === 'dark' || fromCookie === 'light') {
+    return fromCookie as ThemeMode;
+  }
+  // Fallback to browser preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
 };
 
 export const useDarkMode = (): UseDarkModeReturn => {

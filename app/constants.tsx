@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { Category, Language } from '@/app/types';
 
+export const THEME_COOKIE_KEY = 'events-theme';
+
 export const CATEGORIES: Category[] = [
   {
     slug: 'music',
