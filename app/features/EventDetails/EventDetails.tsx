@@ -31,7 +31,7 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
       </div>
 
       {/* Summary */}
-      <p className="max-w-3xl leading-relaxed">{event.summary}</p>
+      <p className="max-w-3xl leading-relaxed whitespace-pre-line">{event.summary}</p>
 
       {/* Dates */}
       <EventDetailsDates schedule={event.schedule} locale={locale} />
