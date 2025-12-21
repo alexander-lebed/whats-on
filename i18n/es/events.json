@@ -89,5 +89,9 @@
     "location-required": "Selecciona una ubicación",
     "invalid-number": "Introduce un número válido",
     "non-negative-number": "Debe ser un número no negativo"
+  },
+  "empty-state": {
+    "no-events": "Lo sentimos, aún no hay eventos.",
+    "try-adjusting-filters": "Intenta ajustar los filtros."
   }
 }

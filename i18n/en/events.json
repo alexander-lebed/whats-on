@@ -90,5 +90,9 @@
     "location-required": "Please select a location",
     "invalid-number": "Please enter a valid number",
     "non-negative-number": "Must be a non-negative number"
+  },
+  "empty-state": {
+    "no-events": "Sorry, there are no events yet.",
+    "try-adjusting-filters": "Try adjusting filters."
   }
 }

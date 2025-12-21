@@ -105,6 +105,9 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
     });
   };
 
+  const hasActiveFilters = selected.size > 0 || dateRange !== null;
+  const isEmpty = filteredEvents.length === 0;
+
   return (
     <>
       <div className="mb-3 sm:mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -163,7 +166,22 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             );
           })}
         </div>
-        <EventsGrid events={filteredEvents} />
+        {isEmpty ? (
+          <div
+            className="flex flex-col items-center justify-center py-10 text-center"
+            role="status"
+            aria-live="polite"
+          >
+            <p className="text-lg text-default-600">{t('events.empty-state.no-events')}</p>
+            {hasActiveFilters && (
+              <p className="mt-2 text-sm text-default-500">
+                {t('events.empty-state.try-adjusting-filters')}
+              </p>
+            )}
+          </div>
+        ) : (
+          <EventsGrid events={filteredEvents} />
+        )}
       </div>
     </>
   );
