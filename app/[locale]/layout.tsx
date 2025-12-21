@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import Head from 'next/head';
 import { cookies } from 'next/headers';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
@@ -9,13 +9,8 @@ import { THEME_COOKIE_KEY } from '@/app/constants';
 import { HeroProvider } from '@/app/providers';
 import { routing } from '@/i18n/routing';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
 });
 
@@ -38,7 +33,11 @@ export default async function MainLayout({ children, params }: Props) {
   const themeCookie = cookieStore.get(THEME_COOKIE_KEY)?.value;
 
   return (
-    <html lang={locale} className={themeCookie} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${themeCookie || ''}`}
+      suppressHydrationWarning
+    >
       <Head>
         <script
           dangerouslySetInnerHTML={{
@@ -64,7 +63,7 @@ export default async function MainLayout({ children, params }: Props) {
           }}
         />
       </Head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased">
         <HeroProvider locale={locale}>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </HeroProvider>
