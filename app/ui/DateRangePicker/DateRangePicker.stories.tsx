@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { today, getLocalTimeZone, type DateValue } from '@internationalized/date';
+import type { RangeValue } from '@react-types/shared';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { DateRangePicker } from '@/app/ui/DateRangePicker';
 import { VARIANTS, SIZES, COLORS } from '@/app/ui/DateRangePicker/DateRangePicker';
@@ -183,4 +186,30 @@ export const LabelPlacements: Story = {
       ))}
     </div>
   ),
+};
+
+const ClearableTemplate = () => {
+  const [value, setValue] = useState<RangeValue<DateValue> | null>({
+    start: today(getLocalTimeZone()),
+    end: today(getLocalTimeZone()).add({ days: 7 }),
+  });
+
+  return (
+    <div className="flex flex-col gap-4 w-[640px]">
+      <DateRangePicker
+        label="Clearable Date Range"
+        granularity="day"
+        value={value}
+        onChange={setValue}
+        onClear={() => setValue(null)}
+      />
+      <p className="text-sm text-default-500">
+        Selected: {value ? `${value.start} – ${value.end}` : 'None'}
+      </p>
+    </div>
+  );
+};
+
+export const Clearable: Story = {
+  render: () => <ClearableTemplate />,
 };

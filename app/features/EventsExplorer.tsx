@@ -114,7 +114,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
         <h1 className="text-3xl font-bold tracking-tight">{t('events.title')}</h1>
         <div className="flex flex-col gap-2 w-full sm:w-auto sm:min-w-[240px]">
           <DateRangePicker
-            className="w-full"
+            className="w-full min-w-2xs"
             label={t('events.when')}
             variant="flat"
             size={isMobile ? 'sm' : undefined}
@@ -123,6 +123,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             selectorIcon={<CalendarDays size="1em" />}
             value={dateRange}
             onChange={setDateRange}
+            onClear={() => setDateRange(null)}
             minValue={minValue}
             visibleMonths={isMobile ? 1 : 2}
             firstDayOfWeek="mon"
