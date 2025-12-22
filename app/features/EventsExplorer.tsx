@@ -6,6 +6,7 @@ import { endOfWeek, format, startOfToday } from 'date-fns';
 import { CalendarDays } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { CATEGORIES } from '@/app/constants';
+import { useDarkMode } from '@/app/hooks';
 import { useBreakpoint } from '@/app/hooks';
 import { Button, DateRangePicker } from '@/app/ui';
 import { eventDateOverlapsRange, calendarDateToIso } from '@/app/utils';
@@ -19,6 +20,7 @@ export type EventsExplorerProps = {
 export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const t = useTranslations();
   const { isMobile } = useBreakpoint();
+  const { theme } = useDarkMode();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [dateRange, setDateRange] = useState<RangeValue<DateValue> | null>(null);
 
@@ -105,6 +107,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
     });
   };
 
+  const isLightMode = theme === 'light';
   const hasActiveFilters = selected.size > 0 || dateRange !== null;
   const isEmpty = filteredEvents.length === 0;
 
@@ -160,6 +163,9 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
                 size={isMobile ? 'sm' : undefined}
                 aria-label={t(category.i18n)}
                 onPress={() => toggle(category.slug)}
+                className={
+                  isLightMode ? (isActive ? 'text-white' : 'outline-default-200') : undefined
+                }
               >
                 {cloneElement(category.iconComponent, { size: '1rem', 'aria-hidden': true })}
                 <span>{t(category.i18n)}</span>
