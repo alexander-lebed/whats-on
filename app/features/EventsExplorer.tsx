@@ -133,6 +133,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             selectorButtonPlacement="start"
             classNames={{
               popoverContent: 'border border-default-200',
+              inputWrapper: isLightMode ? 'outline outline-default-200' : undefined,
             }}
             CalendarBottomContent={
               <div className="flex flex-wrap gap-2 p-2 border-t border-default-200">
