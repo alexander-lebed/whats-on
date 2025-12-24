@@ -35,8 +35,9 @@ const Map: FC<MapProps> = ({ places = [], className, ...mapsProps }) => {
           defaultCenter={CASTELLON_CENTER}
           center={center}
           defaultZoom={15}
-          gestureHandling="greedy"
           disableDefaultUI
+          zoomControl
+          streetViewControl
           {...mapsProps}
         >
           {markers.map(m => (

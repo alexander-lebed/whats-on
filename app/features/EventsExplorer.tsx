@@ -151,7 +151,7 @@ export const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 sm:gap-10">
         <div className="flex flex-wrap gap-3">
           {CATEGORIES.map(category => {
             const isActive = selected.has(category.slug);
