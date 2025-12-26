@@ -16,7 +16,9 @@ const deskStructure = (S: StructureBuilder) =>
                   S.documentList()
                     .title('Upcoming events')
                     .schemaType('event')
-                    .filter('_type == "event" && schedule.startDate >= now()')
+                    .filter(
+                      '_type == "event" && coalesce(schedule.endDate, schedule.startDate) >= now()'
+                    )
                     .defaultOrdering([{ field: 'schedule.startDate', direction: 'asc' }])
                 ),
               S.listItem()
