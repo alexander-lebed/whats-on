@@ -1,19 +1,13 @@
-import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import prettier from 'eslint-config-prettier';
 
-const compat = new FlatCompat({
-  // import.meta.dirname is available after Node.js v20.11.0
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: js.configs.recommended,
-});
-
-export default defineConfig([
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  prettier,
   {
-    ignores: ['.next/**', 'node_modules/**', 'dist/**', 'coverage/**', 'next-env.d.ts'],
-  },
-  ...compat.config({
-    extends: ['next/core-web-vitals', 'next/typescript', 'prettier'],
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-destructuring': ['error', { object: true, array: false }],
@@ -43,5 +37,15 @@ export default defineConfig([
         },
       ],
     },
-  }),
+  },
+  globalIgnores([
+    '.next/**',
+    'node_modules/**',
+    'dist/**',
+    'coverage/**',
+    'next-env.d.ts',
+    'storybook-static/**',
+  ]),
 ]);
+
+export default eslintConfig;

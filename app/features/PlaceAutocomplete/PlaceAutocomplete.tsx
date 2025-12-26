@@ -97,6 +97,7 @@ const InnerPlaceAutocomplete: FC<PlaceAutocompleteProps> = ({
 
   useEffect(() => {
     if (!inputValue) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setItems([]);
       // clear selection when the input transitions from non-empty to empty
       if (selectedKey !== null) {

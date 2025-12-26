@@ -80,8 +80,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams({ params }: { params: { locale: Locale } }) {
-  const events = await fetchEvents(params.locale);
+export async function generateStaticParams({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const events = await fetchEvents(locale);
   return events.map(e => ({ slug: e.slug }));
 }
 
