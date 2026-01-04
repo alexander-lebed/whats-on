@@ -1,0 +1,1 @@
+export { useFilteredEvents } from './useFilteredEvents';

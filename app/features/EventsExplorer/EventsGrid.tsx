@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useTranslations } from 'next-intl';
-import EventCard, { EventCardProps } from './EventCard';
+import EventCard, { EventCardProps } from '../EventCard';
 
 export type EventsGridProps = {
   events: Array<EventCardProps['event']>;
