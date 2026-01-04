@@ -21,7 +21,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ currentLocale }) =
   );
 
   const handleSelect = (locale: string) => {
-    router.replace(pathname, { locale });
+    router.replace(`${pathname}${window.location.search}`, { locale });
   };
 
   return (
