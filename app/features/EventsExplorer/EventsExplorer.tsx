@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { type DateValue } from '@internationalized/date';
 import type { RangeValue } from '@react-types/shared';
 import { useTranslations } from 'next-intl';
@@ -10,8 +10,7 @@ import NoEventsMessage from '@/app/features/EventsExplorer/NoEventsMessage';
 import { Category, Event } from '@/app/types';
 import EventsDateRangePicker from './EventsDateRangePicker';
 import EventsGrid from './EventsGrid';
-import { useFilteredEvents } from './hooks';
-import { EventFilters } from './types';
+import { useFilteredEvents, useFiltersUrlSync } from './hooks';
 
 type EventsExplorerProps = {
   events: Event[];
@@ -19,10 +18,7 @@ type EventsExplorerProps = {
 
 const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const t = useTranslations();
-  const [filters, setFilters] = useState<EventFilters>({
-    categories: new Set(),
-    dateRange: null,
-  });
+  const [filters, setFilters] = useFiltersUrlSync();
 
   const filteredEvents = useFilteredEvents({ events, filters });
 
@@ -32,23 +28,26 @@ const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
         ...prev,
         dateRange: value,
       })),
-    []
+    [setFilters]
   );
 
-  const toggleCategory = useCallback(({ slug }: Category) => {
-    setFilters(prev => {
-      const updatedCategories = new Set(prev.categories);
-      if (updatedCategories.has(slug)) {
-        updatedCategories.delete(slug);
-      } else {
-        updatedCategories.add(slug);
-      }
-      return {
-        ...prev,
-        categories: updatedCategories,
-      };
-    });
-  }, []);
+  const toggleCategory = useCallback(
+    ({ slug }: Category) => {
+      setFilters(prev => {
+        const updatedCategories = new Set(prev.categories);
+        if (updatedCategories.has(slug)) {
+          updatedCategories.delete(slug);
+        } else {
+          updatedCategories.add(slug);
+        }
+        return {
+          ...prev,
+          categories: updatedCategories,
+        };
+      });
+    },
+    [setFilters]
+  );
 
   const { categories, dateRange } = filters;
 
