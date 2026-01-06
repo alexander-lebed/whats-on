@@ -3,6 +3,7 @@ import { MapPin, ExternalLink } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ImageHero, Map } from '@/app/features';
 import { Event, Locale } from '@/app/types';
+import Button from '@/app/ui/Button/Button';
 import { getPlaceAddress } from '@/app/utils';
 import { urlForImage } from '@/app/utils/sanityImage';
 import EventDetailsDates from './EventDetailsDates';
@@ -38,61 +39,76 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
 
       {/* Tickets & pricing */}
       {(event.ticketUrl || event.isFree || typeof event.price === 'number') && (
-        <section aria-labelledby="tickets-heading" className="border-l-2 pl-4">
-          <h2 id="tickets-heading" className="mb-3 text-sm font-semibold uppercase tracking-wide">
-            {t('events.tickets')}
-          </h2>
+        <section
+          aria-labelledby="tickets-heading"
+          className="flex flex-col gap-4 rounded-3xl border border-stone-200 bg-stone-100/50 p-6 dark:border-none dark:bg-transparent dark:p-0"
+        >
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h2 id="tickets-heading" className="text-lg font-bold text-foreground">
+              {t('events.tickets')}
+            </h2>
+            {event.isFree === true || typeof event.price === 'number' ? (
+              <p className="text-right text-lg font-medium">
+                {event.isFree === true || !event.price || event.price <= 0 ? null : (
+                  <span className="mr-2 text-base font-normal text-stone-500">
+                    {t('events.min-price')}:
+                  </span>
+                )}
+                {event.isFree === true || !event.price || event.price <= 0
+                  ? t('events.free')
+                  : new Intl.NumberFormat(locale, {
+                      style: 'currency',
+                      currency: 'EUR',
+                    }).format(event.price)}
+              </p>
+            ) : null}
+          </div>
 
           {event.ticketUrl ? (
-            <p className="flex items-center gap-2">
-              <ExternalLink aria-hidden className="h-5 w-5" />
-              <a
-                className="text-primary hover:underline"
+            <div>
+              <Button
+                as="a"
+                href={event.ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                href={event.ticketUrl}
+                color="primary"
+                variant="solid"
+                endContent={<ExternalLink className="h-4 w-4" />}
+                className="w-full sm:w-auto text-white"
               >
                 {t('events.tickets')}
-              </a>
-            </p>
-          ) : null}
-
-          {event.isFree === true || typeof event.price === 'number' ? (
-            <p className="mt-4">
-              <span className="font-medium">{t('events.price')}:</span>{' '}
-              {event.isFree === true || !event.price || event.price <= 0
-                ? t('events.free')
-                : new Intl.NumberFormat(locale, {
-                    style: 'currency',
-                    currency: 'EUR',
-                  }).format(event.price)}
-            </p>
+              </Button>
+            </div>
           ) : null}
         </section>
       )}
 
       {/* Address */}
       {(event.place || event.website) && (
-        <section aria-labelledby="getting-there-heading" className="border-l-2 pl-4">
-          <h2
-            id="getting-there-heading"
-            className="mb-3 text-sm font-semibold uppercase tracking-wide"
-          >
+        <section
+          aria-labelledby="getting-there-heading"
+          className="flex flex-col gap-4 rounded-3xl border border-stone-200 bg-stone-100/50 p-6 dark:border-none dark:bg-transparent dark:p-0"
+        >
+          <h2 id="getting-there-heading" className="text-lg font-bold text-foreground">
             {t('events.getting-there')}
           </h2>
+
           {event.place ? (
-            <div className="mb-2">
-              <div className="mb-1 flex items-center gap-2">
-                <MapPin aria-hidden className="h-5 w-5" />
+            <div>
+              <div className="mb-1 flex items-center gap-2 font-medium">
+                <MapPin aria-hidden className="h-5 w-5 text-stone-400" />
                 <span>{event.place.name}</span>
               </div>
-              {event.place.address ? <p>{getPlaceAddress(event.place)}</p> : null}
+              {event.place.address ? (
+                <p className="ml-7 text-stone-600 dark:text-stone-300">
+                  {getPlaceAddress(event.place)}
+                </p>
+              ) : null}
+
               {event.place.address && (
-                <p className="mt-2">
-                  <a
-                    className="text-primary hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <div className="mt-4">
+                  <Button
+                    as="a"
                     href={(() => {
                       if (event.place?.location?.lat && event.place?.location?.lng) {
                         const { lat, lng } = event.place.location;
@@ -100,27 +116,32 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
                       }
                       return `https://maps.google.com/?q=${encodeURIComponent(getPlaceAddress(event.place) || event.place?.name)}`;
                     })()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="bordered"
+                    endContent={<ExternalLink className="h-4 w-4" />}
                   >
-                    {t('events.open-in-google-maps')}{' '}
-                    <ExternalLink aria-hidden className="ml-1 inline h-4 w-4 align-middle" />
-                  </a>
-                </p>
+                    {t('events.open-in-google-maps')}
+                  </Button>
+                </div>
               )}
             </div>
           ) : null}
 
           {event.website ? (
-            <p className="mt-4 flex items-center gap-2">
-              <ExternalLink aria-hidden className="h-5 w-5" />
-              <a
-                className="text-primary hover:underline"
+            <div className="mt-2 text-sm">
+              <Button
+                as="a"
+                href={event.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                href={event.website}
+                variant="flat"
+                size="sm"
+                endContent={<ExternalLink className="h-4 w-4" />}
               >
                 {t('events.website')}
-              </a>
-            </p>
+              </Button>
+            </div>
           ) : null}
         </section>
       )}

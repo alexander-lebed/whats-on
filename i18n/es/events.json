@@ -16,6 +16,7 @@
   "website": "Sitio web",
   "tickets": "Entradas",
   "price": "Precio",
+  "min-price": "Precio mín.",
   "free": "Gratis",
   "weekday": {
     "monday": "Lunes",
@@ -65,7 +66,6 @@
     "pricing-label": "Precios",
     "paid": "De pago",
     "ticket-url": "URL de entradas",
-    "min-price": "Precio mín.",
     "submit": "Enviar",
     "page-title": "Crear un evento",
     "contact-section": "Contacto",

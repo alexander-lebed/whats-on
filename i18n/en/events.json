@@ -16,6 +16,7 @@
   "website": "Website",
   "tickets": "Tickets",
   "price": "Price",
+  "min-price": "Min. price",
   "free": "Free",
   "weekday": {
     "monday": "Monday",
@@ -66,7 +67,6 @@
     "pricing-label": "Pricing",
     "paid": "Paid",
     "ticket-url": "Ticket URL",
-    "min-price": "Min. price",
     "submit": "Submit",
     "page-title": "Create an event",
     "contact-section": "Contact",

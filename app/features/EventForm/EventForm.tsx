@@ -517,7 +517,7 @@ export const EventForm: FC = () => {
             />
             <Input
               type="number"
-              label={t('events.create.min-price')}
+              label={t('events.min-price')}
               variant={inputVariant}
               startContent={
                 <div className="pointer-events-none flex items-center">
