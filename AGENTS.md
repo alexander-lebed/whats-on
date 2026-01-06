@@ -7,7 +7,7 @@ All code generated must adhere to the following standards. Always consult the **
 #### 🧹 Code Formatting
 - Always respect **ESLint** and **Prettier** configurations.
 - Always follow the repository ESLint rules defined in `eslint.config.mjs`.
-- Use formatting and lint scripts defined in `package.json` before committing or submitting code.
+- Use formatting and lint scripts defined in `package.json` before committing or submitting code using `pnpm`.
 - Run `pnpm lint` to check ESLint errors.
 - Run `pnpm lint:fix` to auto-fix ESLint errors and format with Prettier.
 
@@ -31,11 +31,14 @@ All code generated must adhere to the following standards. Always consult the **
 #### ⚛️ React
 - Use **functional components** with **arrow functions**:
   ```tsx
-  const MyComponent: FC<Props> = ({ ... }) => { ... }
+  const Component = (props: Props) => { ... }
+  
+  export default Component;
   ```
 - Destructure React imports:
   ```ts
-  import { FC, ReactNode, useEffect } from 'react';
+  import { useEffect } from 'react';
+  import type { ReactNode } from 'react';
   ```
 - Use **hooks** effectively. Prefer `useCallback`, `useMemo`, etc., only when needed for performance.
 - Handle component states with clear structure. Avoid unnecessary nesting or prop drilling — use context or custom hooks if needed.
@@ -54,7 +57,7 @@ All code generated must adhere to the following standards. Always consult the **
   /utils           → general helper functions
   /types           → global/shared TypeScript types
   ```
-- In each shared folder (except /pages & /features), add an index.ts that re-exports its modules for concise imports.
+- In each shared folder (except /pages & /features), add an index.ts that re-exports its modules for concise imports. Also add feature-specific files (if any) to /utils.ts, /hooks.ts, ./constants.ts, and /types.ts.
 
 ---
 
