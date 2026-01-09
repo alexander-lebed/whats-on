@@ -72,7 +72,9 @@
     "contact-email": "Correo de contacto",
     "contact-phone": "Teléfono de contacto",
     "required-fields-message": "Por favor, completa todos los campos obligatorios.",
-    "overview-section": "Resumen"
+    "overview-section": "Resumen",
+    "preview-button": "Vista previa",
+    "preview-modal-title": "Vista previa del evento"
   },
   "validation": {
     "required": "Este campo es obligatorio",

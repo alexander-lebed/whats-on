@@ -10,6 +10,10 @@ export const urlForImage = (source: unknown): string | null => {
     if (!projectId) {
       return null;
     }
+    // If source is already a URL string (e.g. blob:...), return it as is
+    if (typeof source === 'string' && (source.startsWith('http') || source.startsWith('blob:'))) {
+      return source;
+    }
     // @sanity/image-url accepts ref string or image object
     return builder
       .image(source as never)

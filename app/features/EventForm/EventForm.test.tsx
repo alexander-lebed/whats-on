@@ -48,6 +48,11 @@ jest.mock('../../../i18n/navigation', () => ({
 // Mock canvas-confetti
 jest.mock('canvas-confetti', () => jest.fn());
 
+// Mock useBreakpoint to avoid window.matchMedia error
+jest.mock('@/app/hooks', () => ({
+  useBreakpoint: () => ({ isMobile: false }),
+}));
+
 beforeAll(() => {
   global.URL.createObjectURL = jest.fn(() => 'blob://preview');
 });

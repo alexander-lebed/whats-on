@@ -73,7 +73,9 @@
     "contact-email": "Contact email",
     "contact-phone": "Contact phone",
     "required-fields-message": "Please fill in all required fields.",
-    "overview-section": "Overview"
+    "overview-section": "Overview",
+    "preview-button": "Preview",
+    "preview-modal-title": "Preview event"
   },
   "validation": {
     "required": "This field is required",

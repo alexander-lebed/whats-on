@@ -10,7 +10,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LANGUAGES, CATEGORIES, WEEKDAYS } from '@/app/constants';
 import { ImageHero, PlaceAutocomplete, Map } from '@/app/features';
+import { EventFormValues } from '@/app/features/EventForm/types';
 import { PlacePayload } from '@/app/features/PlaceAutocomplete';
+import { useBreakpoint } from '@/app/hooks';
 import { Event } from '@/app/types';
 import {
   Button,
@@ -25,6 +27,8 @@ import {
 import { cn } from '@/app/utils';
 import { useRouter } from '@/i18n/navigation';
 import { formSchema } from './constants';
+import { EventPreviewModal } from './EventPreviewModal';
+import { transformFormValuesToEvent } from './utils';
 
 type FormValues = z.input<typeof formSchema>;
 
@@ -35,8 +39,10 @@ export const EventForm: FC = () => {
   const t = useTranslations();
   const router = useRouter();
   const [, startTransition] = useTransition();
+  const { isMobile } = useBreakpoint();
   const [place, setPlace] = useState<PlacePayload | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -68,6 +74,11 @@ export const EventForm: FC = () => {
   const isDigital = !!watch('isDigital');
   const isFree = !!watch('isFree');
   const todayISO = useMemo(() => format(startOfToday(), 'yyyy-MM-dd'), []);
+
+  const sortedLanguages = useMemo(
+    () => [...LANGUAGES].sort((a, b) => (a.locale === 'es' ? -1 : b.locale === 'es' ? 1 : 0)),
+    []
+  );
 
   const toHHmm = (v: unknown): string => {
     if (!v) {
@@ -266,7 +277,7 @@ export const EventForm: FC = () => {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.overview-section')}</h2>
-        {LANGUAGES.map(lang => (
+        {sortedLanguages.map(lang => (
           <div key={lang.locale} className="flex flex-col gap-3">
             <h3>{t('events.create.description-in-language', { language: lang.name })}</h3>
             <Input
@@ -530,7 +541,7 @@ export const EventForm: FC = () => {
         )}
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className={`flex flex-col gap-3 ${isMobile ? 'pb-10' : ''}`}>
         <h2 className="text-xl font-bold">{t('events.create.contact-section')}</h2>
         <Input
           label={t('events.create.website-url')}
@@ -559,20 +570,66 @@ export const EventForm: FC = () => {
         />
       </section>
 
-      <div className="flex items-center gap-3">
-        <Button
-          type="submit"
-          variant="solid"
-          color="primary"
-          isDisabled={isSubmitting || !isValid}
-          isLoading={isSubmitting}
-        >
-          {t('events.create.submit')}
-        </Button>
-        {!isValid && (
-          <p className="text-sm text-default-500">{t('events.create.required-fields-message')}</p>
+      {!isMobile && (
+        <div className="flex items-center gap-3">
+          <Button variant="bordered" isDisabled={!isValid} onPress={() => setIsPreviewOpen(true)}>
+            {t('events.create.preview-button')}
+          </Button>
+          <Button
+            type="submit"
+            variant="solid"
+            color="primary"
+            isDisabled={isSubmitting || !isValid}
+            isLoading={isSubmitting}
+          >
+            {t('events.create.submit')}
+          </Button>
+          {!isValid && (
+            <p className="text-sm text-default-500">{t('events.create.required-fields-message')}</p>
+          )}
+        </div>
+      )}
+
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-md border-t border-default-200 z-50 flex flex-col gap-3 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
+          {!isValid && (
+            <p className="text-sm text-default-500 text-center">
+              {t('events.create.required-fields-message')}
+            </p>
+          )}
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="bordered"
+              isDisabled={!isValid}
+              onPress={() => setIsPreviewOpen(true)}
+              className="flex-1"
+            >
+              {t('events.create.preview-button')}
+            </Button>
+            <Button
+              type="submit"
+              variant="solid"
+              color="primary"
+              isDisabled={isSubmitting || !isValid}
+              isLoading={isSubmitting}
+              className="flex-1"
+            >
+              {t('events.create.submit')}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <EventPreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        event={transformFormValuesToEvent(
+          watch() as EventFormValues,
+          place,
+          preview ?? undefined,
+          locale as 'en' | 'es'
         )}
-      </div>
+      />
     </form>
   );
 };

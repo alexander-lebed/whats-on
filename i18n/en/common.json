@@ -5,5 +5,6 @@
   },
   "theme": {
     "toggle-label": "Change to {mode} mode"
-  }
+  },
+  "close": "Close"
 }
