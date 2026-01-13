@@ -1,5 +1,7 @@
 'use client';
 
+import type { MouseEvent } from 'react';
+import { useState } from 'react';
 import { parseDate, today, type DateValue } from '@internationalized/date';
 import { RangeValue } from '@react-types/shared';
 import { endOfWeek, format, startOfToday } from 'date-fns';
@@ -16,11 +18,31 @@ type Props = Pick<DateRangePickerProps, 'value'> & {
 const EventsDateRangePicker = ({ value, onChange }: Props) => {
   const t = useTranslations();
   const { isMobile } = useBreakpoint();
+  const [isOpen, setIsOpen] = useState(false);
 
   // Set the minimum date to today
   const minValue = parseDate(format(startOfToday(), 'yyyy-MM-dd'));
 
-  const handleClear = () => onChange(null);
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+  };
+
+  const handleContainerClick = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleClear = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onChange(null);
+  };
+
+  const handleFocus = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  };
 
   // Preset handlers
   const handlePresetToday = () => {
@@ -46,12 +68,16 @@ const EventsDateRangePicker = ({ value, onChange }: Props) => {
   return (
     <DateRangePicker
       className="w-full min-w-2xs"
+      isOpen={isOpen}
       label={t('events.when')}
       variant="flat"
       size={isMobile ? 'sm' : undefined}
       labelPlacement="inside"
       granularity="day"
       selectorIcon={<CalendarDays size="1em" />}
+      onContainerClick={handleContainerClick}
+      onOpenChange={handleOpenChange}
+      onFocus={handleFocus}
       value={value}
       onChange={onChange}
       onClear={handleClear}
@@ -61,7 +87,8 @@ const EventsDateRangePicker = ({ value, onChange }: Props) => {
       selectorButtonPlacement="start"
       classNames={{
         popoverContent: 'border border-default-200',
-        inputWrapper: 'outline outline-default-200 dark:outline-0',
+        label: 'cursor-pointer',
+        inputWrapper: 'cursor-pointer outline outline-default-200 dark:outline-0',
       }}
       CalendarBottomContent={
         <div className="flex flex-wrap gap-2 p-2 border-t border-default-200">

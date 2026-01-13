@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import {
   DateRangePicker as HDateRangePicker,
   type DateRangePickerProps as HDateRangePickerProps,
@@ -9,7 +9,8 @@ import { X } from 'lucide-react';
 import { cn } from '@/app/utils/cn';
 
 export type DateRangePickerProps = HDateRangePickerProps & {
-  onClear?: () => void;
+  onClear?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onContainerClick?: (e: MouseEvent<HTMLDivElement>) => void;
 };
 
 export const VARIANTS: DateRangePickerProps['variant'][] = [
@@ -29,7 +30,7 @@ export const COLORS: DateRangePickerProps['color'][] = [
 ];
 
 const DateRangePicker: FC<DateRangePickerProps> = props => {
-  const { classNames, onClear, onChange, value, ...rest } = props;
+  const { classNames, onContainerClick, onClear, onChange, value, ...rest } = props;
 
   const hasValue = value !== null && value !== undefined;
   const showClearButton = onClear && hasValue;
@@ -49,8 +50,8 @@ const DateRangePicker: FC<DateRangePickerProps> = props => {
   } as DateRangePickerProps['classNames'];
 
   return (
-    <div className="relative">
-      <HDateRangePicker {...rest} value={value} onChange={onChange} classNames={mergedClassNames} />
+    <div className="relative" onClick={onContainerClick}>
+      <HDateRangePicker {...rest} classNames={mergedClassNames} value={value} onChange={onChange} />
       {showClearButton && (
         <button
           type="button"
