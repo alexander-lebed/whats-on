@@ -89,6 +89,8 @@ const EventsDateRangePicker = ({ value, onChange }: Props) => {
         popoverContent: 'border border-default-200',
         label: 'cursor-pointer',
         inputWrapper: 'cursor-pointer outline outline-default-200 dark:outline-0',
+        input: value ? '' : 'hidden',
+        separator: value ? '' : 'hidden',
       }}
       CalendarBottomContent={
         <div className="flex flex-wrap gap-2 p-2 border-t border-default-200">
