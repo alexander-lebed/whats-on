@@ -2,6 +2,9 @@ import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   typedRoutes: true,
   images: {
     remotePatterns: [
