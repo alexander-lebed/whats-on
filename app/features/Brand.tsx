@@ -18,7 +18,7 @@ const Brand = async ({ hideOnMobile }: Props) => {
         className="object-contain"
       />
       <span
-        className={`text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-500 ${hideOnMobile ? 'hidden sm:inline' : ''}`}
+        className={`text-md font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-500 ${hideOnMobile ? 'hidden sm:inline' : ''}`}
       >
         {t('metadata.title')}
       </span>
