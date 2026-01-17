@@ -6,6 +6,7 @@ import { Event, Locale } from '@/app/types';
 import Button from '@/app/ui/Button/Button';
 import { getPlaceAddress } from '@/app/utils';
 import { urlForImage } from '@/app/utils/sanityImage';
+import EventDetailsActions from './EventDetailsActions';
 import EventDetailsDates from './EventDetailsDates';
 import EventDetailsHeader from './EventDetailsHeader';
 
@@ -150,6 +151,9 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
           <Map places={[event.place]} />
         </section>
       ) : null}
+
+      {/* Share & Save */}
+      <EventDetailsActions event={event} />
     </article>
   );
 };
