@@ -11,6 +11,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     messages: {
       common: (await import(`./${locale}/common.json`)).default,
       events: (await import(`./${locale}/events.json`)).default,
+      organizers: (await import(`./${locale}/organizers.json`)).default,
     },
   } as const;
 });

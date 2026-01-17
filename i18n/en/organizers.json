@@ -1,0 +1,77 @@
+{
+  "page-title": "For organizers and venues",
+  "badge": "For Organizers",
+  "intro": {
+    "title": "An events directory for Castellón de la Plana",
+    "description": "Go Castellón helps residents and visitors quickly find what's happening in the city: concerts, exhibitions, meetups, festivals, sports, local events, and more. You submit an event — we review it and publish it in the directory."
+  },
+  "who-its-for": {
+    "title": "Who it's for",
+    "items": [
+      "Museums, cultural centres, municipal venues",
+      "Theatres, galleries, exhibition spaces",
+      "Cafes, bars, and venues with recurring events (quizzes, talks, concerts)",
+      "Local communities (book clubs, language meetups, etc.)"
+    ]
+  },
+  "what-you-get": {
+    "title": "What you get",
+    "items": [
+      { "label": "Extra visibility", "description": "People discover your event in the directory and learn about your venue." },
+      { "label": "Publishing without hassle", "description": "You fill in the form — we handle the rest." },
+      { "label": "Pre-publication review", "description": "When needed, we lightly edit the text, standardize the format, and clarify details." },
+      { "label": "Accurate location", "description": "We verify the address and the map pin." },
+      { "label": "A shareable event page", "description": "A permanent link you can send to visitors." }
+    ]
+  },
+  "how-it-works": {
+    "title": "How it works",
+    "step-prefix": "Step",
+    "steps": [
+      { "number": "1", "text": "You submit an event via the form (takes a few minutes)." },
+      { "number": "2", "text": "We review and publish it (moderation helps keep quality high and prevents spam)." },
+      { "number": "3", "text": "The event appears in the directory and receives a permanent link." }
+    ]
+  },
+  "what-to-include": {
+    "title": "What to include when submitting",
+    "subtitle": "To get your event approved quickly:",
+    "items": [
+      { "label": "Title", "description": "Clear and to the point" },
+      { "label": "Category", "description": "Helps people find events via filters" },
+      { "label": "Date/time", "description": "And location (address or a clear description of where it is)" },
+      { "label": "1 image", "description": "Poster/photo; clear and readable" },
+      { "label": "Description", "description": "What it is, who it's for, key details" },
+      { "label": "Link", "description": "If available (website/social/tickets). If you don't have a link, that's fine." }
+    ]
+  },
+  "moderation": {
+    "title": "Moderation and quality rules",
+    "description": "We moderate submissions so the directory stays trustworthy and useful.",
+    "admin-rights": "The admin reserves the right to:",
+    "admin-actions": [
+      "Publish an event,",
+      "Request clarifications/edits,",
+      "Decline publication if an event doesn't meet the directory rules."
+    ],
+    "decline-reasons-intro": "We typically ask for clarification or decline if:",
+    "decline-reasons": [
+      "The date/time/location is unclear,",
+      "It's a duplicate,",
+      "The information looks like spam or is misleading,",
+      "The content violates basic norms or the law."
+    ],
+    "decline-note": "If an event is not published, we'll briefly explain why and what to fix."
+  },
+  "pilot": {
+    "title": "Pilot mode",
+    "description": "The project is currently running as a local pilot. We're improving Go Castellón together with local venues and institutions. If you have a recurring program (e.g., tours/exhibitions/series), we can agree on a convenient way to share events."
+  },
+  "contact": {
+    "description": "Want to add an event or join as a venue?",
+    "cta": "Submit your first event via the form — we'll follow up if anything needs clarification."
+  },
+  "cta": {
+    "submit-event": "Submit an event"
+  }
+}

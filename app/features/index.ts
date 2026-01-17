@@ -8,3 +8,5 @@ export { default as Map } from './Map/Map';
 export { default as EventForm } from './EventForm';
 export { default as PlaceAutocomplete } from './PlaceAutocomplete';
 export { default as SubmitEventButton } from './SubmitEventButton';
+export { default as Brand } from './Brand';
+export { default as Footer } from './Footer';
