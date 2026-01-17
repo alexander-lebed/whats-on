@@ -13,9 +13,10 @@ import EventDetailsHeader from './EventDetailsHeader';
 type Props = {
   event: Event;
   locale: Locale;
+  preview?: boolean;
 };
 
-export const EventDetails: FC<Props> = ({ event, locale }) => {
+export const EventDetails: FC<Props> = ({ event, locale, preview }) => {
   const t = useTranslations();
   const imgUrl = urlForImage(event.image);
 
@@ -153,7 +154,7 @@ export const EventDetails: FC<Props> = ({ event, locale }) => {
       ) : null}
 
       {/* Share & Save */}
-      <EventDetailsActions event={event} />
+      {!preview && <EventDetailsActions event={event} />}
     </article>
   );
 };

@@ -35,7 +35,7 @@ export const EventPreviewModal: FC<Props> = ({ isOpen, onClose, event }) => {
               {t('preview-modal-title')}
             </ModalHeader>
             <ModalBody className="p-6">
-              {event && <EventDetails event={event} locale={locale} />}
+              {event && <EventDetails preview event={event} locale={locale} />}
             </ModalBody>
             <ModalFooter className="border-t border-default-200">
               <Button variant="light" onPress={onClose}>
