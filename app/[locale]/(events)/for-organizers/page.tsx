@@ -166,7 +166,7 @@ const ForOrganizersPage = async () => {
         {/* Moderation & Guidelines */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* What to include (Good) */}
-          <div className="bg-green-50/50 dark:bg-green-950/10 rounded-3xl p-8 sm:p-10 border border-green-100 dark:border-green-900/20">
+          <div className="bg-green-50/50 dark:bg-green-950/10 rounded-3xl p-8 sm:p-10 border border-green-200 dark:border-green-900/20">
             <div className="flex items-center gap-3 mb-8">
               <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
                 <ClipboardList className="w-6 h-6 text-green-700 dark:text-green-500" />
@@ -191,7 +191,7 @@ const ForOrganizersPage = async () => {
           </div>
 
           {/* Moderation (Bad/Warning) */}
-          <div className="bg-stone-50 dark:bg-stone-900 rounded-3xl p-8 sm:p-10 border border-stone-100 dark:border-stone-800">
+          <div className="bg-stone-50 dark:bg-stone-900 rounded-3xl p-8 sm:p-10 border border-stone-200 dark:border-stone-800">
             <div className="flex items-center gap-3 mb-8">
               <div className="p-2 bg-stone-100 dark:bg-stone-800 rounded-lg">
                 <Shield className="w-6 h-6 text-stone-600 dark:text-stone-400" />
