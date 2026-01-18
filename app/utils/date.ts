@@ -15,10 +15,10 @@ export const formatDateRange = (start: string, end?: string): string => {
 
 export const getDateFnsLocale = (locale: Locale) => (locale === 'es' ? esLocale : enUS);
 
-export const formatDayShort = (isoDate: string, locale: Locale) => {
+export const formatDayShort = (isoDate: string, locale: Locale, withYear = false) => {
   try {
     const d = parseISO(`${isoDate}T00:00:00Z`);
-    return format(d, 'd MMM', { locale: getDateFnsLocale(locale) });
+    return format(d, withYear ? 'd MMM yyyy' : 'd MMM', { locale: getDateFnsLocale(locale) });
   } catch {
     return isoDate;
   }

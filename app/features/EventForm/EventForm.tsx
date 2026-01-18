@@ -572,7 +572,7 @@ export const EventForm: FC = () => {
 
       {!isMobile && (
         <div className="flex items-center gap-3">
-          <Button variant="bordered" isDisabled={!isValid} onPress={() => setIsPreviewOpen(true)}>
+          <Button variant="flat" isDisabled={!isValid} onPress={() => setIsPreviewOpen(true)}>
             {t('events.create.preview-button')}
           </Button>
           <Button
@@ -599,7 +599,7 @@ export const EventForm: FC = () => {
           )}
           <div className="flex justify-end gap-3">
             <Button
-              variant="bordered"
+              variant="flat"
               isDisabled={!isValid}
               onPress={() => setIsPreviewOpen(true)}
               className="flex-1"

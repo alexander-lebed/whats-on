@@ -26,11 +26,8 @@ const EventDetailsDates: FC<EventDatesProps> = ({ schedule, locale }) => {
   }
 
   return (
-    <section
-      aria-labelledby="dates-heading"
-      className="rounded-3xl border border-stone-200 bg-stone-100/50 p-6 dark:border-none dark:bg-transparent dark:p-0"
-    >
-      <h2 id="dates-heading" className="mb-1 text-lg font-bold text-foreground">
+    <section aria-labelledby="dates-heading" className="space-y-4">
+      <h2 id="dates-heading" className="text-2xl font-bold text-foreground">
         {t('events.all-dates')}
       </h2>
       <div className="overflow-x-auto">
@@ -39,23 +36,25 @@ const EventDetailsDates: FC<EventDatesProps> = ({ schedule, locale }) => {
           <tbody>
             {visible.map((o, idx) => (
               <tr key={idx} className="align-middle">
-                <td className="pr-10 whitespace-nowrap font-medium">{o.label}</td>
-                <td className="text-right tabular-nums whitespace-nowrap text-stone-600 dark:text-stone-400">
+                <td className="pr-10 whitespace-nowrap font-medium text-stone-700 dark:text-stone-200">
+                  {o.label}
+                </td>
+                <td className="text-right tabular-nums whitespace-nowrap text-stone-500 dark:text-stone-400">
                   {o.time}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {hasMore && !expanded ? (
+          <button
+            onClick={() => setExpanded(true)}
+            className="mt-2 font-semibold text-primary hover:underline cursor-pointer disabled:opacity-50 text-sm"
+          >
+            {t('events.show-all-dates')}
+          </button>
+        ) : null}
       </div>
-      {hasMore && !expanded ? (
-        <button
-          onClick={() => setExpanded(true)}
-          className="mt-3 font-medium text-primary hover:underline cursor-pointer disabled:opacity-50"
-        >
-          {t('events.show-all-dates')}
-        </button>
-      ) : null}
     </section>
   );
 };

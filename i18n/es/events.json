@@ -1,9 +1,10 @@
 {
   "title": "Eventos",
+  "about": "Información",
   "submit-event-button": "Enviar nuevo evento",
   "heading": "Lista de eventos",
   "all-dates": "Todas las fechas",
-  "show-all-dates": "+ Mostrar todas las fechas",
+  "show-all-dates": "Mostrar todas las fechas",
   "when": "¿Cuándo?",
   "presets": {
     "today": "Hoy",
@@ -17,6 +18,7 @@
   "price": "Precio",
   "min-price": "Precio mín.",
   "free": "Gratis",
+  "all-day": "Todo el día",
   "actions-section": "Compartir y Agregar",
   "share-event": "Compartir",
   "share-native": "Compartir...",

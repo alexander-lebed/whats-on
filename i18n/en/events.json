@@ -1,9 +1,10 @@
 {
   "title": "Events",
+  "about": "About",
   "submit-event-button": "Submit new event",
   "heading": "Events list",
   "all-dates": "All dates",
-  "show-all-dates": "+ Show all dates",
+  "show-all-dates": "Show all dates",
   "when": "When?",
   "presets": {
     "today": "Today",
@@ -17,6 +18,7 @@
   "price": "Price",
   "min-price": "Min. price",
   "free": "Free",
+  "all-day": "All day",
   "actions-section": "Share & Add",
   "share-event": "Share",
   "share-native": "Share...",
@@ -50,7 +52,6 @@
     "networking-community": "Networking & Community",
     "local-fiestas": "Local Fiestas"
   },
-
   "create": {
     "description-in-language": "Describe your event in {language}",
     "name-label": "Name ({language})",

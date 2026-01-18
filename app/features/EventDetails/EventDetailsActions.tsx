@@ -100,18 +100,15 @@ const EventDetailsActions: FC<Props> = ({ event }) => {
   const hasSchedule = Boolean(event.schedule);
 
   return (
-    <section
-      aria-labelledby="actions-heading"
-      className="flex flex-col gap-4 rounded-3xl border border-stone-200 bg-stone-100/50 p-6 dark:border-none dark:bg-transparent dark:p-0"
-    >
-      <h2 id="actions-heading" className="text-lg font-bold text-foreground">
+    <section aria-labelledby="actions-heading" className="space-y-4">
+      <h2 id="actions-heading" className="text-2xl font-bold text-foreground">
         {t('events.actions-section')}
       </h2>
       <div className="flex flex-wrap gap-3">
         {/* Share Dropdown */}
         <Dropdown>
           <DropdownTrigger asChild>
-            <Button variant="bordered" startContent={<Share2 className="h-4 w-4" />}>
+            <Button variant="flat" startContent={<Share2 className="h-4 w-4" />}>
               {t('events.share-event')}
             </Button>
           </DropdownTrigger>
@@ -157,7 +154,7 @@ const EventDetailsActions: FC<Props> = ({ event }) => {
         {hasSchedule ? (
           <Dropdown>
             <DropdownTrigger asChild>
-              <Button variant="bordered" startContent={<CalendarPlus className="h-4 w-4" />}>
+              <Button variant="flat" startContent={<CalendarPlus className="h-4 w-4" />}>
                 {t('events.add-to-calendar')}
               </Button>
             </DropdownTrigger>
