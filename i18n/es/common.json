@@ -6,5 +6,23 @@
   "theme": {
     "toggle-label": "Cambiar a modo {mode}"
   },
-  "close": "Cerrar"
+  "close": "Cerrar",
+  "footer": {
+    "description": "El directorio de eventos locales de Castellón de la Plana.",
+    "for-organizers": "Para locales y organizadores",
+    "about": {
+      "title": "Acerca de",
+      "project": "Sobre el proyecto",
+      "contact": "Contacto",
+      "privacy": "Política de privacidad",
+      "cookie": "Política de cookies"
+    },
+    "connect": {
+      "title": "Conectar",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} Go Castellón. Todos los derechos reservados."
+  }
 }

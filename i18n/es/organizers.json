@@ -1,0 +1,104 @@
+{
+  "page-title": "Para organizadores y locales",
+  "badge": "Para organizadores",
+  "intro": {
+    "title": "Un directorio de eventos para Castellón de la Plana",
+    "description": "Go Castellón ayuda a residentes y visitantes a encontrar rápidamente lo que está pasando en la ciudad: conciertos, exposiciones, encuentros, festivales, deportes, eventos locales y más. Tú envías un evento — nosotros lo revisamos y lo publicamos en el directorio."
+  },
+  "who-its-for": {
+    "title": "¿Para quién es?",
+    "items": [
+      "Museos, centros culturales, espacios municipales",
+      "Teatros, galerías, espacios de exposición",
+      "Cafeterías, bares y locales con eventos recurrentes (quizzes, charlas, conciertos)",
+      "Comunidades locales (clubes de lectura, intercambios de idiomas, etc.)"
+    ]
+  },
+  "what-you-get": {
+    "title": "¿Qué obtienes?",
+    "items": [
+      {
+        "label": "Mayor visibilidad",
+        "description": "La gente descubre tu evento en el directorio y conoce tu local."
+      },
+      {
+        "label": "Publicación sin complicaciones",
+        "description": "Tú rellenas el formulario — nosotros nos encargamos del resto."
+      },
+      {
+        "label": "Revisión antes de publicar",
+        "description": "Cuando es necesario, editamos ligeramente el texto, estandarizamos el formato y aclaramos detalles."
+      },
+      {
+        "label": "Ubicación precisa",
+        "description": "Verificamos la dirección y el marcador en el mapa."
+      },
+      {
+        "label": "Página del evento para compartir",
+        "description": "Un enlace permanente que puedes enviar a los visitantes."
+      }
+    ]
+  },
+  "how-it-works": {
+    "title": "¿Cómo funciona?",
+    "step-prefix": "Paso",
+    "steps": [
+      { "number": "1", "text": "Envías un evento a través del formulario (toma unos minutos)." },
+      {
+        "number": "2",
+        "text": "Lo revisamos y lo publicamos (la moderación ayuda a mantener la calidad y prevenir spam)."
+      },
+      { "number": "3", "text": "El evento aparece en el directorio y recibe un enlace permanente." }
+    ]
+  },
+  "what-to-include": {
+    "title": "Qué incluir al enviar",
+    "subtitle": "Para que tu evento sea aprobado rápidamente:",
+    "items": [
+      { "label": "Título", "description": "Claro y directo" },
+      {
+        "label": "Categoría",
+        "description": "Ayuda a la gente a encontrar eventos mediante filtros"
+      },
+      {
+        "label": "Fecha/hora",
+        "description": "Y ubicación (dirección o descripción clara de dónde es)"
+      },
+      { "label": "1 imagen", "description": "Póster/foto; clara y legible" },
+      { "label": "Descripción", "description": "Qué es, para quién es, detalles clave" },
+      {
+        "label": "Enlace",
+        "description": "Si está disponible (web/redes sociales/entradas). Si no tienes enlace, no pasa nada."
+      }
+    ]
+  },
+  "moderation": {
+    "title": "Moderación y normas de calidad",
+    "description": "Moderamos los envíos para que el directorio sea fiable y útil.",
+    "admin-rights": "El administrador se reserva el derecho de:",
+    "admin-actions": [
+      "Publicar un evento,",
+      "Solicitar aclaraciones/cambios,",
+      "Rechazar la publicación si un evento no cumple las normas del directorio."
+    ],
+    "decline-reasons-intro": "Normalmente pedimos aclaraciones o rechazamos si:",
+    "decline-reasons": [
+      "La fecha/hora/ubicación no está clara,",
+      "Es un duplicado,",
+      "La información parece spam o es engañosa,",
+      "El contenido viola normas básicas o la ley."
+    ],
+    "decline-note": "Si un evento no se publica, explicaremos brevemente por qué y qué corregir."
+  },
+  "pilot": {
+    "title": "Modo piloto",
+    "description": "El proyecto está actualmente en fase piloto local. Estamos mejorando Go Castellón junto con locales e instituciones de la zona. Si tienes un programa recurrente (por ejemplo, tours/exposiciones/series), podemos acordar una forma cómoda de compartir eventos."
+  },
+  "contact": {
+    "description": "¿Quieres añadir un evento o unirte como local?",
+    "cta": "Envía tu primer evento a través del formulario — te contactaremos si algo necesita aclaración."
+  },
+  "cta": {
+    "submit-event": "Enviar un evento"
+  }
+}
