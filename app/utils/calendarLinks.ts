@@ -13,16 +13,17 @@ type CalendarEventData = {
 };
 
 /**
- * Formats a date and time for calendar URLs (YYYYMMDDTHHmmssZ format)
+ * Formats a date and time for calendar URLs (YYYYMMDD or YYYYMMDDTHHmmss format)
+ * No Z suffix - times are local to the specified timezone (Europe/Madrid)
  */
 const formatCalendarDateTime = (date: string, time?: string): string => {
   const datePart = date.replace(/-/g, '');
   if (!time) {
-    return `${datePart}T000000Z`;
+    return datePart; // Date-only for all-day events
   }
   // Time format is HH:mm, convert to HHmmss
   const timePart = time.replace(':', '') + '00';
-  return `${datePart}T${timePart}Z`;
+  return `${datePart}T${timePart}`;
 };
 
 /**
@@ -120,6 +121,7 @@ export const getGoogleCalendarUrl = (event: Event, currentUrl: string): string =
       data.endDate || data.startDate,
       data.endTime || data.startTime
     )}`,
+    ctz: 'Europe/Madrid',
   });
 
   if (data.description) {
@@ -133,14 +135,24 @@ export const getGoogleCalendarUrl = (event: Event, currentUrl: string): string =
 };
 
 /**
+ * Formats a date and time for Outlook Calendar URLs (YYYY-MM-DDTHH:mm:ss format)
+ */
+const formatOutlookDateTime = (date: string, time?: string): string => {
+  if (!time) {
+    return date;
+  }
+  return `${date}T${time}:00`;
+};
+
+/**
  * Generates an Outlook Calendar URL for adding an event
  */
 export const getOutlookCalendarUrl = (event: Event, currentUrl: string): string => {
   const data = getCalendarEventData(event, currentUrl);
   const params = new URLSearchParams({
     subject: data.title,
-    startdt: formatCalendarDateTime(data.startDate, data.startTime),
-    enddt: formatCalendarDateTime(data.endDate || data.startDate, data.endTime || data.startTime),
+    startdt: formatOutlookDateTime(data.startDate, data.startTime),
+    enddt: formatOutlookDateTime(data.endDate || data.startDate, data.endTime || data.startTime),
   });
 
   if (data.description) {
