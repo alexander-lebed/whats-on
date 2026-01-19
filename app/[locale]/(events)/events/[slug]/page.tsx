@@ -5,7 +5,11 @@ import { fetchEvents } from '@/app/api';
 import { LANGUAGES } from '@/app/constants';
 import { EventDetails } from '@/app/features';
 import { Event, Locale } from '@/app/types';
+import { urlForImage } from '@/app/utils/sanityImage';
 import EventScript from './EventScript';
+
+const SITE_URL = 'https://go-castellon.vercel.app';
+const FALLBACK_OG_IMAGE = `${SITE_URL}/square-orange.png`;
 
 export const revalidate = 300;
 
@@ -47,10 +51,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = event.title || t('common.metadata.title');
   const description = event.summary || t('common.metadata.description');
-  const canonical = `https://gocastellon.com/${locale}/events/${event.slug}`;
+  const canonical = `${SITE_URL}/${locale}/events/${event.slug}`;
   const languages = Object.fromEntries(
-    LANGUAGES.map(l => [l.locale, `https://gocastellon.com/${l.locale}/events/${event.slug}`])
+    LANGUAGES.map(l => [l.locale, `${SITE_URL}/${l.locale}/events/${event.slug}`])
   );
+
+  // Use urlForImage utility, fallback to default OG image if not available
+  const ogImageUrl = urlForImage(event.image) ?? FALLBACK_OG_IMAGE;
 
   return {
     title,
@@ -64,18 +71,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       type: 'article',
       url: canonical,
-      images: event.image?.asset
-        ? [
-            {
-              url: `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/production/${event.image.asset._ref.split('-').slice(1, 3).join('-')}.jpg`,
-            },
-          ]
-        : undefined,
+      images: [{ url: ogImageUrl }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImageUrl],
     },
   };
 }
