@@ -2,9 +2,13 @@
 
 import type { FC } from 'react';
 import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
+import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Event, Locale } from '@/app/types';
-import { getScheduleOccurrences } from '@/app/utils';
+import { Button } from '@/app/ui';
+import { getScheduleOccurrences, cn } from '@/app/utils';
+import { getDateFnsLocale } from '@/app/utils/date';
 
 type EventDatesProps = {
   schedule: Event['schedule'];
@@ -18,42 +22,83 @@ const EventDetailsDates: FC<EventDatesProps> = ({ schedule, locale }) => {
     () => getScheduleOccurrences(schedule, locale),
     [schedule, locale]
   );
-  const visible = expanded ? allOccurrences : allOccurrences.slice(0, 3);
-  const hasMore = allOccurrences.length > 3;
+
+  const initialVisibleCount = 6;
+  const visible = expanded ? allOccurrences : allOccurrences.slice(0, initialVisibleCount);
+  const hasMore = allOccurrences.length > initialVisibleCount;
+
+  // Group visible occurrences by month
+  const groupedOccurrences = useMemo(() => {
+    const groups: { month: string; items: typeof visible }[] = [];
+    visible.forEach(item => {
+      const monthLabel = format(item.date, 'MMMM yyyy', {
+        locale: getDateFnsLocale(locale),
+      });
+      const existingGroup = groups.find(g => g.month === monthLabel);
+      if (existingGroup) {
+        existingGroup.items.push(item);
+      } else {
+        groups.push({ month: monthLabel, items: [item] });
+      }
+    });
+    return groups;
+  }, [visible, locale]);
 
   if (allOccurrences.length === 0) {
     return null;
   }
 
   return (
-    <section aria-labelledby="dates-heading" className="space-y-4">
-      <h2 id="dates-heading" className="text-2xl font-bold text-foreground">
-        {t('events.all-dates')}
-      </h2>
-      <div className="overflow-x-auto">
-        <table className="w-auto border-separate border-spacing-y-2">
-          <caption className="sr-only">{t('events.all-dates')}</caption>
-          <tbody>
-            {visible.map((o, idx) => (
-              <tr key={idx} className="align-middle">
-                <td className="pr-10 whitespace-nowrap font-medium text-stone-700 dark:text-stone-200">
-                  {o.label}
-                </td>
-                <td className="text-right tabular-nums whitespace-nowrap text-stone-500 dark:text-stone-400">
-                  {o.time}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {hasMore && !expanded ? (
-          <button
-            onClick={() => setExpanded(true)}
-            className="mt-2 font-semibold text-primary hover:underline cursor-pointer disabled:opacity-50 text-sm"
-          >
-            {t('events.show-all-dates')}
-          </button>
-        ) : null}
+    <section aria-labelledby="dates-heading" className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 id="dates-heading" className="text-2xl font-bold text-foreground">
+          {t('events.all-dates')}
+        </h2>
+      </div>
+
+      <div className="space-y-4">
+        {groupedOccurrences.map(group => (
+          <div key={group.month} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {group.items.map((o, idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    'flex flex-col gap-1 p-3 rounded-2xl border',
+                    'bg-white/50 dark:bg-stone-800/50 border-stone-200 dark:border-stone-800'
+                  )}
+                >
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg font-semibold text-stone-800 dark:text-stone-100">
+                      {format(o.date, 'd MMM')}
+                    </span>
+                    <span className=" text-stone-500 dark:text-stone-400">
+                      {format(o.date, '(EEE)', { locale: getDateFnsLocale(locale) })}
+                    </span>
+                  </div>
+                  <div className="text-sm tabular-nums text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 opacity-60" />
+                    {o.time}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {hasMore && (
+          <div className="flex justify-start">
+            <Button
+              variant="flat"
+              onPress={() => setExpanded(prev => !prev)}
+              endContent={
+                expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+              }
+            >
+              {expanded ? t('events.show-less-dates') : t('events.show-all-dates')}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

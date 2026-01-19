@@ -5,7 +5,7 @@ import { getDateFnsLocale } from './date';
 export const getScheduleOccurrences = (
   schedule: Event['schedule'],
   locale: Locale
-): Array<{ label: string; time: string }> => {
+): Array<{ label: string; time: string; date: Date }> => {
   if (!schedule) {
     return [];
   }
@@ -13,12 +13,14 @@ export const getScheduleOccurrences = (
   const timeLabel = startTime && endTime ? `${startTime} – ${endTime}` : (startTime ?? '');
 
   if (schedule.mode === 'single' || !schedule.endDate) {
+    const date = parseISO(`${schedule.startDate}T00:00:00Z`);
     return [
       {
-        label: format(parseISO(`${schedule.startDate}T00:00:00Z`), 'd MMM (EEE)', {
+        label: format(date, 'd MMM (EEE)', {
           locale: getDateFnsLocale(locale),
         }),
         time: timeLabel,
+        date,
       },
     ];
   }
@@ -29,7 +31,7 @@ export const getScheduleOccurrences = (
     ? new Set(schedule.weekdays)
     : null;
 
-  const out: Array<{ label: string; time: string }> = [];
+  const out: Array<{ label: string; time: string; date: Date }> = [];
   let cursor = start;
   const hardCap = 366;
   while ((isBefore(cursor, end) || isEqual(cursor, end)) && out.length < hardCap) {
@@ -39,6 +41,7 @@ export const getScheduleOccurrences = (
       out.push({
         label: format(cursor, 'd MMM (EEE)', { locale: getDateFnsLocale(locale) }),
         time: timeLabel,
+        date: new Date(cursor),
       });
     }
     cursor = addDays(cursor, 1);
