@@ -72,3 +72,14 @@ export const getWhatsAppShareUrl = (url: string, text?: string): string => {
   const params = new URLSearchParams({ text: message });
   return `https://wa.me/?${params.toString()}`;
 };
+
+/**
+ * Generates share URL for Telegram
+ */
+export const getTelegramShareUrl = (url: string, text?: string): string => {
+  const params = new URLSearchParams({ url });
+  if (text) {
+    params.append('text', text);
+  }
+  return `https://t.me/share/url?${params.toString()}`;
+};

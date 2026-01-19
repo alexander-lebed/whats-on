@@ -16,6 +16,7 @@ import {
   copyToClipboard,
   getFacebookShareUrl,
   getWhatsAppShareUrl,
+  getTelegramShareUrl,
 } from '@/app/utils/share';
 
 type Props = {
@@ -85,6 +86,14 @@ const EventDetailsActions: FC<Props> = ({ event }) => {
     );
   };
 
+  const handleShareTelegram = (): void => {
+    window.open(
+      getTelegramShareUrl(getCurrentUrl(), event.title || undefined),
+      '_blank',
+      'noopener,noreferrer'
+    );
+  };
+
   const handleGoogleCalendar = (): void => {
     window.open(getGoogleCalendarUrl(event, getCurrentUrl()), '_blank', 'noopener,noreferrer');
   };
@@ -127,6 +136,9 @@ const EventDetailsActions: FC<Props> = ({ event }) => {
                 case 'whatsapp':
                   handleShareWhatsApp();
                   break;
+                case 'telegram':
+                  handleShareTelegram();
+                  break;
               }
             }}
           >
@@ -146,6 +158,9 @@ const EventDetailsActions: FC<Props> = ({ event }) => {
             </DropdownItem>
             <DropdownItem key="whatsapp" startContent={<ExternalLink className="h-4 w-4" />}>
               {t('events.share-whatsapp')}
+            </DropdownItem>
+            <DropdownItem key="telegram" startContent={<ExternalLink className="h-4 w-4" />}>
+              {t('events.share-telegram')}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
