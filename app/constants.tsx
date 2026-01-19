@@ -13,6 +13,9 @@ import {
 } from 'lucide-react';
 import { Category, Language } from '@/app/types';
 
+export const SITE_HOST = 'go-castellon.vercel.app';
+export const SITE_BASE_URL = `https://${SITE_HOST}`;
+
 export const THEME_COOKIE_KEY = 'events-theme';
 
 export const CATEGORIES: Category[] = [

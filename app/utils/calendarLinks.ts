@@ -1,3 +1,4 @@
+import { SITE_HOST } from '@/app/constants';
 import type { Event } from '@/app/types';
 
 type CalendarEventData = {
@@ -25,15 +26,29 @@ const formatCalendarDateTime = (date: string, time?: string): string => {
 };
 
 /**
- * Formats a date and time for ICS files (YYYYMMDDTHHmmss format, no Z)
+ * Formats a date for ICS files (YYYYMMDD format for all-day events)
  */
-const formatICSDateTime = (date: string, time?: string): string => {
+const formatICSDate = (date: string): string => {
+  return date.replace(/-/g, '');
+};
+
+/**
+ * Formats a date and time for ICS files (YYYYMMDDTHHmmss format)
+ */
+const formatICSDateTime = (date: string, time: string): string => {
   const datePart = date.replace(/-/g, '');
-  if (!time) {
-    return `${datePart}T000000`;
-  }
   const timePart = time.replace(':', '') + '00';
   return `${datePart}T${timePart}`;
+};
+
+/**
+ * Adds one day to a date string (YYYY-MM-DD format)
+ * Used for calculating exclusive end date for all-day events per RFC 5545
+ */
+const addOneDay = (date: string): string => {
+  const d = new Date(date + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0];
 };
 
 /**
@@ -45,6 +60,27 @@ const generateDTSTAMP = (): string => {
     .toISOString()
     .replace(/[-:]/g, '')
     .replace(/\.\d{3}/, '');
+};
+
+/**
+ * Folds long lines per RFC 5545 (max 75 octets per line)
+ * Lines are folded with CRLF followed by a space
+ */
+const foldLine = (line: string, maxLength = 75): string => {
+  if (line.length <= maxLength) {
+    return line;
+  }
+  const parts: string[] = [];
+  let remaining = line;
+  let isFirst = true;
+  while (remaining.length > 0) {
+    // First line: 75 chars, subsequent: 74 (account for leading space)
+    const chunkSize = isFirst ? maxLength : maxLength - 1;
+    parts.push(remaining.slice(0, chunkSize));
+    remaining = remaining.slice(chunkSize);
+    isFirst = false;
+  }
+  return parts.join('\r\n ');
 };
 
 /**
@@ -118,15 +154,33 @@ export const getOutlookCalendarUrl = (event: Event, currentUrl: string): string 
 };
 
 /**
+ * VTIMEZONE component for Europe/Madrid timezone
+ * Includes standard time (CET) and daylight saving time (CEST) rules
+ */
+const VTIMEZONE_EUROPE_MADRID = `BEGIN:VTIMEZONE
+TZID:Europe/Madrid
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE`;
+
+/**
  * Generates an ICS file content for Apple Calendar and other calendar apps
  */
 export const generateICSFile = (event: Event, currentUrl: string): string => {
   const data = getCalendarEventData(event, currentUrl);
-  const startDateTime = formatICSDateTime(data.startDate, data.startTime);
-  const endDateTime = formatICSDateTime(
-    data.endDate || data.startDate,
-    data.endTime || data.startTime
-  );
+  const isAllDay = !data.startTime;
 
   // Escape text for ICS format (escape commas, semicolons, backslashes, newlines)
   const escapeICS = (text: string): string => {
@@ -140,23 +194,44 @@ export const generateICSFile = (event: Event, currentUrl: string): string => {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Whats On//Event Calendar//EN',
+    'PRODID:-//Go Castellon//Event Calendar//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${event._id}@gocastellon.com`,
-    `DTSTAMP:${generateDTSTAMP()}`,
-    `DTSTART:${startDateTime}`,
-    `DTEND:${endDateTime}`,
-    `SUMMARY:${escapeICS(data.title)}`,
   ];
 
+  // Add VTIMEZONE component for timed events
+  if (!isAllDay) {
+    lines.push(VTIMEZONE_EUROPE_MADRID);
+  }
+
+  lines.push('BEGIN:VEVENT', `UID:${event._id}@${SITE_HOST}`, `DTSTAMP:${generateDTSTAMP()}`);
+
+  if (isAllDay) {
+    // All-day event: use VALUE=DATE format (YYYYMMDD)
+    // Per RFC 5545, DTEND for all-day events is exclusive (day after last day)
+    const startDate = formatICSDate(data.startDate);
+    const endDate = formatICSDate(addOneDay(data.endDate || data.startDate));
+    lines.push(`DTSTART;VALUE=DATE:${startDate}`);
+    lines.push(`DTEND;VALUE=DATE:${endDate}`);
+  } else {
+    // Timed event: use TZID parameter with Europe/Madrid timezone
+    const startDateTime = formatICSDateTime(data.startDate, data.startTime!);
+    const endDateTime = formatICSDateTime(
+      data.endDate || data.startDate,
+      data.endTime || data.startTime!
+    );
+    lines.push(`DTSTART;TZID=Europe/Madrid:${startDateTime}`);
+    lines.push(`DTEND;TZID=Europe/Madrid:${endDateTime}`);
+  }
+
+  lines.push(foldLine(`SUMMARY:${escapeICS(data.title)}`));
+
   if (data.description) {
-    lines.push(`DESCRIPTION:${escapeICS(data.description)}`);
+    lines.push(foldLine(`DESCRIPTION:${escapeICS(data.description)}`));
   }
 
   if (data.location) {
-    lines.push(`LOCATION:${escapeICS(data.location)}`);
+    lines.push(foldLine(`LOCATION:${escapeICS(data.location)}`));
   }
 
   if (data.url) {
@@ -165,7 +240,7 @@ export const generateICSFile = (event: Event, currentUrl: string): string => {
 
   lines.push('END:VEVENT', 'END:VCALENDAR');
 
-  return lines.join('\r\n');
+  return lines.join('\r\n') + '\r\n';
 };
 
 /**
