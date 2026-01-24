@@ -96,6 +96,11 @@ All code generated must adhere to the following standards. Always consult the **
   - Places Autocomplete Data API: [Place Autocomplete Data API](https://developers.google.com/maps/documentation/javascript/place-autocomplete-data)
   - Autocomplete and session pricing: [Autocomplete and session pricing](https://developers.google.com/maps/documentation/javascript/session-pricing)
 
+- **OpenAI API**
+  - Overview: [OpenAI Platform Overview](https://platform.openai.com/docs/overview)
+  - API Reference: [OpenAI API Reference](https://platform.openai.com/docs/api-reference/)
+  - Structured Outputs: [Structured Outputs Guide](https://platform.openai.com/docs/guides/structured-outputs)
+  - JavaScript/TypeScript SDK: [openai-node SDK](https://github.com/openai/openai-node)
 ---
 
 #### 🎨 HeroUI Component Library
@@ -108,7 +113,7 @@ All code generated must adhere to the following standards. Always consult the **
   - Full TypeScript support
   - Dark mode support (automatically includes `light` and `dark` themes)
   - Compatible with Next.js App Router and Pages directory
-  
+
 - **Installation & Setup:**
   - Main docs: [HeroUI Introduction](https://www.heroui.com/docs/guide/introduction)
   - Next.js Setup: [HeroUI Next.js Guide](https://www.heroui.com/docs/frameworks/nextjs)
@@ -132,7 +137,7 @@ All code generated must adhere to the following standards. Always consult the **
   - Import components from individual packages, not from `@heroui/react` (e.g., `import { Button } from '@heroui/button'`)
   - Components can be imported directly in Server Components (HeroUI adds `use client` at build time)
   - Use `tailwind-variants` to handle Tailwind CSS class conflicts with custom overrides
-  
+
 - **Common Components:**
   - Button: [Button Docs](https://www.heroui.com/docs/components/button) - Customizable with variants (solid, bordered, light, flat, faded, shadow, ghost), colors, sizes, and loading states
   - For a complete list of 210+ components, see: [HeroUI Components](https://www.heroui.com/docs/components/accordion)
@@ -144,7 +149,7 @@ All code generated must adhere to the following standards. Always consult the **
 
 #### ⚠️ Other Best Practices
 - Try to avoid:
-    - Deep nesting of components and logic
-    - Mutable data structures
+  - Deep nesting of components and logic
+  - Mutable data structures
 - Always prefer **semantic HTML** and accessible elements with proper `aria-*` when needed.
 - Write **clear JSDoc or inline comments** when logic is not obvious.

@@ -2,6 +2,7 @@
 
 import { FC, useState, useEffect, useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Time } from '@internationalized/date';
 import confetti from 'canvas-confetti';
 import { parseISO, eachDayOfInterval, getDay, format, startOfToday } from 'date-fns';
 import { DynamicIcon } from 'lucide-react/dynamic';
@@ -10,10 +11,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LANGUAGES, CATEGORIES, WEEKDAYS } from '@/app/constants';
 import { ImageHero, PlaceAutocomplete, Map } from '@/app/features';
-import { EventFormValues } from '@/app/features/EventForm/types';
 import { PlacePayload } from '@/app/features/PlaceAutocomplete';
 import { useBreakpoint } from '@/app/hooks';
-import { Event } from '@/app/types';
+import { Event, EventFormValues } from '@/app/types';
 import {
   Button,
   RadioGroup,
@@ -28,11 +28,28 @@ import { cn } from '@/app/utils';
 import { useRouter } from '@/i18n/navigation';
 import { formSchema } from './constants';
 import { EventPreviewModal } from './EventPreviewModal';
-import { transformFormValuesToEvent } from './utils';
+import { ImportFromUrl } from './ImportFromUrl';
+import { parseTimeString, transformFormValuesToEvent } from './utils';
 
 type FormValues = z.input<typeof formSchema>;
 
 const inputVariant = 'faded';
+
+const defaultFormValues: FormValues = {
+  title: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
+  summary: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
+  scheduleMode: 'single',
+  categories: [],
+  isDigital: false,
+  isFree: true,
+  startDate: '',
+  startTime: '',
+  endTime: '',
+  weekdays: [],
+  contactEmail: '',
+  contactPhone: '',
+  placeSelected: false,
+};
 
 export const EventForm: FC = () => {
   const locale = useLocale();
@@ -43,29 +60,19 @@ export const EventForm: FC = () => {
   const [place, setPlace] = useState<PlacePayload | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [importedFormValues, setImportedFormValues] = useState<FormValues | undefined>(undefined);
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    getValues,
     formState: { errors, isSubmitted, touchedFields, isValid, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: 'onBlur',
-    defaultValues: {
-      title: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
-      summary: Object.fromEntries(LANGUAGES.map(l => [l.locale, ''])),
-      scheduleMode: 'single',
-      categories: [],
-      isDigital: false,
-      isFree: true,
-      startTime: '',
-      endTime: '',
-      weekdays: [],
-      contactEmail: '',
-      contactPhone: '',
-      placeSelected: false,
-    },
+    defaultValues: defaultFormValues,
+    values: importedFormValues,
   });
 
   const scheduleMode = (watch('scheduleMode') ?? 'single') as FormValues['scheduleMode'];
@@ -80,18 +87,13 @@ export const EventForm: FC = () => {
     []
   );
 
-  const toHHmm = (v: unknown): string => {
+  const toHHmm = (v: Time | null): string => {
     if (!v) {
       return '';
     }
-    if (typeof v === 'string') {
-      // Accept raw HH:mm or longer strings and normalize to HH:mm
-      return v.slice(0, 5);
-    }
-    const anyVal = v as { hour?: number; minute?: number };
-    const h = anyVal?.hour ?? null;
-    const m = anyVal?.minute ?? null;
-    if (h == null || m == null) {
+    const h = v?.hour ?? null;
+    const m = v?.minute ?? null;
+    if (h === null || m === null) {
       return '';
     }
     return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
@@ -245,8 +247,22 @@ export const EventForm: FC = () => {
     };
   }, [place]);
 
+  /**
+   * Handle imported event data from URL extraction.
+   * Uses values prop to sync external data with form state.
+   */
+  const handleImport = (data: Partial<Omit<EventFormValues, 'image' | 'placeSelected'>>): void => {
+    setImportedFormValues({
+      ...defaultFormValues, // Start with all defaults
+      ...getValues(), // Override with current values
+      ...data, // Override with imported data
+    });
+  };
+
   return (
     <form className="flex flex-col gap-10 pb-20" onSubmit={handleSubmit(onSubmit)}>
+      <ImportFromUrl onImport={handleImport} />
+
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-bold">{t('events.create.image-section')}</h2>
         {(() => {
@@ -290,6 +306,7 @@ export const EventForm: FC = () => {
                   ? t(errors.title?.[lang.locale]?.message as string)
                   : undefined
               }
+              value={watch(`title.${lang.locale}`) || ''}
               {...register(`title.${lang.locale}`)}
             />
             <Textarea
@@ -303,6 +320,7 @@ export const EventForm: FC = () => {
                   ? t(errors.summary?.[lang.locale]?.message as string)
                   : undefined
               }
+              value={watch(`summary.${lang.locale}`) || ''}
               {...register(`summary.${lang.locale}`)}
             />
           </div>
@@ -359,6 +377,7 @@ export const EventForm: FC = () => {
             isInvalid={!!errors.startDate}
             errorMessage={errors.startDate?.message ? t(errors.startDate?.message) : undefined}
             min={todayISO}
+            value={watch('startDate') || ''}
             {...register('startDate')}
           />
           {scheduleMode === 'range' && (
@@ -370,6 +389,7 @@ export const EventForm: FC = () => {
               isInvalid={!!errors.endDate}
               errorMessage={errors.endDate?.message ? t(errors.endDate?.message) : undefined}
               min={startDate || todayISO}
+              value={watch('endDate') || ''}
               {...register('endDate')}
             />
           )}
@@ -380,6 +400,7 @@ export const EventForm: FC = () => {
             label={t('events.create.start-time')}
             variant={inputVariant}
             hourCycle={24}
+            value={parseTimeString(watch('startTime'))}
             isInvalid={!!errors.startTime}
             errorMessage={errors.startTime?.message ? t(errors.startTime.message) : undefined}
             onChange={val =>
@@ -394,6 +415,7 @@ export const EventForm: FC = () => {
             label={t('events.create.end-time')}
             variant={inputVariant}
             hourCycle={24}
+            value={parseTimeString(watch('endTime'))}
             isInvalid={!!errors.endTime}
             errorMessage={errors.endTime?.message ? t(errors.endTime.message) : undefined}
             onChange={val =>
@@ -524,6 +546,7 @@ export const EventForm: FC = () => {
               variant={inputVariant}
               isInvalid={!!errors.ticketUrl}
               errorMessage={errors.ticketUrl?.message ? t(errors.ticketUrl.message) : undefined}
+              value={watch('ticketUrl') || ''}
               {...register('ticketUrl')}
             />
             <Input
@@ -535,6 +558,8 @@ export const EventForm: FC = () => {
                   <span className="text-default-400 text-small">€</span>
                 </div>
               }
+              value={(watch('price') as string) || ''}
+              // value={watch('price') !== undefined ? (watch('price') as string) : ''}
               {...register('price')}
             />
           </>
@@ -549,6 +574,7 @@ export const EventForm: FC = () => {
           variant={inputVariant}
           isInvalid={!!errors.website}
           errorMessage={errors.website?.message ? t(errors.website.message) : undefined}
+          value={watch('website') || ''}
           {...register('website')}
         />
         <Input
@@ -559,6 +585,7 @@ export const EventForm: FC = () => {
           isRequired
           isInvalid={!!errors.contactEmail}
           errorMessage={errors.contactEmail?.message ? t(errors.contactEmail.message) : undefined}
+          value={watch('contactEmail')}
           {...register('contactEmail')}
         />
         <Input
@@ -566,6 +593,7 @@ export const EventForm: FC = () => {
           label={t('events.create.contact-phone')}
           placeholder="+34 600 000 000"
           variant={inputVariant}
+          value={watch('contactPhone')}
           {...register('contactPhone')}
         />
       </section>

@@ -54,6 +54,14 @@
     "networking-community": "Networking y Comunidad",
     "local-fiestas": "Fiestas Locales"
   },
+  "import": {
+    "section-title": "Importar desde URL",
+    "url-label": "URL de evento existente",
+    "url-placeholder": "https://example.com/tu-evento",
+    "button": "Importar",
+    "loading": "Importando...",
+    "error": "No se pudieron extraer los datos del evento desde esta URL."
+  },
   "create": {
     "description-in-language": "Describe tu evento en {language}",
     "name-label": "Nombre ({language})",

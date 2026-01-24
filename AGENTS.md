@@ -96,6 +96,11 @@ All code generated must adhere to the following standards. Always consult the **
   - Places Autocomplete Data API: [Place Autocomplete Data API](https://developers.google.com/maps/documentation/javascript/place-autocomplete-data)
   - Autocomplete and session pricing: [Autocomplete and session pricing](https://developers.google.com/maps/documentation/javascript/session-pricing)
 
+- **OpenAI API**
+  - Overview: [OpenAI Platform Overview](https://platform.openai.com/docs/overview)
+  - API Reference: [OpenAI API Reference](https://platform.openai.com/docs/api-reference/)
+  - Structured Outputs: [Structured Outputs Guide](https://platform.openai.com/docs/guides/structured-outputs)
+  - JavaScript/TypeScript SDK: [openai-node SDK](https://github.com/openai/openai-node)
 ---
 
 #### 🎨 HeroUI Component Library

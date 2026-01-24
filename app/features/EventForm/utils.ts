@@ -1,6 +1,6 @@
+import { Time } from '@internationalized/date';
 import { PlacePayload } from '@/app/features/PlaceAutocomplete';
-import { Event } from '@/app/types';
-import { EventFormValues } from './types';
+import { Event, EventFormValues } from '@/app/types';
 
 export const transformFormValuesToEvent = (
   values: EventFormValues,
@@ -75,4 +75,18 @@ export const transformFormValuesToEvent = (
     isFree: values.isFree ?? true, // Ensure boolean
     isFeatured: false,
   };
+};
+
+/**
+ * Parse HH:mm string to Time object for controlled TimeInput components.
+ */
+export const parseTimeString = (timeStr: string | undefined): Time | null => {
+  if (!timeStr) {
+    return null;
+  }
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  if (isNaN(hours) || isNaN(minutes)) {
+    return null;
+  }
+  return new Time(hours, minutes);
 };
