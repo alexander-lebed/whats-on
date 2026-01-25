@@ -77,6 +77,18 @@ export const transformFormValuesToEvent = (
   };
 };
 
+export const toHHmm = (v: Time | null): string => {
+  if (!v) {
+    return '';
+  }
+  const h = v?.hour ?? null;
+  const m = v?.minute ?? null;
+  if (h === null || m === null) {
+    return '';
+  }
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+};
+
 /**
  * Parse HH:mm string to Time object for controlled TimeInput components.
  */
