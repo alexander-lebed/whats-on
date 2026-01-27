@@ -76,10 +76,12 @@ const EventDetailsDates: FC<EventDatesProps> = ({ schedule, locale }) => {
                       {format(o.date, '(EEE)', { locale: getDateFnsLocale(locale) })}
                     </span>
                   </div>
-                  <div className="text-sm tabular-nums text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 opacity-60" />
-                    {o.time}
-                  </div>
+                  {o.time && (
+                    <div className="text-sm tabular-nums text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 opacity-60" />
+                      {o.time}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

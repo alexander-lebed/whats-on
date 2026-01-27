@@ -5,7 +5,7 @@ import { getDateFnsLocale } from './date';
 export const getScheduleOccurrences = (
   schedule: Event['schedule'],
   locale: Locale
-): Array<{ label: string; time: string; date: Date }> => {
+): Array<{ label: string; time?: string; date: Date }> => {
   if (!schedule) {
     return [];
   }
