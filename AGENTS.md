@@ -27,5 +27,5 @@ Custom CSS variables defined in `app/globals.css`:
 - [React Conventions](docs/react.md)
 - [File & Folder Structure](docs/file-structure.md)
 - [Testing](docs/testing.md)
-- [External Libraries](docs/libraries.md) — next-intl, date-fns, Sanity, Google Maps, OpenAI
+- [External Libraries](docs/libraries.md) — next-intl, lucide-react, date-fns, Sanity, Google Maps, OpenAI
 - [HeroUI Component Library](docs/heroui.md)

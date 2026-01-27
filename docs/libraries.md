@@ -20,6 +20,17 @@
 
 ---
 
+## Icons (lucide-react)
+- `lucide-react` is the standard icon library for this project.
+- Docs & gallery: [lucide.dev](https://lucide.dev/)
+- Import icons as named imports (no wildcard or dynamic imports), for example:
+  ```tsx
+  import { MapPin } from 'lucide-react';
+  ```
+- Prefer using an existing `lucide-react` icon over creating custom SVGs. Only create bespoke icons if `lucide-react` cannot cover a strong design requirement.
+
+---
+
 ## Date Utilities (date-fns)
 - [format](https://date-fns.org/v4.1.0/docs/format), [parseISO](https://date-fns.org/v4.1.0/docs/parseISO), [addDays](https://date-fns.org/v4.1.0/docs/addDays)
 - Prefer date-fns over custom date math. Work with ISO strings and use `parseISO`, then format with `format`.
