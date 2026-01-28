@@ -52,15 +52,15 @@ const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
   const { categories, dateRange } = filters;
 
   return (
-    <>
-      <div className="mb-3 sm:mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{t('events.title')}</h1>
         <div className="flex flex-col gap-2 w-full sm:w-auto sm:min-w-[240px]">
           <EventsDateRangePicker value={dateRange} onChange={handleDateRange} />
         </div>
       </div>
-      <div className="flex flex-col gap-6 sm:gap-10">
-        <div className="flex flex-wrap gap-3">
+      <div className="relative -mx-4 sm:mx-0">
+        <div className="flex flex-nowrap gap-3 overflow-x-auto px-4 pb-2 sm:flex-wrap sm:px-0 sm:pb-0 scrollbar-hide">
           {CATEGORIES.map(category => (
             <CategoryButton
               key={category.slug}
@@ -70,13 +70,18 @@ const EventsExplorer: FC<EventsExplorerProps> = ({ events }) => {
             />
           ))}
         </div>
-        {filteredEvents.length > 0 ? (
-          <EventsGrid events={filteredEvents} />
-        ) : (
-          <NoEventsMessage hasActiveFilters={categories.size > 0 || dateRange !== null} />
-        )}
+        {/* Left gradient fade */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-2 w-8 bg-gradient-to-r from-background to-transparent sm:hidden" />
+        {/* Right gradient fade */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-background to-transparent sm:hidden" />
       </div>
-    </>
+
+      {filteredEvents.length > 0 ? (
+        <EventsGrid events={filteredEvents} />
+      ) : (
+        <NoEventsMessage hasActiveFilters={categories.size > 0 || dateRange !== null} />
+      )}
+    </div>
   );
 };
 

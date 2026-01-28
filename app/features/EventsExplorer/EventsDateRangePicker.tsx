@@ -71,7 +71,6 @@ const EventsDateRangePicker = ({ value, onChange }: Props) => {
       isOpen={isOpen}
       label={t('events.when')}
       variant="flat"
-      size={isMobile ? 'sm' : undefined}
       labelPlacement="inside"
       granularity="day"
       selectorIcon={<CalendarDays size="1em" />}
