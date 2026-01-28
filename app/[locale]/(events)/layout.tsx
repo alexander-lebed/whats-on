@@ -11,14 +11,15 @@ type Props = {
 
 export default async function Layout({ children, params }: Props) {
   const { locale } = await params;
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="dark bg-stone-900 text-stone-50">
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 py-4">
-            <Brand hideOnMobile />
+            <Brand />
             <div className="flex items-center gap-3">
-              <SubmitEventButton />
+              <SubmitEventButton className="hidden sm:flex" />
               <ThemeToggle />
               <LanguageSwitcher currentLocale={locale} />
             </div>

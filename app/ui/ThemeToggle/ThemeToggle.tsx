@@ -23,7 +23,7 @@ export const ThemeToggle: FC = () => {
     : undefined;
 
   return (
-    <Button variant="light" size="sm" isIconOnly title={label} aria-label={label} onPress={toggle}>
+    <Button variant="light" isIconOnly title={label} aria-label={label} onPress={toggle}>
       <Icon className="h-4 w-4" />
     </Button>
   );

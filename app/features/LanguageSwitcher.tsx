@@ -29,7 +29,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ currentLocale }) =
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <Button variant="light" size="sm" isIconOnly={isMobile}>
+        <Button variant="light" isIconOnly={isMobile}>
           <Globe className="h-4 w-4" />
           {!isMobile && current.name}
         </Button>

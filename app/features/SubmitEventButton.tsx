@@ -1,14 +1,13 @@
 'use client';
-import { FC } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/app/ui';
+import { Button, ButtonProps } from '@/app/ui';
 import { Link } from '@/i18n/navigation';
 
-const SubmitEventButton: FC = () => {
+const SubmitEventButton = (props: ButtonProps) => {
   const t = useTranslations('events');
 
   return (
-    <Button as={Link} href="/events/create" variant="light" size="sm" className="text-sm">
+    <Button as={Link} href="/events/create" variant="light" {...props}>
       {t('submit-event-button')}
     </Button>
   );
